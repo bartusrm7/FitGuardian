@@ -8,6 +8,7 @@ export default function LogReg() {
 					<Link to='/log'>
 						<div className='log-reg__container'>LOGIN</div>
 					</Link>
+					
 					<Link to='/reg'>
 						<div className='log-reg__container'>REGISTER</div>
 					</Link>
