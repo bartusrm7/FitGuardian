@@ -1,0 +1,174 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+body {
+	font-family: "Roboto", sans-serif;
+	background: -webkit-linear-gradient(#316fe4, #323be6);
+	background: linear-gradient(#316fe4, #323be6);
+	letter-spacing: 0;
+}
+.log,
+.reg {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	&__main-container {
+		width: 250px;
+		height: 300px;
+		background-color: #caf0f8;
+		overflow: hidden;
+		border-radius: 5px;
+	}
+	.material-symbols-outlined:first-child {
+		font-size: 20px;
+	}
+	&__container {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		align-items: center;
+		font-size: 0.8rem;
+		font-weight: bold;
+	}
+	&__cancel-btn {
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		background-color: white;
+		font-size: 0rem;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	&__input-item-container {
+		display: flex;
+		align-items: center;
+		span {
+			margin-right: 0.25em;
+			font-size: 1.4rem;
+		}
+		input {
+			font-size: 0.8rem;
+		}
+	}
+	&__input-container {
+		display: flex;
+		flex-direction: column;
+		input {
+			padding: 0.35em;
+			margin: 0.25em 0;
+			border-radius: 5px;
+		}
+	}
+	&__log-reg-accept-btn,
+	&__log-reg-switch-btn {
+		padding: 0.5em 0.75em;
+		background-color: white;
+		font-weight: bold;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	&__log-reg-switch-container {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+	&__log-reg-switch-btn {
+		margin: 0.75em 0;
+	}
+}
+@media (min-width: 368px) {
+	.log,
+	.reg {
+	}
+}
+@media (min-width: 576px) {
+	.log,
+	.reg {
+		&__main-container {
+			width: 320px;
+			height: 370px;
+		}
+		&__container {
+			font-size: 1rem;
+		}
+		.material-symbols-outlined:first-child {
+			font-size: 24px;
+		}
+		&__cancel-btn {
+			top: 12px;
+			right: 12px;
+		}
+		&__input-container {
+			span {
+				font-size: 1.6rem;
+			}
+			input {
+				padding: 0.5em;
+				font-size: 0.9rem;
+			}
+		}
+		&__log-reg-accept-btn,
+		&__log-reg-switch-btn {
+			padding: 0.5em 1.25em;
+			font-size: 0.9rem;
+		}
+		&__cancel-btn,
+		&__log-reg-accept-btn,
+		&__log-reg-switch-btn {
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+			}
+		}
+	}
+}
+@media (min-width: 768px) {
+	.log,
+	.reg {
+		&__main-container {
+			width: 350px;
+			height: 400px;
+		}
+		&__container {
+			font-size: 1.1rem;
+		}
+		&__cancel-btn {
+			top: 15px;
+			right: 15px;
+		}
+	}
+}
+@media (min-width: 992px) {
+	.log,
+	.reg {
+		&__main-container {
+			width: 370px;
+			height: 420px;
+		}
+		&__container {
+			font-size: 1.2rem;
+		}
+		&__input-container {
+			span {
+				font-size: 1.7rem;
+			}
+			input {
+				padding: 0.75em;
+			}
+		}
+		&__log-reg-accept-btn,
+		&__log-reg-switch-btn {
+			padding: 0.5em 1.5em;
+			font-size: 1rem;
+		}
+	}
+}
