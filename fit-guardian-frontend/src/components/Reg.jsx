@@ -74,13 +74,13 @@ export default function Reg() {
 								/>
 							</div>
 						</div>
-						<button className='reg__log-reg-accept-btn'>REGISTER</button>
+						<button className='reg__log-reg-accept-btn' onClick={userRegisterData}>
+							REGISTER
+						</button>
 						<div className='reg__log-reg-switch-container'>
 							<p>Do you have already an account?</p>
 							<Link to='/log'>
-								<button className='reg__log-reg-switch-btn' onClick={userRegisterData}>
-									LOGIN
-								</button>
+								<button className='reg__log-reg-switch-btn'>LOGIN</button>
 							</Link>
 						</div>
 					</div>

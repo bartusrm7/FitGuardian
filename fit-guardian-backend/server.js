@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
@@ -10,12 +12,19 @@ app.use(cors());
 
 let users = [];
 
+const validateEmail = email => {
+	const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return re.test(email);
+};
+
+const validatePassword = password => {
+	return password.length >= 8;
+};
+
 app.post("/register", (req, res) => {
-	const { userName, userEmail, userPassword } = req.body();
+	const { userName, userEmail, userPassword } = req.body;
 	const newUser = { userName, userEmail, userPassword };
-	const userExist = users.filter(
-		user => user.userName === userName || user.userEmail === userEmail || user.userPassword === userPassword
-	);
+	const userExist = users.some(user => user.userName === userName || user.userEmail === userEmail);
 
 	if (userExist) {
 		return res.status(400).json({ message: "User already exists!" });
@@ -33,15 +42,16 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
 	const { userName, userEmail, userPassword } = req.body;
-	const user = users.filter(
+	const user = users.some(
 		user => user.userName === userName || user.userEmail === userEmail || user.userPassword === userPassword
 	);
-	const payload = { userEmail: user.userEmail };
-	const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
-
 	if (!user) {
 		return res.status(400).json({ message: "Invalid username or password!" });
 	}
+
+	const payload = { userEmail: user.userEmail };
+	const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
+
 	res.json({ accessToken: accessToken });
 });
 

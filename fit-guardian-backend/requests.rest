@@ -1,0 +1,19 @@
+POST http://localhost:5174/register
+Content-Type: application/json
+
+{
+    "userName": "dsadasg",
+    "userEmail": "dasdagh@gdsfdsfd.pldfsa",
+    "userPassword": "dsxcxzczdasadxczxa"
+}
+
+### 
+
+POST http://localhost:5174/login
+Content-Type: application/json
+
+{
+    "userName": "dsadas",
+    "userEmail": "asddaas@gdsfds.pl",
+    "userPassword": "dsadasasd"
+}
