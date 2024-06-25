@@ -30,6 +30,14 @@ export default function Reg() {
 			if (!response) {
 				throw Error("Wrong data!");
 			}
+			if (!validateEmail(userEmail)) {
+				console.log("Invalid email format!");
+				return;
+			}
+			if (!validatePassword(userPassword)) {
+				console.log("Password is to short!");
+				return;
+			}
 			const data = await response.json();
 		} catch (error) {}
 	};

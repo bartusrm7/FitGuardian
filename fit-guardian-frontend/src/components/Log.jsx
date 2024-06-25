@@ -1,7 +1,32 @@
 import { Link } from "react-router-dom";
 
 export default function Log() {
-	
+	const userLoginData = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/register", {
+				method: "POST",
+				headers: {
+					"Content-type": "Application/JSON",
+				},
+				body: JSON.stringify({
+					userEmail: userEmail,
+					userPassword: userPassword,
+				}),
+			});
+			if (!response) {
+				throw Error("Wrong data!");
+			}
+			if (!validateEmail(userEmail)) {
+				console.log("Invalid email format!");
+				return;
+			}
+			if (!validatePassword(userPassword)) {
+				console.log("Password is to short!");
+				return;
+			}
+			const data = await response.json();
+		} catch (error) {}
+	};
 
 	return (
 		<div>
@@ -24,7 +49,9 @@ export default function Log() {
 								<input type='password' placeholder='Password' />
 							</div>
 						</div>
-						<button className='log__log-reg-accept-btn'>LOGIN</button>
+						<button className='log__log-reg-accept-btn' onClick={userLoginData}>
+							LOGIN
+						</button>
 						<div className='log__log-reg-switch-container'>
 							<p>Do you have not an account?</p>
 							<Link to='/reg'>
