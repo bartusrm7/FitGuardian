@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogRegContext } from "./LogRegContext";
 
 export default function Reg() {
-	const [userName, setUserName] = useState("");
-	const [userEmail, setUserEmail] = useState("");
-	const [userPassword, setUserPassword] = useState("");
+	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
 
 	const validateEmail = email => {
 		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,7 +38,14 @@ export default function Reg() {
 				return;
 			}
 			const data = await response.json();
-		} catch (error) {}
+			localStorage.setItem("userData", data.accessToken);
+
+			setUserName("");
+			setUserEmail("");
+			setUserPassword("");
+		} catch (error) {
+			console.error("Error", error);
+		}
 	};
 
 	return (

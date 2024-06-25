@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogRegContext } from "./LogRegContext";
 
 export default function Log() {
+	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+
 	const userLoginData = async () => {
 		try {
 			const response = await fetch("http://localhost:5174/register", {
@@ -25,7 +29,10 @@ export default function Log() {
 				return;
 			}
 			const data = await response.json();
-		} catch (error) {}
+			localStorage.setItem("userData", data.accessToken);
+		} catch (error) {
+			console.error("Error", error);
+		}
 	};
 
 	return (
