@@ -30,6 +30,7 @@ export default function Reg() {
 			if (!response) {
 				throw Error("Wrong data!");
 			}
+			const data = await response.json();
 		} catch (error) {}
 	};
 
