@@ -23,10 +23,12 @@ export default function Dashboard() {
 							)}
 						</div>
 						<div className={`dashboard__container-menu ${hamburger ? "opened-menu" : ""}`}>
-							<div className='dashboard__menu-items'>Menu</div>
-							<div className='dashboard__menu-items'>Recipes</div>
-							<div className='dashboard__menu-items'>Statistics</div>
-							<div className='dashboard__menu-items'>Settings</div>
+							<h3 className='dashboard__label'>FitGuardian</h3>
+							<div className='dashboard__account-name'>Account</div>
+							<div className='dashboard__menu-item'>Menu</div>
+							<div className='dashboard__menu-item'>Recipes</div>
+							<div className='dashboard__menu-item'>Statistics</div>
+							<div className='dashboard__menu-item'>Settings</div>
 						</div>
 					</div>
 				</div>

@@ -21,6 +21,7 @@ body {
 		width: 250px;
 		height: 300px;
 		background-color: #caf0f8;
+		color: #000046;
 		overflow: hidden;
 		border-radius: 5px;
 	}
@@ -42,6 +43,7 @@ body {
 		right: 10px;
 		top: 10px;
 		background-color: white;
+		color: #000046;
 		font-size: 0rem;
 		border-radius: 5px;
 		cursor: pointer;
@@ -70,6 +72,7 @@ body {
 	&__log-reg-switch-btn {
 		padding: 0.5em 0.75em;
 		background-color: white;
+		color: #000046;
 		font-weight: bold;
 		border-radius: 5px;
 		cursor: pointer;
