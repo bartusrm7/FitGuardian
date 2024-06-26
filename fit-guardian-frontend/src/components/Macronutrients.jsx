@@ -1,14 +1,15 @@
 import Dashboard from "./Dashboard";
-export default function Recipes() {
+
+export default function Macronutrients() {
 	return (
 		<div>
-			<div className='recipes'>
-				<div className='recipes__main-container'>
-					<div className='recipes__container'>
-						<div className='recipes__container-name'>
-							<h3 className='recipes__label'>Recipes</h3>
+			<div className='macronutrients'>
+				<div className='macronutrients__main-container'>
+					<div className='macronutrients__container'>
+						<div className='macronutrients__container-name'>
+							<h3 className='macronutrients__label'>Macronutrients</h3>
 						</div>
-						<div className='recipes__calories-container'>
+						<div className='macronutrients__calories-container'>
 							fdfsdfddasdasdasdasdasd asdasdasdasasddas grrb tyretyrteys dasdahgrsdfdnmt vogsdfnngdfng drnjrtweasain
 							utasewniusvweiu fdfsdfdd asdasdasda sdasdasdasdas dasasddas grrbtyretyrteys dasda hgrsdfdnmtvo
 							gsdfnngdfngdrnjrtwea sainutasewniusvweiu fdfsdfddasda sdasdasdasdasd asdasdasasddas grrbtyretyrteys

@@ -44,7 +44,7 @@ export default function Reg() {
 			setUserName("");
 			setUserEmail("");
 			setUserPassword("");
-			navigate("/dashboard");
+			navigate("/menu");
 		} catch (error) {
 			console.error("Error", error);
 		}

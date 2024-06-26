@@ -29,12 +29,20 @@ export default function Dashboard() {
 							<div className='dashboard__menu-item'>
 								<Link to='/menu'>Menu</Link>
 							</div>
-							<div className='dashboard__menu-item'>Recipes</div>
-							<div className='dashboard__menu-item'>Statistics</div>
-							<div className='dashboard__menu-item'>Settings</div>
+							<div className='dashboard__menu-item'>
+								<Link to='/macronutrients'>Macronutrients</Link>
+							</div>
+							<div className='dashboard__menu-item'>
+								<Link to='/recipes'>Recipes</Link>
+							</div>
+							<div className='dashboard__menu-item'>
+								<Link to='/statistics'>Statistics</Link>
+							</div>
+							<div className='dashboard__menu-item'>
+								<Link to='/settings'>Settings</Link>
+							</div>
 						</div>
 					</div>
-					<div className='dashboard__container-to-items'></div>
 				</div>
 			</div>
 		</div>
