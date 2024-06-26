@@ -4,6 +4,7 @@ import { useLogRegContext } from "./LogRegContext";
 
 export default function Reg() {
 	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const navigate = useNavigate();
 
 	const validateEmail = email => {
 		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,11 +39,12 @@ export default function Reg() {
 				return;
 			}
 			const data = await response.json();
-			localStorage.setItem("userData", data.accessToken);
+			localStorage.setItem("accessToken", data.accessToken);
 
 			setUserName("");
 			setUserEmail("");
 			setUserPassword("");
+			navigate("/dashboard");
 		} catch (error) {
 			console.error("Error", error);
 		}
