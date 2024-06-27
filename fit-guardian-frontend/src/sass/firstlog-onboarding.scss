@@ -6,63 +6,58 @@
 	margin: 0;
 }
 body {
+	height: 100vh;
 	font-family: "Roboto", sans-serif;
 	background: -webkit-linear-gradient(#316fe4, #323be6);
 	background: linear-gradient(#316fe4, #323be6);
 	letter-spacing: 2px;
 }
-.statistics {
+.firstlog-onboarding {
 	position: absolute;
 	width: 100vw;
 	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 	&__main-container {
 		width: 100vw;
 		height: 100vh;
 		color: #caf0f8;
 	}
 	&__container {
+		width: 100%;
 		font-size: 0.8rem;
 		color: #000046;
 	}
 	&__container-name {
-		margin: 1em 0;
+		margin: 2em 0;
 		color: #000046;
 	}
-	&__calories-container {
-		width: 100%;
-		display: flex;
-		flex-wrap: wrap;
-	}
-	&__statistics-item {
-		cursor: pointer;
+}
+@media (max-width: 368px) {
+	.firstlog-onboarding {
 	}
 }
 @media (min-width: 368px) {
-	.statistics {
+	.firstlog-onboarding {
 		&__container {
 			font-size: 0.9rem;
 		}
 	}
 }
 @media (min-width: 576px) {
-	.statistics {
+	.firstlog-onboarding {
 		&__container {
-			padding: 1em;
 		}
 	}
 }
 @media (max-width: 768px) {
-	.statistics {
+	.firstlog-onboarding {
 		&__main-container {
 			display: flex;
 			justify-content: center;
 		}
 		&__container {
-			padding: 1em;
 			color: #caf0f8;
 			font-size: 1rem;
 		}
@@ -73,7 +68,7 @@ body {
 	}
 }
 @media (min-width: 768px) {
-	.statistics {
+	.firstlog-onboarding {
 		&__main-container {
 			width: 85vw;
 			height: 85vh;
@@ -84,8 +79,6 @@ body {
 		}
 		&__container {
 			padding: 1em;
-			margin-left: 220px;
-			height: 100%;
 			font-size: 1.1rem;
 		}
 		&__container-name {
@@ -94,10 +87,13 @@ body {
 	}
 }
 @media (min-width: 992px) {
-	.statistics {
+	.firstlog-onboarding {
 		&__container {
-			margin-left: 250px;
 			font-size: 1.2rem;
 		}
+	}
+}
+@media (min-width: 1200px) {
+	.firstlog-onboarding {
 	}
 }

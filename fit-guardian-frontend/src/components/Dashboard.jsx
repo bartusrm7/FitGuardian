@@ -41,7 +41,7 @@ export default function Dashboard() {
 							<h3 className='dashboard__label'>FitGuardian</h3>
 							<div className='dashboard__account-name'>
 								<span className='material-symbols-outlined'>person</span>
-								{userName}
+								{localStorage.getItem("userName")}
 							</div>
 							<div className='dashboard__menu-item'>
 								<Link to='/menu' onClick={handleCloseMenu}>

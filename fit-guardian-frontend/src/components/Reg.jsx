@@ -46,6 +46,7 @@ export default function Reg() {
 			setUserEmail("");
 			setUserPassword("");
 			navigate("/menu");
+			navigate("/firstlog-onboarding");
 		} catch (error) {
 			console.error("Error", error);
 		}

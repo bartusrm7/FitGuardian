@@ -10,10 +10,7 @@ export default function Statistics() {
 							<h3 className='statistics__label'>Statistics</h3>
 						</div>
 						<div className='statistics__calories-container'>
-							fdfsdfddasdasdasdasdasd asdasdasdasasddas grrb tyretyrteys dasdahgrsdfdnmt vogsdfnngdfng drnjrtweasain
-							utasewniusvweiu fdfsdfdd asdasdasda sdasdasdasdas dasasddas grrbtyretyrteys dasda hgrsdfdnmtvo
-							gsdfnngdfngdrnjrtwea sainutasewniusvweiu fdfsdfddasda sdasdasdasdasd asdasdasasddas grrbtyretyrteys
-							dasdahgrsdfdnmtvogs dfnngdf ngdrnjrtweasa inutasewniusvweiu
+							
 						</div>
 					</div>
 				</div>

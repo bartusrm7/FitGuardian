@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LogReg from "./components/LogReg";
 import Log from "./components/Log";
 import Reg from "./components/Reg";
+import FirstLogOnboarding from "./components/FirstLogOnboarding";
 import Dashboard from "./components/Dashboard";
 import LogRegProvider from "./components/LogRegContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,6 +20,14 @@ export default function App() {
 					<Route path='/' element={<LogReg />} />
 					<Route path='/log' element={<Log />} />
 					<Route path='/reg' element={<Reg />} />
+					<Route
+						path='/firstlog-onboarding'
+						element={
+							<ProtectedRoute>
+								<FirstLogOnboarding />
+							</ProtectedRoute>
+						}
+					/>
 					<Route
 						path='/dashboard'
 						element={

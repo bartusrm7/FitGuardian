@@ -57,6 +57,10 @@ body {
 }
 @media (max-width: 768px) {
 	.settings {
+		&__main-container {
+			display: flex;
+			justify-content: center;
+		}
 		&__container {
 			padding: 1em;
 			color: #caf0f8;
@@ -64,6 +68,7 @@ body {
 		}
 		&__container-name {
 			margin-top: 50px;
+			text-align: center;
 		}
 	}
 }
