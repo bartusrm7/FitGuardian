@@ -59,6 +59,7 @@ body {
 	.settings {
 		&__container {
 			padding: 1em;
+			color: #caf0f8;
 			font-size: 1rem;
 		}
 		&__container-name {
@@ -78,7 +79,7 @@ body {
 		}
 		&__container {
 			padding: 1em;
-			margin-left: 200px;
+			margin-left: 220px;
 			height: 100%;
 			font-size: 1.1rem;
 		}
@@ -90,6 +91,7 @@ body {
 @media (min-width: 992px) {
 	.settings {
 		&__container {
+			margin-left: 250px;
 			font-size: 1.2rem;
 		}
 	}

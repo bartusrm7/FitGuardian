@@ -1,13 +1,21 @@
-import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
 
 export default function Log() {
-	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const navigate = useNavigate();
+
+	const validateEmail = email => {
+		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return re.test(email);
+	};
+	const validatePassword = password => {
+		return password.length >= 8;
+	};
 
 	const userLoginData = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/register", {
+			const response = await fetch("http://localhost:5174/login", {
 				method: "POST",
 				headers: {
 					"Content-type": "Application/JSON",
@@ -29,7 +37,14 @@ export default function Log() {
 				return;
 			}
 			const data = await response.json();
-			localStorage.setItem("userData", data.accessToken);
+			localStorage.setItem("accessToken", data.accessToken);
+
+			const userName = localStorage.getItem("userName");
+
+			setUserEmail("");
+			setUserPassword("");
+			setUserName(userName);
+			navigate("/menu");
 		} catch (error) {
 			console.error("Error", error);
 		}
@@ -49,11 +64,21 @@ export default function Log() {
 						<div className='log__input-container'>
 							<div className='log__input-item-container'>
 								<span className='material-symbols-outlined'>mail</span>
-								<input type='email' placeholder='Email' />
+								<input
+									type='email'
+									placeholder='Email'
+									value={userEmail}
+									onChange={e => setUserEmail(e.target.value)}
+								/>
 							</div>
 							<div className='log__input-item-container'>
 								<span className='material-symbols-outlined'>lock</span>
-								<input type='password' placeholder='Password' />
+								<input
+									type='password'
+									placeholder='Password'
+									value={userPassword}
+									onChange={e => setUserPassword(e.target.value)}
+								/>
 							</div>
 						</div>
 						<button className='log__log-reg-accept-btn' onClick={userLoginData}>

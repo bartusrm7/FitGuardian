@@ -27,7 +27,7 @@ export default function Reg() {
 					userPassword: userPassword,
 				}),
 			});
-			if (!response) {
+			if (!response.ok) {
 				throw Error("Wrong data!");
 			}
 			if (!validateEmail(userEmail)) {
@@ -40,6 +40,7 @@ export default function Reg() {
 			}
 			const data = await response.json();
 			localStorage.setItem("accessToken", data.accessToken);
+			localStorage.setItem("userName", userName);
 
 			setUserName("");
 			setUserEmail("");

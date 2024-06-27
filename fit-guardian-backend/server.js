@@ -41,10 +41,8 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-	const { userName, userEmail, userPassword } = req.body;
-	const user = users.some(
-		user => user.userName === userName || user.userEmail === userEmail || user.userPassword === userPassword
-	);
+	const { userEmail, userPassword } = req.body;
+	const user = users.find(user => user.userEmail === userEmail || user.userPassword === userPassword);
 	if (!user) {
 		return res.status(400).json({ message: "Invalid username or password!" });
 	}
@@ -52,7 +50,7 @@ app.post("/login", (req, res) => {
 	const payload = { userEmail: user.userEmail };
 	const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
 
-	res.json({ accessToken: accessToken });
+	res.json({ accessToken: accessToken, userName: user.userName });
 });
 
 app.listen(port, () => {
