@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
 
@@ -45,7 +44,6 @@ export default function Reg() {
 			setUserName("");
 			setUserEmail("");
 			setUserPassword("");
-			navigate("/menu");
 			navigate("/firstlog-onboarding");
 		} catch (error) {
 			console.error("Error", error);

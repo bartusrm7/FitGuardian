@@ -18,7 +18,6 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 	&__main-container {
 		width: 100vw;
 		height: 100vh;
@@ -26,6 +25,7 @@ body {
 	}
 	&__container {
 		width: 100%;
+		height: 100%;
 		font-size: 0.8rem;
 		color: #000046;
 	}
@@ -33,8 +33,35 @@ body {
 		margin: 2em 0;
 		color: #000046;
 	}
+	&__add-food-container {
+		height: 85%;
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		overflow: scroll;
+	}
+	&__meal-item {
+		height: 25vh;
+		display: flex;
+	}
+	&__meal-add-btn {
+		margin: 0 2em;
+		height: 25px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	&__input-container {
+		position: relative;
 		text-align: center;
+	}
+	&__cancel-btn {
+		position: absolute;
+		top: 30%;
+		right: 0;
+		margin: 2em;
+		background-color: white;
+		color: #000046;
+		cursor: pointer;
 	}
 	&__input-food,
 	&__add-food-btn {
@@ -56,7 +83,7 @@ body {
 	&__food-main-container {
 		margin: 2em 0;
 		display: grid;
-		grid-template-columns: 30% 17.5% 17.5% 17.5% 17.5%;
+		grid-template-columns: repeat(4, 1fr);
 		justify-content: space-around;
 		text-align: center;
 	}
@@ -79,6 +106,18 @@ body {
 	}
 	.big-view {
 		display: none;
+	}
+	&__background-shadow {
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: rgba(0, 0, 0, 0.95);
+		z-index: 100;
 	}
 }
 @media (max-width: 368px) {
@@ -113,6 +152,9 @@ body {
 	.menu {
 		&__container {
 			padding: 1em;
+		}
+		&__add-food-container {
+			grid-template-columns: repeat(2, 1fr);
 		}
 		.small-view {
 			display: none;
@@ -158,6 +200,9 @@ body {
 		&__container-name {
 			margin-top: 30px;
 		}
+		&__add-food-container {
+			grid-template-columns: repeat(1, 1fr);
+		}
 		&__middle-container {
 			display: flex;
 			flex-direction: column;
@@ -172,6 +217,12 @@ body {
 		&__add-food-btn {
 			padding: 0.7em 1em;
 			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+			}
+		}
+		&__cancel-btn {
+			transition: 0.3s;
 			&:hover {
 				background-color: #60dfff;
 			}
@@ -193,6 +244,9 @@ body {
 			margin-left: 250px;
 			font-size: 1.2rem;
 		}
+		&__add-food-container {
+			grid-template-columns: repeat(2, 1fr);
+		}
 		&__input-food {
 			width: 300px;
 		}
@@ -207,7 +261,6 @@ body {
 @media (min-width: 1200px) {
 	.menu {
 		&__food-main-container {
-			grid-template-columns: 40% 15% 15% 15% 15%;
 		}
 	}
 }

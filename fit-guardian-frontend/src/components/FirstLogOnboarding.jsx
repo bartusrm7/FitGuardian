@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useLogRegContext } from "./LogRegContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function FirstLogOnboarding() {
 	const {
+		setUserTotalCalories,
 		userAge,
 		setUserAge,
 		userGender,
@@ -48,6 +49,33 @@ export default function FirstLogOnboarding() {
 			contextSetters[name](value);
 		}
 	};
+	const calculateCalories = (gender, goal, activity) => {
+		let baseCalories = 0;
+		if (gender === "Male") {
+			baseCalories = 2200;
+		} else if (gender === "Female") {
+			baseCalories = 1800;
+		}
+
+		let baseGoalAmount = 0;
+		if (goal === "Lose weight") {
+			baseGoalAmount = -300;
+		} else if (goal === "Gain weight") {
+			baseGoalAmount = 300;
+		}
+
+		let baseActivityAmount = 1;
+		if (activity === "Light") {
+			baseActivityAmount = 1.25;
+		} else if (activity === "Moderate") {
+			baseActivityAmount = 1.35;
+		} else if (activity === "Active") {
+			baseActivityAmount = 1.5;
+		} else if (activity === "Very Active") {
+			baseActivityAmount = 1.65;
+		}
+		return baseCalories + baseGoalAmount * baseActivityAmount;
+	};
 	const saveUserChoices = () => {
 		const userData = {
 			age: userAge,
@@ -59,10 +87,14 @@ export default function FirstLogOnboarding() {
 		};
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
-			localStorage.setItem("userChoices", JSON.stringify(userData));
+			const userCalories = calculateCalories(userGender, userGoal, userActivity);
+			setUserTotalCalories(userCalories);
+			localStorage.setItem("userChoices", JSON.stringify({ ...userData, userTotalCalories: userCalories }));
+			localStorage.setItem("userCalories", userCalories);
+			console.log(userCalories);
 			navigate("/menu");
 		} else {
-			alert('Some field is empty. Fill all fields to continue!')
+			alert("Some field is empty. Fill all fields to continue!");
 		}
 	};
 

@@ -54,6 +54,9 @@ body {
 		align-items: center;
 		translate: color 0.3s;
 		cursor: pointer;
+		&:hover {
+			color: #316fe4;
+		}
 		a {
 			display: flex;
 			align-items: center;

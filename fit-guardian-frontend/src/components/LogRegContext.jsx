@@ -7,6 +7,7 @@ export default function LogRegProvider({ children }) {
 	const [userEmail, setUserEmail] = useState("");
 	const [userPassword, setUserPassword] = useState("");
 
+	const [userTotalCalories, setUserTotalCalories] = useState("");
 	const [userAge, setUserAge] = useState("");
 	const [userGender, setUserGender] = useState("");
 	const [userHeight, setUserHeight] = useState("");
@@ -23,6 +24,8 @@ export default function LogRegProvider({ children }) {
 				setUserEmail,
 				userPassword,
 				setUserPassword,
+				userTotalCalories,
+				setUserTotalCalories,
 				userAge,
 				setUserAge,
 				userGender,
