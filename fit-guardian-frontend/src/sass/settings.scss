@@ -32,13 +32,10 @@ body {
 		margin: 1em 0;
 		color: #000046;
 	}
-	&__calories-container {
+	&__user-settings-container {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-	}
-	&__settings-item {
-		cursor: pointer;
 	}
 }
 @media (min-width: 368px) {

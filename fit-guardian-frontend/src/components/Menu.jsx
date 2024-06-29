@@ -1,7 +1,17 @@
+import { useState } from "react";
 import Dashboard from "./Dashboard";
 
 export default function Menu() {
-	const handleCloseInputFoodContainer = () => {};
+	const [userFood, setUserFood] = useState({});
+	const [inputIsOpen, setInputIsOpen] = useState(false);
+
+	const handleCloseInputFoodContainer = () => {
+		setInputIsOpen(false);
+	};
+	const handleOpenInputFoodContainer = () => {
+		setInputIsOpen(!inputIsOpen);
+	};
+	const addFoodItem = () => {};
 
 	return (
 		<div>
@@ -11,41 +21,30 @@ export default function Menu() {
 						<div className='menu__container-name'>
 							<h3 className='menu__label'>Menu</h3>
 						</div>
+
 						<div className='menu__add-food-container'>
-							<div className='menu__meal-item'>
-								<div className='menu__meal-item-name'>Meal 1</div>
-								<button className='menu__meal-add-btn'>
-									<span className='material-symbols-outlined'>add</span>
-								</button>
-							</div>
-							<div className='menu__meal-item'>
-								<div className='menu__meal-item-name'>Meal 2</div>
-								<button className='menu__meal-add-btn'>
-									<span className='material-symbols-outlined'>add</span>
-								</button>
-							</div>
-							<div className='menu__meal-item'>
-								<div className='menu__meal-item-name'>Meal 3</div>
-								<button className='menu__meal-add-btn'>
-									<span className='material-symbols-outlined'>add</span>
-								</button>
-							</div>
-							<div className='menu__meal-item'>
-								<div className='menu__meal-item-name'>Meal 4</div>
-								<button className='menu__meal-add-btn'>
-									<span className='material-symbols-outlined'>add</span>
-								</button>
-							</div>
+							{["Meal 1", "Meal 2", "Meal 3", "Meal 4"].map((meal, index) => (
+								<div key={index} className='menu__meal-item-container'>
+									<div className='menu__meal-item'>
+										<div className='menu__meal-item-name'>{meal}</div>
+										<button className='menu__meal-add-btn' onClick={addFoodItem}>
+											<span className='material-symbols-outlined' onClick={handleOpenInputFoodContainer}>
+												add
+											</span>
+										</button>
+									</div>
+								</div>
+							))}
 						</div>
-						{/* <div className='menu__background-shadow'>
-							<div className='menu__cancel-btn'>
+						<div className={`menu__background-shadow ${inputIsOpen ? "open" : ""}`}>
+							<div className='menu__cancel-btn' onClick={handleCloseInputFoodContainer}>
 								<span className='material-symbols-outlined'>close</span>
 							</div>
 							<div className='menu__input-container'>
 								<input className='menu__input-food' type='text' />
 								<button className='menu__add-food-btn'>ADD FOOD</button>
 							</div>
-						</div> */}
+						</div>
 						{/* <div className='menu__middle-container'>
 							<div className='menu__food-main-container small-view'>
 								<div className='menu__food-main-type'>C</div>

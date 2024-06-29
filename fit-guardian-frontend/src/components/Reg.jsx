@@ -38,7 +38,10 @@ export default function Reg() {
 				return;
 			}
 			const data = await response.json();
+			const userData = { userName: userName, userEmail: userEmail, userPassword: userPassword };
+
 			localStorage.setItem("accessToken", data.accessToken);
+			localStorage.setItem("userData", JSON.stringify(userData));
 			localStorage.setItem("userName", userName);
 
 			setUserName("");

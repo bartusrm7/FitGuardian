@@ -19,7 +19,6 @@ export default function FirstLogOnboarding() {
 		setUserActivity,
 	} = useLogRegContext();
 	const navigate = useNavigate();
-
 	const [userChoices, setUserChoices] = useState({
 		age: userAge,
 		gender: userGender,
@@ -89,9 +88,10 @@ export default function FirstLogOnboarding() {
 		if (isDataCompleted) {
 			const userCalories = calculateCalories(userGender, userGoal, userActivity);
 			setUserTotalCalories(userCalories);
-			localStorage.setItem("userChoices", JSON.stringify({ ...userData, userTotalCalories: userCalories }));
+			localStorage.setItem("userSettingChoices", JSON.stringify(userData));
 			localStorage.setItem("userCalories", userCalories);
 			console.log(userCalories);
+			console.log(userData);
 			navigate("/menu");
 		} else {
 			alert("Some field is empty. Fill all fields to continue!");

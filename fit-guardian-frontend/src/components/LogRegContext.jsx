@@ -7,14 +7,6 @@ export default function LogRegProvider({ children }) {
 	const [userEmail, setUserEmail] = useState("");
 	const [userPassword, setUserPassword] = useState("");
 
-	const [userTotalCalories, setUserTotalCalories] = useState("");
-	const [userAge, setUserAge] = useState("");
-	const [userGender, setUserGender] = useState("");
-	const [userHeight, setUserHeight] = useState("");
-	const [userWeight, setUserWeight] = useState("");
-	const [userGoal, setUserGoal] = useState("");
-	const [userActivity, setUserActivity] = useState("");
-
 	return (
 		<LogRegContext.Provider
 			value={{
@@ -24,20 +16,6 @@ export default function LogRegProvider({ children }) {
 				setUserEmail,
 				userPassword,
 				setUserPassword,
-				userTotalCalories,
-				setUserTotalCalories,
-				userAge,
-				setUserAge,
-				userGender,
-				setUserGender,
-				userHeight,
-				setUserHeight,
-				userWeight,
-				setUserWeight,
-				userGoal,
-				setUserGoal,
-				userActivity,
-				setUserActivity,
 			}}>
 			{children}
 		</LogRegContext.Provider>

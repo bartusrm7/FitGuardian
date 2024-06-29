@@ -39,16 +39,23 @@ body {
 		grid-template-columns: repeat(1, 1fr);
 		overflow: scroll;
 	}
-	&__meal-item {
-		height: 25vh;
+	&__meal-item-container {
+		min-height: 25vh;
 		display: flex;
+		flex-direction: column;
+	}
+	&__meal-item {
+		display: flex;
+		align-items: center;
+		font-weight: bold;
 	}
 	&__meal-add-btn {
-		margin: 0 2em;
-		height: 25px;
+		margin: 0 1em;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		border-radius: 50%;
+		cursor: pointer;
 	}
 	&__input-container {
 		position: relative;
@@ -56,11 +63,14 @@ body {
 	}
 	&__cancel-btn {
 		position: absolute;
-		top: 30%;
+		top: 0;
 		right: 0;
+		padding: 0.1em;
 		margin: 2em;
+		display: flex;
 		background-color: white;
 		color: #000046;
+		border-radius: 5px;
 		cursor: pointer;
 	}
 	&__input-food,
@@ -113,11 +123,16 @@ body {
 		right: 0;
 		height: 100%;
 		width: 100%;
-		display: flex;
+		display: none;
 		justify-content: center;
 		align-items: center;
 		background-color: rgba(0, 0, 0, 0.95);
+		transition: 0.3s;
 		z-index: 100;
+	}
+	&__background-shadow.open {
+		display: flex;
+		opacity: 1;
 	}
 }
 @media (max-width: 368px) {
@@ -155,6 +170,9 @@ body {
 		}
 		&__add-food-container {
 			grid-template-columns: repeat(2, 1fr);
+		}
+		&__cancel-btn {
+			padding: 0.25em;
 		}
 		.small-view {
 			display: none;
@@ -202,6 +220,15 @@ body {
 		}
 		&__add-food-container {
 			grid-template-columns: repeat(1, 1fr);
+		}
+		&__meal-add-btn {
+			background-color: #000046;
+			color: #caf0f8;
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+				color: #000046;
+			}
 		}
 		&__middle-container {
 			display: flex;
