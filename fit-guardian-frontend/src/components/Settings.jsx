@@ -33,9 +33,11 @@ export default function Settings() {
 		setEditedUserData(prevState => ({
 			...prevState,
 			userChoices: {
+				...prevState.userChoices,
 				[name]: value,
 			},
 			userData: {
+				...prevState.userData,
 				[name]: value,
 			},
 		}));
@@ -44,13 +46,13 @@ export default function Settings() {
 	const handleSaveChanges = () => {
 		if (editedUserData) {
 			setUserAllData(editedUserData);
-			localStorage.setItem("userSettingChoices", JSON.stringify(editedUserData.userChoices));
+			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
 		}
 	};
 
 	useEffect(() => {
-		const userChoicesString = localStorage.getItem("userSettingChoices");
+		const userChoicesString = localStorage.getItem("userChoices");
 		const userDataString = localStorage.getItem("userData");
 
 		if (userChoicesString && userDataString) {
