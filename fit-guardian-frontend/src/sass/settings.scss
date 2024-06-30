@@ -18,13 +18,13 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
 	&__main-container {
 		width: 100vw;
 		height: 100vh;
 		color: #caf0f8;
 	}
 	&__container {
+		padding: 1em;
 		font-size: 0.8rem;
 		color: #000046;
 	}
@@ -37,12 +37,43 @@ body {
 		display: flex;
 		flex-direction: column;
 	}
+	&__user-settings-item {
+		margin: 0.25em 0;
+	}
+	.choices {
+		display: flex;
+		flex-direction: column;
+	}
+	&__user-settings-name {
+		margin: 0.25em 0;
+		font-weight: bold;
+	}
+	&__user-settings-data {
+		padding: 0.25em 0.5em;
+		font-size: 0.8rem;
+		border-radius: 5px;
+	}
+	&__edited-data-btn-container {
+		margin: 1em 0;
+	}
+	&__edited-data-btn {
+		padding: 0.35em 0.5em;
+		background-color: white;
+		font-size: 0.8rem;
+		font-weight: bold;
+		border-radius: 5px;
+		cursor: pointer;
+	}
 }
 @media (min-width: 368px) {
 	.settings {
 		&__container {
+			padding: 1em 2em;
 			width: 100%;
 			font-size: 0.9rem;
+		}
+		&__user-settings-container {
+			margin: 2em 0;
 		}
 		&__user-settings-item {
 			width: 100%;
@@ -50,12 +81,39 @@ body {
 			justify-content: space-between;
 			align-items: center;
 		}
+		.choices {
+			position: relative;
+			span {
+				position: absolute;
+				top: 0;
+				left: -65px;
+				display: flex;
+			}
+		}
+		&__user-settings-data {
+			font-size: 0.9rem;
+		}
+		&__edited-data-btn-container {
+			text-align: center;
+		}
+		&__edited-data-btn {
+			padding: 0.5em 0.75em;
+			font-size: 0.9rem;
+			text-align: center;
+		}
 	}
 }
 @media (min-width: 576px) {
 	.settings {
 		&__container {
 			padding: 1em;
+		}
+		&__user-settings-container {
+			width: 100%;
+		}
+		&__user-settings-item {
+			margin: 0.25em auto;
+			width: 70%;
 		}
 	}
 }
@@ -66,9 +124,7 @@ body {
 			justify-content: center;
 		}
 		&__container {
-			padding: 1em;
 			color: #caf0f8;
-			font-size: 1rem;
 		}
 		&__container-name {
 			margin-top: 50px;
@@ -87,13 +143,25 @@ body {
 			overflow: hidden;
 		}
 		&__container {
-			padding: 1em;
 			margin-left: 220px;
 			height: 100%;
-			font-size: 1.1rem;
+			font-size: 1rem;
 		}
 		&__container-name {
 			margin-top: 30px;
+		}
+		&__user-settings-item {
+			width: 100%;
+		}
+		&__user-settings-data {
+			font-size: 1rem;
+		}
+		&__edited-data-btn {
+			padding: 0.75em 1.25em;
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+			}
 		}
 	}
 }
@@ -102,6 +170,17 @@ body {
 		&__container {
 			margin-left: 250px;
 			font-size: 1.2rem;
+		}
+		&__user-settings-item {
+			width: 80%;
+			font-size: 1.1rem;
+		}
+	}
+}
+@media (min-width: 1200px) {
+	.settings {
+		&__user-settings-item {
+			width: 60%;
 		}
 	}
 }

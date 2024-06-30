@@ -5,23 +5,8 @@ import { useUserContext } from "./UserContext";
 
 export default function Settings() {
 	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
-	const {
-		userAllData,
-		setUserAllData,
-		setUserTotalCalories,
-		userAge,
-		setUserAge,
-		userGender,
-		setUserGender,
-		userHeight,
-		setUserHeight,
-		userWeight,
-		setUserWeight,
-		userGoal,
-		setUserGoal,
-		userActivity,
-		setUserActivity,
-	} = useUserContext();
+
+	const { userAllData, setUserAllData } = useUserContext();
 	const [userOptions, setUserOptions] = useState({
 		genderOptions: ["Male", "Female"],
 		goalOptions: ["Lose weight", "Maintain weight", "Gain weight"],
@@ -29,6 +14,13 @@ export default function Settings() {
 	});
 	const [editedUserData, setEditedUserData] = useState(null);
 
+	const validateEmail = email => {
+		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return re.test(email);
+	};
+	const validatePassword = password => {
+		return password.length >= 8;
+	};
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => ({
 			...prevState,
@@ -42,7 +34,6 @@ export default function Settings() {
 			},
 		}));
 	};
-
 	const handleSaveChanges = () => {
 		if (editedUserData) {
 			setUserAllData(editedUserData);
@@ -50,7 +41,6 @@ export default function Settings() {
 			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
 		}
 	};
-
 	useEffect(() => {
 		const userChoicesString = localStorage.getItem("userChoices");
 		const userDataString = localStorage.getItem("userData");
@@ -74,6 +64,39 @@ export default function Settings() {
 					<div className='settings__container'>
 						<div className='settings__container-name'>
 							<h3 className='settings__label'>Settings</h3>
+						</div>
+						<div className='settings__user-settings-container'>
+							{editedUserData && (
+								<>
+									<div className='settings__user-settings-item'>
+										<div className='settings__user-settings-name'>NAME:</div>
+										<input
+											type='text'
+											className='settings__user-settings-data'
+											value={editedUserData.userData.userName}
+											onChange={e => handleInputChange("userName", e.target.value)}
+										/>
+									</div>
+									<div className='settings__user-settings-item'>
+										<div className='settings__user-settings-name'>EMAIL:</div>
+										<input
+											type='email'
+											className='settings__user-settings-data'
+											value={editedUserData.userData.userEmail}
+											onChange={e => handleInputChange("userEmail", e.target.value)}
+										/>
+									</div>
+									<div className='settings__user-settings-item'>
+										<div className='settings__user-settings-name'>PASSWORD:</div>
+										<input
+											type='password'
+											className='settings__user-settings-data'
+											value={editedUserData.userData.userPassword}
+											onChange={e => handleInputChange("userPassword", e.target.value)}
+										/>
+									</div>
+								</>
+							)}
 						</div>
 						<div className='settings__user-settings-container'>
 							{editedUserData && (
@@ -103,21 +126,31 @@ export default function Settings() {
 									</div>
 									<div className='settings__user-settings-item'>
 										<div className='settings__user-settings-name'>HEIGHT:</div>
-										<input
-											type='range'
-											className='settings__user-settings-data'
-											value={editedUserData.userChoices.height}
-											onChange={e => handleInputChange("height", e.target.value)}
-										/>
+										<div className='choices'>
+											<span>{`${editedUserData.userChoices.height}cm`}</span>
+											<input
+												type='range'
+												min={100}
+												max={250}
+												className='settings__user-settings-data'
+												value={editedUserData.userChoices.height}
+												onChange={e => handleInputChange("height", e.target.value)}
+											/>
+										</div>
 									</div>
 									<div className='settings__user-settings-item'>
 										<div className='settings__user-settings-name'>WEIGHT:</div>
-										<input
-											type='range'
-											className='settings__user-settings-data'
-											value={editedUserData.userChoices.weight}
-											onChange={e => handleInputChange("weight", e.target.value)}
-										/>
+										<div className='choices'>
+											<span>{`${editedUserData.userChoices.weight}kg`}</span>
+											<input
+												type='range'
+												min={40}
+												max={150}
+												className='settings__user-settings-data'
+												value={editedUserData.userChoices.weight}
+												onChange={e => handleInputChange("weight", e.target.value)}
+											/>
+										</div>
 									</div>
 									<div className='settings__user-settings-item'>
 										<div className='settings__user-settings-name'>GOAL:</div>
@@ -150,9 +183,11 @@ export default function Settings() {
 								</>
 							)}
 						</div>
-						<button className='settings__edited-data-btn' onClick={handleSaveChanges}>
-							SAVE CHANGES
-						</button>
+						<div className='settings__edited-data-btn-container'>
+							<button className='settings__edited-data-btn' onClick={handleSaveChanges}>
+								SAVE CHANGES
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
