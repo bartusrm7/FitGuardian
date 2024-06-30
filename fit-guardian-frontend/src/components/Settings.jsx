@@ -1,11 +1,8 @@
 import Dashboard from "./Dashboard";
 import { useEffect, useState } from "react";
-import { useLogRegContext } from "./LogRegContext";
 import { useUserContext } from "./UserContext";
 
 export default function Settings() {
-	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
-
 	const { userAllData, setUserAllData } = useUserContext();
 	const [userOptions, setUserOptions] = useState({
 		genderOptions: ["Male", "Female"],
@@ -21,6 +18,7 @@ export default function Settings() {
 	const validatePassword = password => {
 		return password.length >= 8;
 	};
+
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => ({
 			...prevState,
@@ -34,13 +32,26 @@ export default function Settings() {
 			},
 		}));
 	};
+
 	const handleSaveChanges = () => {
 		if (editedUserData) {
+			const { userData } = editedUserData;
+			if (!validateEmail(userData.userEmail)) {
+				console.log("Invalid email format!");
+				return;
+			}
+			if (!validatePassword(userData.userPassword)) {
+				console.log("Password is to short!");
+				return;
+			}
+
 			setUserAllData(editedUserData);
 			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
+			localStorage.setItem("userName", userData.userName);
 		}
 	};
+
 	useEffect(() => {
 		const userChoicesString = localStorage.getItem("userChoices");
 		const userDataString = localStorage.getItem("userData");
