@@ -1,4 +1,5 @@
 import Dashboard from "./Dashboard";
+
 export default function Recipes() {
 	return (
 		<div>

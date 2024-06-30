@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { useLogRegContext } from "./LogRegContext";
+import { useEffect } from "react";
+import { useUserContext } from "./UserContext";
 import Dashboard from "./Dashboard";
 
 export default function Macronutrients() {
-	const { userTotalCalories, setUserTotalCalories } = useLogRegContext();
+	const { userTotalCalories, setUserTotalCalories } = useUserContext();
 	useEffect(() => {
 		const updatedUserTotalCalories = localStorage.getItem("userCalories");
 		setUserTotalCalories(updatedUserTotalCalories);

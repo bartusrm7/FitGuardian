@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLogRegContext } from "./LogRegContext";
+import { useUserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 export default function FirstLogOnboarding() {
@@ -17,7 +17,8 @@ export default function FirstLogOnboarding() {
 		setUserGoal,
 		userActivity,
 		setUserActivity,
-	} = useLogRegContext();
+	} = useUserContext();
+
 	const navigate = useNavigate();
 	const [userChoices, setUserChoices] = useState({
 		age: userAge,
@@ -87,11 +88,11 @@ export default function FirstLogOnboarding() {
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
 			const userCalories = calculateCalories(userGender, userGoal, userActivity);
-			setUserTotalCalories(userCalories);
+
 			localStorage.setItem("userSettingChoices", JSON.stringify(userData));
 			localStorage.setItem("userCalories", userCalories);
-			console.log(userCalories);
-			console.log(userData);
+			
+			setUserTotalCalories(userCalories);
 			navigate("/menu");
 		} else {
 			alert("Some field is empty. Fill all fields to continue!");

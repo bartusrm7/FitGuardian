@@ -35,13 +35,20 @@ body {
 	&__user-settings-container {
 		width: 100%;
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: column;
 	}
 }
 @media (min-width: 368px) {
 	.settings {
 		&__container {
+			width: 100%;
 			font-size: 0.9rem;
+		}
+		&__user-settings-item {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 		}
 	}
 }

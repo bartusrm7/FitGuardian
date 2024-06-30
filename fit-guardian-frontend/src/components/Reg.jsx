@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
+import { useUserContext } from "./UserContext";
 
 export default function Reg() {
 	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
@@ -38,10 +39,10 @@ export default function Reg() {
 				return;
 			}
 			const data = await response.json();
-			const userData = { userName: userName, userEmail: userEmail, userPassword: userPassword };
+			const saveUserData = { userName: userName, userEmail: userEmail, userPassword: userPassword };
 
 			localStorage.setItem("accessToken", data.accessToken);
-			localStorage.setItem("userData", JSON.stringify(userData));
+			localStorage.setItem("userData", JSON.stringify(saveUserData));
 			localStorage.setItem("userName", userName);
 
 			setUserName("");

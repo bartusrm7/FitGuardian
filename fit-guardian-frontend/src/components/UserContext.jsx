@@ -1,8 +1,9 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
 
 export default function UserProvider({ children }) {
+	const [userAllData, setUserAllData] = useState("");
 	const [userTotalCalories, setUserTotalCalories] = useState("");
 	const [userAge, setUserAge] = useState("");
 	const [userGender, setUserGender] = useState("");
@@ -14,6 +15,8 @@ export default function UserProvider({ children }) {
 	return (
 		<UserContext.Provider
 			value={{
+				userAllData,
+				setUserAllData,
 				userTotalCalories,
 				setUserTotalCalories,
 				userAge,
