@@ -14,6 +14,14 @@ export default function Log() {
 	};
 
 	const userLoginData = async () => {
+		if (!validateEmail(userEmail)) {
+			console.log("Invalid email format!");
+			return;
+		}
+		if (!validatePassword(userPassword)) {
+			console.log("Password is to short!");
+			return;
+		}
 		try {
 			const response = await fetch("http://localhost:5174/login", {
 				method: "POST",
@@ -26,19 +34,13 @@ export default function Log() {
 				}),
 			});
 			if (!response) {
-				throw Error("Wrong data!");
-			}
-			if (!validateEmail(userEmail)) {
-				console.log("Invalid email format!");
-				return;
-			}
-			if (!validatePassword(userPassword)) {
-				console.log("Password is to short!");
-				return;
+				throw Error("Login failed!!");
 			}
 			const data = await response.json();
+			if (!data.accessToken) {
+				return;
+			}
 			localStorage.setItem("accessToken", data.accessToken);
-
 			const userName = localStorage.getItem("userName");
 
 			setUserEmail("");

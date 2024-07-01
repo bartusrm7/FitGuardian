@@ -29,29 +29,47 @@ body {
 		color: #000046;
 	}
 	&__container-name {
-		margin: 1em 0;
 		color: #000046;
 	}
+	&__main-container-with-data {
+		height: 90%;
+	}
 	&__user-settings-container {
+		margin: 1em 0;
 		width: 100%;
+		height: 90%;
 		display: flex;
 		flex-direction: column;
-	}
-	&__user-settings-item {
-		margin: 0.25em 0;
+		justify-content: space-evenly;
+		overflow: scroll;
 	}
 	.choices {
 		display: flex;
 		flex-direction: column;
+		input {
+			width: 172px;
+			padding: 0.25em 0;
+		}
 	}
 	&__user-settings-name {
 		margin: 0.25em 0;
 		font-weight: bold;
 	}
-	&__user-settings-data {
+	&__user-settings-data,
+	&__user-settings-name {
 		padding: 0.25em 0.5em;
 		font-size: 0.8rem;
 		border-radius: 5px;
+	}
+	.calories {
+		input {
+			width: 100px;
+		}
+	}
+	&__input-macro-container {
+		input {
+			width: 50px;
+		}
 	}
 	&__edited-data-btn-container {
 		margin: 1em 0;
@@ -68,12 +86,9 @@ body {
 @media (min-width: 368px) {
 	.settings {
 		&__container {
-			padding: 1em 2em;
+			padding: 1em;
 			width: 100%;
 			font-size: 0.9rem;
-		}
-		&__user-settings-container {
-			margin: 2em 0;
 		}
 		&__user-settings-item {
 			width: 100%;
@@ -90,8 +105,18 @@ body {
 				display: flex;
 			}
 		}
-		&__user-settings-data {
+		&__user-settings-data,
+		&__user-settings-name {
 			font-size: 0.9rem;
+		}
+		&__input-macro-container {
+			width: 100%;
+			display: flex;
+			justify-content: end;
+			input {
+				margin: 0 0.25em;
+				width: 65px;
+			}
 		}
 		&__edited-data-btn-container {
 			text-align: center;
@@ -112,7 +137,7 @@ body {
 			width: 100%;
 		}
 		&__user-settings-item {
-			margin: 0.25em auto;
+			margin: 0 auto;
 			width: 70%;
 		}
 	}
@@ -145,16 +170,36 @@ body {
 		&__container {
 			margin-left: 220px;
 			height: 100%;
-			font-size: 1rem;
+			font-size: 1.1rem;
 		}
 		&__container-name {
 			margin-top: 30px;
 		}
+		&__user-settings-container {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+		}
 		&__user-settings-item {
 			width: 100%;
 		}
-		&__user-settings-data {
+		.choices {
+			position: relative;
+			span {
+				position: absolute;
+				top: 0;
+				left: -75px;
+				display: flex;
+			}
+		}
+		&__user-settings-data,
+		&__user-settings-name {
+			padding: 0.25em 0;
 			font-size: 1rem;
+		}
+		input,
+		select {
+			padding: 0.25em 0.5em;
 		}
 		&__edited-data-btn {
 			padding: 0.75em 1.25em;
@@ -173,6 +218,9 @@ body {
 		}
 		&__user-settings-item {
 			width: 80%;
+		}
+		&__user-settings-data,
+		&__user-settings-name {
 			font-size: 1.1rem;
 		}
 	}

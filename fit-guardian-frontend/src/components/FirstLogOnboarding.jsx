@@ -49,7 +49,25 @@ export default function FirstLogOnboarding() {
 			contextSetters[name](value);
 		}
 	};
-	const calculateCalories = (gender, goal, activity) => {
+	const calculateCalories = (height, weight, gender, goal, activity) => {
+		let basedHeight = 0;
+		if (height >= 170 && height <= 190) {
+			basedHeight = 100;
+		} else if (height >= 191 && height <= 220) {
+			basedHeight = 200;
+		} else if (height >= 211) {
+			basedHeight = 300;
+		}
+
+		let basedWeight = 0;
+		if (weight >= 75 && weight <= 90) {
+			basedWeight = 200;
+		} else if (weight >= 91 && weight <= 110) {
+			basedWeight = 300;
+		} else if (weight >= 111) {
+			basedWeight = 400;
+		}
+
 		let baseCalories = 0;
 		if (gender === "Male") {
 			baseCalories = 2200;
@@ -74,7 +92,7 @@ export default function FirstLogOnboarding() {
 		} else if (activity === "Very Active") {
 			baseActivityAmount = 1.65;
 		}
-		return baseCalories + baseGoalAmount * baseActivityAmount;
+		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount;
 	};
 	const saveUserChoices = () => {
 		const userData = {
@@ -87,11 +105,11 @@ export default function FirstLogOnboarding() {
 		};
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
-			const userCalories = calculateCalories(userGender, userGoal, userActivity);
+			const userCalories = calculateCalories(userHeight, userWeight, userGender, userGoal, userActivity);
 
-			localStorage.setItem("userSettingChoices", JSON.stringify(userData));
+			localStorage.setItem("userChoices", JSON.stringify(userData));
 			localStorage.setItem("userCalories", userCalories);
-			
+
 			setUserTotalCalories(userCalories);
 			navigate("/menu");
 		} else {

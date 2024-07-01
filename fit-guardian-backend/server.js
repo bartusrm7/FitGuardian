@@ -44,7 +44,7 @@ app.post("/login", (req, res) => {
 	const { userEmail, userPassword } = req.body;
 	const user = users.find(user => user.userEmail === userEmail || user.userPassword === userPassword);
 	if (!user) {
-		return res.status(400).json({ message: "Invalid username or password!" });
+		return res.status(401).json({ message: "Invalid username or password!" });
 	}
 
 	const payload = { userEmail: user.userEmail };

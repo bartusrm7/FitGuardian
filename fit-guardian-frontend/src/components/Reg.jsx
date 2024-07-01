@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
-import { useUserContext } from "./UserContext";
 
 export default function Reg() {
 	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
@@ -15,6 +14,14 @@ export default function Reg() {
 	};
 
 	const userRegisterData = async () => {
+		if (!validateEmail(userEmail)) {
+			console.log("Register failed!");
+			return;
+		}
+		if (!validatePassword(userPassword)) {
+			console.log("Password is to short!");
+			return;
+		}
 		try {
 			const response = await fetch("http://localhost:5174/register", {
 				method: "POST",
@@ -29,14 +36,6 @@ export default function Reg() {
 			});
 			if (!response.ok) {
 				throw Error("Wrong data!");
-			}
-			if (!validateEmail(userEmail)) {
-				console.log("Invalid email format!");
-				return;
-			}
-			if (!validatePassword(userPassword)) {
-				console.log("Password is to short!");
-				return;
 			}
 			const data = await response.json();
 			const saveUserData = { userName: userName, userEmail: userEmail, userPassword: userPassword };

@@ -3,7 +3,16 @@ import { useUserContext } from "./UserContext";
 import Dashboard from "./Dashboard";
 
 export default function Macronutrients() {
-	const { userTotalCalories, setUserTotalCalories } = useUserContext();
+	const {
+		userTotalCalories,
+		setUserTotalCalories,
+		userProteins,
+		setUserProteins,
+		userCarbs,
+		setUserCarbs,
+		userFats,
+		setUserFats,
+	} = useUserContext();
 	useEffect(() => {
 		const updatedUserTotalCalories = localStorage.getItem("userCalories");
 		setUserTotalCalories(updatedUserTotalCalories);
@@ -20,9 +29,9 @@ export default function Macronutrients() {
 						<div className='macronutrients__macros-calories-container'>
 							<div className='macronutrients__calories'>{`${userTotalCalories}kcal`}</div>
 							<div className='macronutrients__macros-container'>
-								<div className='macronutrients__macro-item proteins'></div>
-								<div className='macronutrients__macro-item carbs'></div>
-								<div className='macronutrients__macro-item fats'></div>
+								<div className='macronutrients__macro-item proteins'>{`${userProteins}g`}</div>
+								<div className='macronutrients__macro-item carbs'>{`${userCarbs}g`}</div>
+								<div className='macronutrients__macro-item fats'>{`${userFats}g`}</div>
 							</div>
 						</div>
 					</div>

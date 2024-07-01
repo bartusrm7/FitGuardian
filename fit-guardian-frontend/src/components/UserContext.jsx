@@ -4,7 +4,12 @@ const UserContext = createContext();
 
 export default function UserProvider({ children }) {
 	const [userAllData, setUserAllData] = useState("");
+
 	const [userTotalCalories, setUserTotalCalories] = useState("");
+	const [userProteins, setUserProteins] = useState("");
+	const [userCarbs, setUserCarbs] = useState("");
+	const [userFats, setUserFats] = useState("");
+
 	const [userAge, setUserAge] = useState("");
 	const [userGender, setUserGender] = useState("");
 	const [userHeight, setUserHeight] = useState("");
@@ -19,6 +24,12 @@ export default function UserProvider({ children }) {
 				setUserAllData,
 				userTotalCalories,
 				setUserTotalCalories,
+				userProteins,
+				setUserProteins,
+				userCarbs,
+				setUserCarbs,
+				userFats,
+				setUserFats,
 				userAge,
 				setUserAge,
 				userGender,
