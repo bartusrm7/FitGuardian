@@ -6,6 +6,7 @@ export default function UserProvider({ children }) {
 	const [userAllData, setUserAllData] = useState("");
 
 	const [userTotalCalories, setUserTotalCalories] = useState("");
+	const [userTotalMacros, setUserTotalMacros] = useState("");
 	const [userProteins, setUserProteins] = useState("");
 	const [userCarbs, setUserCarbs] = useState("");
 	const [userFats, setUserFats] = useState("");
@@ -24,6 +25,8 @@ export default function UserProvider({ children }) {
 				setUserAllData,
 				userTotalCalories,
 				setUserTotalCalories,
+				userTotalMacros,
+				setUserTotalMacros,
 				userProteins,
 				setUserProteins,
 				userCarbs,

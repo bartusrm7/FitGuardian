@@ -7,6 +7,8 @@ export default function Settings() {
 		setUserAllData,
 		userTotalCalories,
 		setUserTotalCalories,
+		userTotalMacros,
+		setUserTotalMacros,
 		userProteins,
 		setUserProteins,
 		userCarbs,
@@ -27,22 +29,29 @@ export default function Settings() {
 	const validatePassword = password => {
 		return password.length >= 8;
 	};
-	const proteinPercentage = 0.2;
-	const carbPercentage = 0.5;
-	const fatPercentage = 0.3;
 
 	const setMacronutrientsFromTotalCalories = () => {
-		const proteinPercents = Math.round(((userTotalCalories / 100) * proteinPercentage) / 9);
-		const carbsPercents = Math.round(((userTotalCalories / 100) * carbPercentage) / 9);
-		const fatsPercents = Math.round(((userTotalCalories / 100) * fatPercentage) / 9);
+		const proteinPercentage = 0.2;
+		const carbPercentage = 0.5;
+		const fatPercentage = 0.3;
 
-		const userMacronutrients = {
-			proteins: proteinPercents,
-			carbs: carbsPercents,
-			fats: fatsPercents,
+		const proteins = (proteinPercentage * userTotalCalories) / 4;
+		const carbs = (carbPercentage * userTotalCalories) / 4;
+		const fats = (fatPercentage * userTotalCalories) / 9;
+
+		const totalMacros = {
+			proteins: proteins.toFixed(0),
+			carbs: carbs.toFixed(0),
+			fats: fats.toFixed(0),
 		};
-	};
 
+		setUserTotalMacros(totalMacros);
+		console.log(totalMacros);
+
+		setUserProteins(proteins.toFixed(0));
+		setUserCarbs(carbs.toFixed(0));
+		setUserFats(fats.toFixed(0));
+	};
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => ({
 			...prevState,
@@ -68,11 +77,13 @@ export default function Settings() {
 				console.log("Password is to short!");
 				return;
 			}
+
 			setUserAllData(editedUserData);
 			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
 			localStorage.setItem("userName", userData.userName);
 			localStorage.setItem("userCalories", userTotalCalories);
+			localStorage.setItem("userMacros", JSON.stringify(userTotalMacros));
 		}
 	};
 
@@ -80,19 +91,24 @@ export default function Settings() {
 		const userChoicesString = localStorage.getItem("userChoices");
 		const userDataString = localStorage.getItem("userData");
 		const userCaloriesString = localStorage.getItem("userCalories");
+		const userMacrosString = localStorage.getItem("userMacros");
+		console.log(userMacrosString);
 
 		if (userChoicesString && userDataString) {
 			const userChoices = JSON.parse(userChoicesString);
 			const userData = JSON.parse(userDataString);
 			const userCalories = JSON.parse(userCaloriesString);
+			const userMacros = JSON.parse(userMacrosString);
 
 			const updatedUserChoices = {
 				userChoices: userChoices,
 				userData: userData,
 				userCalories: userCalories,
+				userMacros: userMacros,
 			};
 			setEditedUserData(updatedUserChoices);
 			setUserTotalCalories(userCalories);
+			setMacronutrientsFromTotalCalories(userMacrosString);
 		}
 	}, []);
 
@@ -217,35 +233,35 @@ export default function Settings() {
 										<div className='settings__user-settings-item calories'>
 											<div className='settings__user-settings-name'>CALORIES:</div>
 											<input
-												type='number'
+												type='text'
 												className='settings__user-settings-data'
-												value={userTotalCalories}
+												value={`${userTotalCalories}kcal`}
 												onChange={e => setUserTotalCalories(e.target.value)}
 											/>
 										</div>
 										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>MACRONUTRIENTS:</div>
+											<div className='settings__user-settings-name'>MACROS:</div>
 											<div className='settings__input-macro-container'>
 												<input
-													type='number'
+													type='text'
 													className='settings__user-settings-data'
 													placeholder='P%'
-													value={userProteins}
-													onChange={e => setEditedUserData(e.target.value)}
+													value={`${userProteins}g`}
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
 												/>
 												<input
-													type='number'
+													type='text'
 													className='settings__user-settings-data'
 													placeholder='C%'
-													value={userCarbs}
-													onChange={e => setEditedUserData(e.target.value)}
+													value={`${userCarbs}g`}
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
 												/>
 												<input
-													type='number'
+													type='text'
 													className='settings__user-settings-data'
 													placeholder='F%'
-													value={userFats}
-													onChange={e => setEditedUserData(e.target.value)}
+													value={`${userFats}g`}
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
 												/>
 											</div>
 										</div>
