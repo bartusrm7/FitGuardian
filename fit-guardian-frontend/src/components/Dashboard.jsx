@@ -54,11 +54,6 @@ export default function Dashboard() {
 								</Link>
 							</div>
 							<div className='dashboard__menu-item'>
-								<Link to='/recipes' onClick={handleCloseMenu}>
-									<span className='material-symbols-outlined'>menu_book</span>Recipes
-								</Link>
-							</div>
-							<div className='dashboard__menu-item'>
 								<Link to='/statistics' onClick={handleCloseMenu}>
 									<span className='material-symbols-outlined'>monitoring</span>Statistics
 								</Link>

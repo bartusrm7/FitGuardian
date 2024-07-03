@@ -7,7 +7,6 @@ import "./sass/firstlog-onboarding.scss";
 import "./sass/dashboard.scss";
 import "./sass/menu.scss";
 import "./sass/macronutrients.scss";
-import "./sass/recipes.scss";
 import "./sass/settings.scss";
 import "./sass/statistics.scss";
 

@@ -10,7 +10,6 @@ import FoodProvider from "./components/FoodContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Menu from "./components/Menu";
 import Macronutrients from "./components/Macronutrients";
-import Recipes from "./components/Recipes";
 import Statistics from "./components/Statistics";
 import Settings from "./components/Settings";
 
@@ -53,14 +52,6 @@ export default function App() {
 								element={
 									<ProtectedRoute>
 										<Macronutrients />
-									</ProtectedRoute>
-								}
-							/>
-							<Route
-								path='/recipes'
-								element={
-									<ProtectedRoute>
-										<Recipes />
 									</ProtectedRoute>
 								}
 							/>
