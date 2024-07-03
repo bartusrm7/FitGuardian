@@ -26,7 +26,7 @@ export default function Reg() {
 			const response = await fetch("http://localhost:5174/register", {
 				method: "POST",
 				headers: {
-					"Content-Type": "Application/JSON",
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					userName: userName,

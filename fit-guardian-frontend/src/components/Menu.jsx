@@ -11,7 +11,22 @@ export default function Menu() {
 	const handleOpenInputFoodContainer = () => {
 		setInputIsOpen(!inputIsOpen);
 	};
-	const addFoodItem = () => {};
+	const handleAddFoodItem = async food => {
+		try {
+			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${food}`, {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({ food: food }),
+			});
+			if (!response.ok) {
+				throw Error("Wrong data!");
+			}
+			const data = response.json();
+			console.log(data);
+		} catch (error) {}
+	};
 
 	return (
 		<div>
@@ -27,7 +42,7 @@ export default function Menu() {
 								<div key={index} className='menu__meal-item-container'>
 									<div className='menu__meal-item'>
 										<div className='menu__meal-item-name'>{meal}</div>
-										<button className='menu__meal-add-btn' onClick={addFoodItem}>
+										<button className='menu__meal-add-btn' onClick={handleAddFoodItem}>
 											<span className='material-symbols-outlined' onClick={handleOpenInputFoodContainer}>
 												add
 											</span>

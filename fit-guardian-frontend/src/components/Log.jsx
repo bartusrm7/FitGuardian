@@ -26,7 +26,7 @@ export default function Log() {
 			const response = await fetch("http://localhost:5174/login", {
 				method: "POST",
 				headers: {
-					"Content-type": "Application/JSON",
+					"Content-type": "application/json",
 				},
 				body: JSON.stringify({
 					userEmail: userEmail,
