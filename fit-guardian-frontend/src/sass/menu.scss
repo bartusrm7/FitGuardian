@@ -80,8 +80,13 @@ body {
 	}
 	&__input-food {
 		width: 200px;
-		border-top-left-radius: 5px;
-		border-bottom-left-radius: 5px;
+		&:first-child {
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
+	}
+	.grams {
+		width: 60px;
 	}
 	&__add-food-btn {
 		padding: 0.5em 1em;
@@ -282,12 +287,6 @@ body {
 		}
 		.big-view {
 			display: grid;
-		}
-	}
-}
-@media (min-width: 1200px) {
-	.menu {
-		&__food-main-container {
 		}
 	}
 }

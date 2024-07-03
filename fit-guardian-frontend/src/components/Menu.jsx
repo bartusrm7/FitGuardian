@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 
 export default function Menu() {
-	const [userFood, setUserFood] = useState({});
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 
 	const handleCloseInputFoodContainer = () => {
@@ -11,21 +10,38 @@ export default function Menu() {
 	const handleOpenInputFoodContainer = () => {
 		setInputIsOpen(!inputIsOpen);
 	};
-	const handleAddFoodItem = async food => {
+	const handleAddFoodItem = async () => {
 		try {
-			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${food}`, {
-				method: "POST",
+			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${inputFood}`, {
+				method: "GET",
 				headers: {
+					"X-Api-Key": "mlvXoPbZRa8k/+ScMmOVRg==dh7Jd2IWTMotpu0B",
 					"Content-type": "application/json",
 				},
-				body: JSON.stringify({ food: food }),
 			});
 			if (!response.ok) {
 				throw Error("Wrong data!");
 			}
-			const data = response.json();
-			console.log(data);
-		} catch (error) {}
+			const data = await response.json();
+
+			if (inputFood === "") {
+				return;
+			}
+			const caloriesWeight = parseFloat(inputFoodGrams);
+			const newFood = {
+				foodName: inputFood,
+				foodCalories: (data.items[0].calories / 100) * caloriesWeight,
+				foodProteins: (data.items[0].protein_g / 100) * caloriesWeight,
+				foodCarbs: (data.items[0].carbohydrates_total_g / 100) * caloriesWeight,
+				foodFats: (data.items[0].fat_total_g / 100) * caloriesWeight,
+			};
+			setUserFood(prevState => [...prevState, newFood]);
+			setInputFood("");
+			setInputFoodGrams("");
+			setInputIsOpen(false);
+		} catch (error) {
+			console.error("Error fetching data:", error.message);
+		}
 	};
 
 	return (
@@ -42,12 +58,11 @@ export default function Menu() {
 								<div key={index} className='menu__meal-item-container'>
 									<div className='menu__meal-item'>
 										<div className='menu__meal-item-name'>{meal}</div>
-										<button className='menu__meal-add-btn' onClick={handleAddFoodItem}>
-											<span className='material-symbols-outlined' onClick={handleOpenInputFoodContainer}>
-												add
-											</span>
+										<button className='menu__meal-add-btn' onClick={handleOpenInputFoodContainer}>
+											<span className='material-symbols-outlined'>add</span>
 										</button>
 									</div>
+									<div className='menu__added-food-container'></div>
 								</div>
 							))}
 						</div>
@@ -56,8 +71,21 @@ export default function Menu() {
 								<span className='material-symbols-outlined'>close</span>
 							</div>
 							<div className='menu__input-container'>
-								<input className='menu__input-food' type='text' />
-								<button className='menu__add-food-btn'>ADD FOOD</button>
+								<input
+									className='menu__input-food'
+									type='text'
+									value={inputFood}
+									onChange={e => setInputFood(e.target.value)}
+								/>
+								<input
+									className='menu__input-food grams'
+									type='number'
+									value={inputFoodGrams}
+									onChange={e => setInputFoodGrams(e.target.value)}
+								/>
+								<button className='menu__add-food-btn' onClick={handleAddFoodItem}>
+									ADD FOOD
+								</button>
 							</div>
 						</div>
 						{/* <div className='menu__middle-container'>
