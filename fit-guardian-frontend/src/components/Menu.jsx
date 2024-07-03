@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
+import { useState } from "react";
+import { useFoodContext } from "./FoodContext";
 
 export default function Menu() {
+	const { userMeal, setUserMeal, inputFood, setInputFood, inputFoodGrams, setInputFoodGrams } = useFoodContext();
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 
 	const handleCloseInputFoodContainer = () => {
@@ -30,12 +32,13 @@ export default function Menu() {
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
 				foodName: inputFood,
-				foodCalories: (data.items[0].calories / 100) * caloriesWeight,
-				foodProteins: (data.items[0].protein_g / 100) * caloriesWeight,
-				foodCarbs: (data.items[0].carbohydrates_total_g / 100) * caloriesWeight,
-				foodFats: (data.items[0].fat_total_g / 100) * caloriesWeight,
+				foodCalories: (data.items[0].calories.toFixed(0) / 100) * caloriesWeight,
+				foodProteins: (data.items[0].protein_g.toFixed(0) / 100) * caloriesWeight,
+				foodCarbs: (data.items[0].carbohydrates_total_g.toFixed(0) / 100) * caloriesWeight,
+				foodFats: (data.items[0].fat_total_g.toFixed(0) / 100) * caloriesWeight,
 			};
-			setUserFood(prevState => [...prevState, newFood]);
+			console.log(newFood);
+			setUserMeal(prevState => [...prevState, newFood]);
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);
@@ -54,15 +57,25 @@ export default function Menu() {
 						</div>
 
 						<div className='menu__add-food-container'>
-							{["Meal 1", "Meal 2", "Meal 3", "Meal 4"].map((meal, index) => (
+							{userMeal.map((meal, index) => (
 								<div key={index} className='menu__meal-item-container'>
 									<div className='menu__meal-item'>
-										<div className='menu__meal-item-name'>{meal}</div>
+										<div className='menu__meal-item-name'>{meal.name}</div>
 										<button className='menu__meal-add-btn' onClick={handleOpenInputFoodContainer}>
 											<span className='material-symbols-outlined'>add</span>
 										</button>
 									</div>
-									<div className='menu__added-food-container'></div>
+									<div className='menu__added-food-container'>
+										{userMeal.map((food, index) => (
+											<div key={index} className='menu__added-food-item'>
+												<p>{food.foodName}</p>
+												<p>{food.foodCalories}</p>
+												<p>{food.foodProteins}</p>
+												<p>{food.foodCarbs}</p>
+												<p>{food.foodFats}</p>
+											</div>
+										))}
+									</div>
 								</div>
 							))}
 						</div>

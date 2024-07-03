@@ -57,6 +57,12 @@ body {
 		border-radius: 50%;
 		cursor: pointer;
 	}
+	&__added-food-item {
+		display: flex;
+		p {
+			margin: 0 0.25em;
+		}
+	}
 	&__input-container {
 		position: relative;
 		text-align: center;
