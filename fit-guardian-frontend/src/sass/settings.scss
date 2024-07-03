@@ -23,25 +23,30 @@ body {
 		height: 100vh;
 		color: #caf0f8;
 	}
-	&__container {
-		padding: 1em;
-		font-size: 0.8rem;
-		color: #000046;
-	}
 	&__container-name {
 		color: #000046;
 	}
-	&__main-container-with-data {
-		height: 90%;
-	}
-	&__user-settings-container {
-		margin: 1em 0;
-		width: 100%;
-		height: 90%;
+	&__container {
+		padding: 1em;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-evenly;
+		font-size: 0.8rem;
+		color: #000046;
+	}
+	&__over-container {
+		margin: 1em 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
 		overflow: scroll;
+	}
+	&__user-settings-container {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
 	}
 	.choices {
 		display: flex;
@@ -52,7 +57,6 @@ body {
 		}
 	}
 	&__user-settings-name {
-		margin: 0.25em 0;
 		font-weight: bold;
 	}
 	&__user-settings-data,
@@ -67,8 +71,11 @@ body {
 		}
 	}
 	&__input-macro-container {
-		input {
-			width: 50px;
+		div {
+			margin-left: 0.55em;
+			span {
+				font-weight: bold;
+			}
 		}
 	}
 	&__edited-data-btn-container {
@@ -113,10 +120,6 @@ body {
 			width: 100%;
 			display: flex;
 			justify-content: end;
-			input {
-				margin-left: 0.55em;
-				width: 65px;
-			}
 		}
 		&__edited-data-btn-container {
 			text-align: center;
@@ -148,12 +151,20 @@ body {
 			display: flex;
 			justify-content: center;
 		}
-		&__container {
-			color: #caf0f8;
-		}
 		&__container-name {
 			margin-top: 50px;
 			text-align: center;
+		}
+		&__container {
+			color: #caf0f8;
+		}
+		&__over-container {
+			min-height: 100%;
+		}
+		.choices {
+			span {
+				padding: 0 0.5em;
+			}
 		}
 	}
 }
@@ -167,18 +178,15 @@ body {
 			border-radius: 5px;
 			overflow: hidden;
 		}
-		&__container {
-			margin-left: 220px;
-			height: 100%;
-			font-size: 1.1rem;
-		}
 		&__container-name {
 			margin-top: 30px;
 		}
-		&__user-settings-container {
-			display: flex;
-			justify-content: space-evenly;
-			align-items: center;
+		&__container {
+			margin-left: 220px;
+			font-size: 1.1rem;
+		}
+		&__over-container {
+			height: 100%;
 		}
 		&__user-settings-item {
 			width: 100%;

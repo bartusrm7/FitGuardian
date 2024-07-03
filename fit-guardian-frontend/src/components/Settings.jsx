@@ -46,11 +46,12 @@ export default function Settings() {
 		};
 
 		setUserTotalMacros(totalMacros);
-		console.log(totalMacros);
-
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
+
+		localStorage.setItem("userMacros", JSON.stringify(userTotalMacros));
+		console.log(userTotalMacros);
 	};
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => ({
@@ -77,13 +78,11 @@ export default function Settings() {
 				console.log("Password is to short!");
 				return;
 			}
-
 			setUserAllData(editedUserData);
 			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
 			localStorage.setItem("userName", userData.userName);
 			localStorage.setItem("userCalories", userTotalCalories);
-			localStorage.setItem("userMacros", JSON.stringify(userTotalMacros));
 		}
 	};
 
@@ -92,7 +91,6 @@ export default function Settings() {
 		const userDataString = localStorage.getItem("userData");
 		const userCaloriesString = localStorage.getItem("userCalories");
 		const userMacrosString = localStorage.getItem("userMacros");
-		console.log(userMacrosString);
 
 		if (userChoicesString && userDataString) {
 			const userChoices = JSON.parse(userChoicesString);
@@ -108,7 +106,13 @@ export default function Settings() {
 			};
 			setEditedUserData(updatedUserChoices);
 			setUserTotalCalories(userCalories);
-			setMacronutrientsFromTotalCalories(userMacrosString);
+			if (userMacros) {
+				setUserProteins(userMacros.proteins);
+				setUserCarbs(userMacros.carbs);
+				setUserFats(userMacros.fats);
+			} else {
+				setMacronutrientsFromTotalCalories();
+			}
 		}
 	}, []);
 
@@ -120,7 +124,7 @@ export default function Settings() {
 						<div className='settings__container-name'>
 							<h3 className='settings__label'>Settings</h3>
 						</div>
-						<div className='settings__main-container-with-data'>
+						<div className='settings__over-container'>
 							<div className='settings__user-settings-container'>
 								{editedUserData && (
 									<>
@@ -153,26 +157,19 @@ export default function Settings() {
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>BIRTHDAY DATE:</div>
-											<input
-												type='date'
+											<div
 												className='settings__user-settings-data'
-												value={editedUserData.userChoices.age}
-												onChange={e => handleInputChange("age", e.target.value)}
-											/>
+												onChange={e => handleInputChange("age", e.target.value)}>
+												{editedUserData.userChoices.age}
+											</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>GENDER:</div>
-											<select
+											<div
 												className='settings__user-settings-data'
-												value={editedUserData.userChoices.gender}
 												onChange={e => handleInputChange("gender", e.target.value)}>
-												<option value=''></option>
-												{userOptions.genderOptions.map((option, index) => (
-													<option key={index} value={option}>
-														{option}
-													</option>
-												))}
-											</select>
+												{editedUserData.userChoices.gender}
+											</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>HEIGHT:</div>
@@ -180,7 +177,7 @@ export default function Settings() {
 												<span>{`${editedUserData.userChoices.height}cm`}</span>
 												<input
 													type='range'
-													min={100}
+													min={140}
 													max={250}
 													className='settings__user-settings-data'
 													value={editedUserData.userChoices.height}
@@ -242,27 +239,24 @@ export default function Settings() {
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>MACROS:</div>
 											<div className='settings__input-macro-container'>
-												<input
-													type='text'
+												<div
 													className='settings__user-settings-data'
-													placeholder='P%'
-													value={`${userProteins}g`}
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
-												/>
-												<input
-													type='text'
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													<span>P:</span>
+													{`${userProteins}g`}
+												</div>
+												<div
 													className='settings__user-settings-data'
-													placeholder='C%'
-													value={`${userCarbs}g`}
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
-												/>
-												<input
-													type='text'
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													<span>C:</span>
+													{`${userCarbs}g`}
+												</div>
+												<div
 													className='settings__user-settings-data'
-													placeholder='F%'
-													value={`${userFats}g`}
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}
-												/>
+													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													<span>F:</span>
+													{`${userFats}g`}
+												</div>
 											</div>
 										</div>
 										<div className='settings__edited-data-btn-container'>

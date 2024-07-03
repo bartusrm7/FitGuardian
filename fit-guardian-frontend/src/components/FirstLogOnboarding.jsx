@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 export default function FirstLogOnboarding() {
 	const {
+		userTotalCalories,
 		setUserTotalCalories,
+		setUserProteins,
+		setUserCarbs,
+		setUserFats,
+		setUserTotalMacros,
 		userAge,
 		setUserAge,
 		userGender,
@@ -31,8 +36,23 @@ export default function FirstLogOnboarding() {
 		activity: userActivity,
 		activityOptions: ["Sedentary", "Light", "Moderate", "Active", "Very Active"],
 	});
+	const handleSetUserAge = birthDate => {
+		const today = new Date();
+		const birthDateObject = new Date(birthDate);
+		let age = today.getFullYear() - birthDateObject.getFullYear();
+		const monthDifference = today.getMonth() - birthDateObject.getMonth();
 
+		if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObject.getDate())) {
+			age--;
+		}
+		return age;
+	};
 	const handleUserChoices = (name, value) => {
+		let updatedValue = value;
+		if (name === "age") {
+			const age = handleSetUserAge(value);
+			updatedValue = age;
+		}
 		setUserChoices(prevState => ({
 			...prevState,
 			[name]: value,
@@ -49,7 +69,17 @@ export default function FirstLogOnboarding() {
 			contextSetters[name](value);
 		}
 	};
-	const calculateCalories = (height, weight, gender, goal, activity) => {
+
+	const calculateCalories = (age, height, weight, gender, goal, activity) => {
+		let basedAge = 1;
+		if (age >= 40 && age <= 50) {
+			basedAge = 0.9;
+		} else if (age >= 51 && age <= 60) {
+			basedAge = 0.8;
+		} else if (age >= 61) {
+			basedAge = 0.7;
+		}
+
 		let basedHeight = 0;
 		if (height >= 170 && height <= 190) {
 			basedHeight = 100;
@@ -92,7 +122,29 @@ export default function FirstLogOnboarding() {
 		} else if (activity === "Very Active") {
 			baseActivityAmount = 1.65;
 		}
-		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount;
+		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
+	};
+	const setMacronutrientsFromTotalCalories = calories => {
+		const proteinPercentage = 0.2;
+		const carbPercentage = 0.5;
+		const fatPercentage = 0.3;
+
+		const proteins = (calories * proteinPercentage) / 4;
+		const carbs = (calories * carbPercentage) / 4;
+		const fats = (calories * fatPercentage) / 9;
+
+		const totalMacros = {
+			proteins: proteins.toFixed(0),
+			carbs: carbs.toFixed(0),
+			fats: fats.toFixed(0),
+		};
+
+		setUserTotalMacros(totalMacros);
+		setUserProteins(proteins.toFixed(0));
+		setUserCarbs(carbs.toFixed(0));
+		setUserFats(fats.toFixed(0));
+
+		localStorage.setItem("userMacros", JSON.stringify(totalMacros));
 	};
 	const saveUserChoices = () => {
 		const userData = {
@@ -111,6 +163,7 @@ export default function FirstLogOnboarding() {
 			localStorage.setItem("userCalories", userCalories);
 
 			setUserTotalCalories(userCalories);
+			setMacronutrientsFromTotalCalories(userCalories);
 			navigate("/menu");
 		} else {
 			alert("Some field is empty. Fill all fields to continue!");
@@ -157,7 +210,7 @@ export default function FirstLogOnboarding() {
 									<input
 										type='range'
 										className='firstlog-onboarding__items'
-										min={100}
+										min={140}
 										max={250}
 										value={userChoices.height}
 										onChange={e => handleUserChoices("height", e.target.value)}

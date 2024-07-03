@@ -16,10 +16,14 @@ export default function Macronutrients() {
 		setUserFats,
 	} = useUserContext();
 	useEffect(() => {
-		const updatedUserTotalCalories = localStorage.getItem("userCalories");
-		const updatedUserTotalMacros = localStorage.getItem("userMacros");
-		setUserTotalCalories(updatedUserTotalCalories);
-		setUserTotalMacros(updatedUserTotalMacros);
+		const updatedUserTotalCaloriesString = localStorage.getItem("userCalories");
+		const updatedUserTotalMacrosString = localStorage.getItem("userMacros");
+		setUserTotalCalories(updatedUserTotalCaloriesString);
+
+		if (updatedUserTotalMacrosString) {
+			const userMacros = JSON.parse(updatedUserTotalMacrosString);
+			setUserTotalMacros(userMacros);
+		}
 	}, []);
 
 	return (
@@ -31,11 +35,23 @@ export default function Macronutrients() {
 							<h3 className='macronutrients__label'>Macronutrients</h3>
 						</div>
 						<div className='macronutrients__macros-calories-container'>
-							<div className='macronutrients__calories'>{`${userTotalCalories}kcal`}</div>
+							<div className='macronutrients__macro-item'>
+								<div className='macronutrients__macro-name'>{`${userTotalCalories}kcal`}</div>
+								<div className='macronutrients__macro-box calories'>0%</div>
+							</div>
 							<div className='macronutrients__macros-container'>
-								<div className='macronutrients__macro-item proteins'>{`${userTotalMacros}g`}</div>
-								<div className='macronutrients__macro-item carbs'>{`${userCarbs}g`}</div>
-								<div className='macronutrients__macro-item fats'>{`${userFats}g`}</div>
+								<div className='macronutrients__macro-item'>
+									<div className='macronutrients__macro-name'>{`${userTotalMacros.proteins}g`}</div>
+									<div className='macronutrients__macro-box item proteins'>0%</div>
+								</div>
+								<div className='macronutrients__macro-item'>
+									<div className='macronutrients__macro-name'>{`${userTotalMacros.carbs}g`}</div>
+									<div className='macronutrients__macro-box item carbs'>0%</div>
+								</div>
+								<div className='macronutrients__macro-item'>
+									<div className='macronutrients__macro-name'>{`${userTotalMacros.fats}g`}</div>
+									<div className='macronutrients__macro-box item fats'>0%</div>
+								</div>
 							</div>
 						</div>
 					</div>
