@@ -40,9 +40,10 @@ body {
 		overflow: scroll;
 	}
 	&__meal-item-container {
-		min-height: 25vh;
+		height: 25vh;
 		display: flex;
 		flex-direction: column;
+		overflow-x: scroll;
 	}
 	&__meal-item {
 		display: flex;
@@ -59,9 +60,32 @@ body {
 	}
 	&__added-food-item {
 		display: flex;
-		p {
-			margin: 0 0.25em;
+		flex-direction: column;
+		justify-content: center;
+		flex-wrap: wrap;
+		.name {
+			color: #000046;
+			font-weight: bold;
 		}
+		p {
+			margin-right: 0.25em;
+		}
+	}
+	&__macros-items-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+	&__amounts-container {
+		display: flex;
+	}
+	&__remove-food-btn {
+		display: flex;
+		background-color: #caf0f8;
+		color: #000046;
+		border-radius: 5px;
+		cursor: pointer;
 	}
 	&__input-container {
 		position: relative;
@@ -239,6 +263,19 @@ body {
 			&:hover {
 				background-color: #60dfff;
 				color: #000046;
+			}
+		}
+		&__added-food-item {
+			.name {
+				color: #323be6;
+			}
+		}
+		&__remove-food-btn {
+			background-color: white;
+			color: #000046;
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
 			}
 		}
 		&__middle-container {

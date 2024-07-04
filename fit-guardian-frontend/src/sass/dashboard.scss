@@ -52,7 +52,6 @@ body {
 	&__menu-item {
 		display: flex;
 		align-items: center;
-		translate: color 0.3s;
 		cursor: pointer;
 		&:hover {
 			color: #316fe4;
@@ -62,6 +61,7 @@ body {
 			align-items: center;
 			color: #000046;
 			text-decoration: none;
+			translate: 0.3s;
 			&:hover {
 				color: #316fe4;
 			}

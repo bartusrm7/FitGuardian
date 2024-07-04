@@ -4,10 +4,10 @@ const FoodContext = createContext();
 
 export default function FoodProvider({ children }) {
 	const [userMeal, setUserMeal] = useState([
-		{ name: "Meal 1", food: [] },
-		{ name: "Meal 2", food: [] },
-		{ name: "Meal 3", food: [] },
-		{ name: "Meal 4", food: [] },
+		{ id: 1, name: "Meal 1", food: [] },
+		{ id: 2, name: "Meal 2", food: [] },
+		{ id: 3, name: "Meal 3", food: [] },
+		{ id: 4, name: "Meal 4", food: [] },
 	]);
 	const [inputFood, setInputFood] = useState("");
 	const [inputFoodGrams, setInputFoodGrams] = useState("");

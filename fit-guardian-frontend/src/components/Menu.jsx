@@ -1,16 +1,32 @@
 import Dashboard from "./Dashboard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
 
 export default function Menu() {
 	const { userMeal, setUserMeal, inputFood, setInputFood, inputFoodGrams, setInputFoodGrams } = useFoodContext();
 	const [inputIsOpen, setInputIsOpen] = useState(false);
+	const [activeMealId, setActiveMealId] = useState(null);
 
 	const handleCloseInputFoodContainer = () => {
 		setInputIsOpen(false);
+		setActiveMealId(null);
 	};
-	const handleOpenInputFoodContainer = () => {
+	const handleOpenInputFoodContainer = mealId => {
 		setInputIsOpen(!inputIsOpen);
+		setActiveMealId(mealId);
+	};
+	const handleRemoveFoodItem = (mealId, foodIndex) => {
+		const updatedMealsAfterRemovedItem = userMeal.map(meal => {
+			if (meal.id === mealId) {
+				return {
+					...meal,
+					food: meal.food.filter((food, index) => index !== foodIndex),
+				};
+			}
+			return meal;
+		});
+		localStorage.setItem("userMeal", JSON.stringify(updatedMealsAfterRemovedItem));
+		setUserMeal(updatedMealsAfterRemovedItem);
 	};
 	const handleAddFoodItem = async () => {
 		try {
@@ -25,27 +41,37 @@ export default function Menu() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-
-			if (inputFood === "") {
-				return;
-			}
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
 				foodName: inputFood,
-				foodCalories: (data.items[0].calories.toFixed(0) / 100) * caloriesWeight,
-				foodProteins: (data.items[0].protein_g.toFixed(0) / 100) * caloriesWeight,
-				foodCarbs: (data.items[0].carbohydrates_total_g.toFixed(0) / 100) * caloriesWeight,
-				foodFats: (data.items[0].fat_total_g.toFixed(0) / 100) * caloriesWeight,
+				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}kcal`,
+				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
+				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
+				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 			};
-			console.log(newFood);
-			setUserMeal(prevState => [...prevState, newFood]);
+			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId);
+
+			if (mealIndex !== -1) {
+				const updatedMeals = [...userMeal];
+				updatedMeals[mealIndex].food.push(newFood);
+				setUserMeal(updatedMeals);
+				localStorage.setItem("userMeal", JSON.stringify(updatedMeals));
+			}
+
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);
+			setActiveMealId(null);
 		} catch (error) {
 			console.error("Error fetching data:", error.message);
 		}
 	};
+	useEffect(() => {
+		const storedMeals = localStorage.getItem("userMeal");
+		if (storedMeals) {
+			setUserMeal(JSON.parse(storedMeals));
+		}
+	}, []);
 
 	return (
 		<div>
@@ -57,22 +83,33 @@ export default function Menu() {
 						</div>
 
 						<div className='menu__add-food-container'>
-							{userMeal.map((meal, index) => (
-								<div key={index} className='menu__meal-item-container'>
+							{userMeal.map(meal => (
+								<div key={meal.id} className='menu__meal-item-container'>
 									<div className='menu__meal-item'>
 										<div className='menu__meal-item-name'>{meal.name}</div>
-										<button className='menu__meal-add-btn' onClick={handleOpenInputFoodContainer}>
+										<button className='menu__meal-add-btn' onClick={() => handleOpenInputFoodContainer(meal.id)}>
 											<span className='material-symbols-outlined'>add</span>
 										</button>
 									</div>
 									<div className='menu__added-food-container'>
-										{userMeal.map((food, index) => (
+										{meal.food.map((food, index) => (
 											<div key={index} className='menu__added-food-item'>
-												<p>{food.foodName}</p>
-												<p>{food.foodCalories}</p>
-												<p>{food.foodProteins}</p>
-												<p>{food.foodCarbs}</p>
-												<p>{food.foodFats}</p>
+												<p className='name'>{food.foodName}</p>
+												<div className='menu__macros-items-container'>
+													<div className='menu__amounts-container'>
+														<p>{food.foodCalories}</p>
+														<p>{food.foodProteins}</p>
+														<p>{food.foodCarbs}</p>
+														<p>{food.foodFats}</p>
+													</div>
+													<button className='menu__remove-food-btn'>
+														<span
+															className='material-symbols-outlined'
+															onClick={() => handleRemoveFoodItem(meal.id, index)}>
+															delete
+														</span>
+													</button>
+												</div>
 											</div>
 										))}
 									</div>
