@@ -55,7 +55,7 @@ export default function Menu() {
 				const updatedMeals = [...userMeal];
 				updatedMeals[mealIndex].food.push(newFood);
 				setUserMeal(updatedMeals);
-				localStorage.setItem("userMeal", JSON.stringify(updatedMeals));
+				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			}
 
 			setInputFood("");
@@ -67,9 +67,9 @@ export default function Menu() {
 		}
 	};
 	useEffect(() => {
-		const storedMeals = localStorage.getItem("userMeal");
-		if (storedMeals) {
-			setUserMeal(JSON.parse(storedMeals));
+		const updatedUserMeals = localStorage.getItem("userMeals");
+		if (updatedUserMeals) {
+			setUserMeal(JSON.parse(updatedUserMeals));
 		}
 	}, []);
 

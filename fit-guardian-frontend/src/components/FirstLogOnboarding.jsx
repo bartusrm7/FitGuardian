@@ -134,7 +134,7 @@ export default function FirstLogOnboarding() {
 		const fats = (calories * fatPercentage) / 9;
 
 		const totalMacros = {
-			proteins: proteins.toFixed(0),
+			proteins: proteins.toFixed(0),	
 			carbs: carbs.toFixed(0),
 			fats: fats.toFixed(0),
 		};
@@ -157,7 +157,7 @@ export default function FirstLogOnboarding() {
 		};
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
-			const userCalories = calculateCalories(userHeight, userWeight, userGender, userGoal, userActivity);
+			const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 
 			localStorage.setItem("userChoices", JSON.stringify(userData));
 			localStorage.setItem("userCalories", userCalories);
