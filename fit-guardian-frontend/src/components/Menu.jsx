@@ -25,7 +25,7 @@ export default function Menu() {
 			}
 			return meal;
 		});
-		localStorage.setItem("userMeal", JSON.stringify(updatedMealsAfterRemovedItem));
+		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
 		setUserMeal(updatedMealsAfterRemovedItem);
 	};
 	const handleAddFoodItem = async () => {

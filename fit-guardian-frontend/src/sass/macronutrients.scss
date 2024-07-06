@@ -93,6 +93,7 @@ body {
 		}
 		&__macros-container {
 			flex-direction: row;
+			justify-content: space-evenly;
 		}
 		&__macro-item {
 			margin: 0 0.25em;
@@ -103,8 +104,15 @@ body {
 			align-items: center;
 		}
 		.item {
-			width: 180px;
-			height: 40px;
+			width: 40px;
+			height: 180px;
+		}
+	}
+}
+@media (min-width: 576px) and (max-width: 768px) {
+	.macronutrients {
+		&__container {
+			width: 70%;
 		}
 	}
 }
@@ -151,6 +159,10 @@ body {
 			background-color: #60dfff;
 			color: #000046;
 		}
+		.item {
+			width: 180px;
+			height: 40px;
+		}
 	}
 }
 @media (min-width: 992px) {
@@ -160,7 +172,13 @@ body {
 			font-size: 1.2rem;
 		}
 		&__macros-container {
+			margin: 3em;
 			flex-direction: row;
+			justify-content: space-evenly;
+		}
+		.item {
+			width: 50px;
+			height: 180px;
 		}
 	}
 }

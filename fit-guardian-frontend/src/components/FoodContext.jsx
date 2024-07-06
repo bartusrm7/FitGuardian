@@ -9,11 +9,27 @@ export default function FoodProvider({ children }) {
 		{ id: 3, name: "Meal 3", food: [] },
 		{ id: 4, name: "Meal 4", food: [] },
 	]);
+	const [allMacros, setAllMacros] = useState({
+		calories: [],
+		proteins: [],
+		carbs: [],
+		fats: [],
+	});
 	const [inputFood, setInputFood] = useState("");
 	const [inputFoodGrams, setInputFoodGrams] = useState("");
 
 	return (
-		<FoodContext.Provider value={{ userMeal, setUserMeal, inputFood, setInputFood, inputFoodGrams, setInputFoodGrams }}>
+		<FoodContext.Provider
+			value={{
+				userMeal,
+				setUserMeal,
+				allMacros,
+				setAllMacros,
+				inputFood,
+				setInputFood,
+				inputFoodGrams,
+				setInputFoodGrams,
+			}}>
 			{children}
 		</FoodContext.Provider>
 	);
