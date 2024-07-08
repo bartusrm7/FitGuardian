@@ -229,12 +229,11 @@ export default function Settings() {
 										</div>
 										<div className='settings__user-settings-item calories'>
 											<div className='settings__user-settings-name'>CALORIES:</div>
-											<input
-												type='text'
+											<div
 												className='settings__user-settings-data'
-												value={`${userTotalCalories}kcal`}
-												onChange={e => setUserTotalCalories(e.target.value)}
-											/>
+												onChange={e => setUserTotalCalories(e.target.value)}>
+												{`${userTotalCalories}cal`}
+											</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>MACROS:</div>
