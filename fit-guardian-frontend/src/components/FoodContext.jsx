@@ -10,10 +10,10 @@ export default function FoodProvider({ children }) {
 		{ id: 4, name: "Meal 4", food: [] },
 	]);
 	const [allMacros, setAllMacros] = useState({
-		calories: [],
-		proteins: [],
-		carbs: [],
-		fats: [],
+		calories: 0,
+		proteins: 0,
+		carbs: 0,
+		fats: 0,
 	});
 	const [inputFood, setInputFood] = useState("");
 	const [inputFoodGrams, setInputFoodGrams] = useState("");

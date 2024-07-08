@@ -24,7 +24,6 @@ body {
 	}
 	&__container {
 		font-size: 0.8rem;
-		z-index: 10;
 	}
 	&__container-name {
 		padding: 1em;
@@ -44,6 +43,7 @@ body {
 		align-items: center;
 		background-color: #60dfff;
 		color: #000046;
+		z-index: 10;
 	}
 	&__account-name {
 		display: flex;
@@ -72,7 +72,7 @@ body {
 		font-size: 1.3rem;
 	}
 	.hamburger {
-		z-index: 10;
+		z-index: 11;
 		cursor: pointer;
 	}
 	.opened-menu {
