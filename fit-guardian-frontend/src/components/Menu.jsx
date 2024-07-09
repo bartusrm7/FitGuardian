@@ -48,6 +48,7 @@ export default function Menu() {
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
+				date: new Date().toLocaleDateString(),
 			};
 			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId);
 
@@ -81,7 +82,6 @@ export default function Menu() {
 						<div className='menu__container-name'>
 							<h3 className='menu__label'>Menu</h3>
 						</div>
-
 						<div className='menu__add-food-container'>
 							{userMeal.map(meal => (
 								<div key={meal.id} className='menu__meal-item-container'>

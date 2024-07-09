@@ -91,6 +91,12 @@ body {
 				color: #caf0f8;
 			}
 		}
+		&:first-child {
+			border-top-right-radius: 5px;
+		}
+		&:last-child {
+			border-bottom-right-radius: 5px;
+		}
 	}
 	&__macros-items-container {
 		display: flex;
@@ -239,9 +245,6 @@ body {
 		.big-view {
 			display: grid;
 		}
-		&__remove-food-btn {
-			margin-right: 0.75em;
-		}
 	}
 }
 @media (max-width: 768px) {
@@ -300,7 +303,7 @@ body {
 					color: #000046;
 				}
 				.menu__amounts-container {
-					color: #323be6;
+					color: #316fe4;
 				}
 			}
 		}
@@ -312,10 +315,6 @@ body {
 			&:hover {
 				background-color: #60dfff;
 			}
-		}
-		&__middle-container {
-			display: flex;
-			flex-direction: column;
 		}
 		&__input-food,
 		&__add-food-btn {
@@ -357,17 +356,12 @@ body {
 		&__added-food-item {
 			margin-right: 0.25em;
 		}
-		&__remove-food-btn {
-			margin-right: 0.75em;
-		}
 		&__add-food-container {
 			grid-template-columns: repeat(2, 1fr);
 		}
-
 		&__input-food {
 			width: 300px;
 		}
-
 		.small-view {
 			display: none;
 		}
