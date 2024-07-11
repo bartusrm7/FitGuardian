@@ -32,12 +32,19 @@ body {
 		color: #000046;
 	}
 	&__calories-container {
-		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: center;
 	}
-	&__statistics-item {
-		cursor: pointer;
+	&__calendar-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	&__calories-container {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
 	}
 }
 @media (min-width: 368px) {
@@ -57,8 +64,6 @@ body {
 @media (max-width: 768px) {
 	.statistics {
 		&__main-container {
-			display: flex;
-			justify-content: center;
 		}
 		&__container {
 			padding: 1em;
@@ -76,7 +81,6 @@ body {
 		&__main-container {
 			width: 85vw;
 			height: 85vh;
-			display: flex;
 			background-color: #caf0f8;
 			border-radius: 5px;
 			overflow: hidden;
