@@ -50,24 +50,24 @@ export default function Statistics() {
 
 							<div className='statistics__main-view-container'>
 								<div className='statistics__calories-container'>
-									<div className='statistics__circle' style={{ height: 150, width: 150 }}>
-										<Circle percent={100} strokeWidth={10} />
+									<div className='statistics__circle'>
+										<Circle percent={100} strokeWidth={11} gapDegree={20} />
 									</div>
 								</div>
 								<div className='statistics__macros-container'>
 									<div className='statistics__macros-circle-progress'>
-										<div className='statistics__circle' style={{ height: 100, width: 100 }}>
-											<Circle percent={100} strokeWidth={7} />
+										<div className='statistics__circle'>
+											<Circle percent={100} strokeWidth={9} gapDegree={20} />
 										</div>
 									</div>
 									<div className='statistics__macros-circle-progress'>
-										<div className='statistics__circle' style={{ height: 100, width: 100 }}>
-											<Circle percent={100} strokeWidth={7} />
+										<div className='statistics__circle'>
+											<Circle percent={100} strokeWidth={9} gapDegree={20} />
 										</div>
 									</div>
 									<div className='statistics__macros-circle-progress'>
-										<div className='statistics__circle' style={{ height: 100, width: 100 }}>
-											<Circle percent={100} strokeWidth={7} />
+										<div className='statistics__circle'>
+											<Circle percent={100} strokeWidth={9} gapDegree={20} />
 										</div>
 									</div>
 								</div>
