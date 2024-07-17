@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useFoodContext } from "./FoodContext";
-import { Circle } from "rc-progress";
 import Dashboard from "./Dashboard";
 
 export default function Statistics() {
 	const { userMeal, setUserMeal, allMacros, setAllMacros } = useFoodContext();
 	const [periodChoice, setPeriodChoice] = useState("");
-
+	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
+		calories: 0,
+		proteins: 0,
+		carbs: 0,
+		fats: 0,
+	});
 	const getDateFromPeriodChoiceDate = () => {
 		const date = new Date();
 		if (periodChoice === "week") {
@@ -18,7 +22,6 @@ export default function Statistics() {
 		}
 		return date;
 	};
-
 	useEffect(() => {
 		const updatedUserMealsString = localStorage.getItem("userMeals");
 		if (updatedUserMealsString) {
@@ -43,31 +46,31 @@ export default function Statistics() {
 						</div>
 						<div className='statistics__calories-container'>
 							<div className='statistics__calendar-container'>
-								<button className='statistics__period-chosing-btn'>Last week</button>
-								<button className='statistics__period-chosing-btn'>Last month</button>
-								<button className='statistics__period-chosing-btn'>Last year</button>
+								<button className='statistics__period-chosing-btn'>
+									<input type='date' />
+								</button>
 							</div>
 
 							<div className='statistics__main-view-container'>
 								<div className='statistics__calories-container'>
 									<div className='statistics__circle'>
-										<Circle percent={100} strokeWidth={11} gapDegree={20} />
+										<div className='statistics__macro-name'>{allMacrosPercentageCompleted.calories.toFixed(1)}%</div>
 									</div>
 								</div>
 								<div className='statistics__macros-container'>
 									<div className='statistics__macros-circle-progress'>
 										<div className='statistics__circle'>
-											<Circle percent={100} strokeWidth={9} gapDegree={20} />
+											<div className='statistics__macro-name'>{allMacrosPercentageCompleted.proteins.toFixed(1)}%</div>
 										</div>
 									</div>
 									<div className='statistics__macros-circle-progress'>
 										<div className='statistics__circle'>
-											<Circle percent={100} strokeWidth={9} gapDegree={20} />
+											<div className='statistics__macro-name'>{allMacrosPercentageCompleted.carbs.toFixed(1)}%</div>
 										</div>
 									</div>
 									<div className='statistics__macros-circle-progress'>
 										<div className='statistics__circle'>
-											<Circle percent={100} strokeWidth={9} gapDegree={20} />
+											<div className='statistics__macro-name'>{allMacrosPercentageCompleted.fats.toFixed(1)}%</div>
 										</div>
 									</div>
 								</div>

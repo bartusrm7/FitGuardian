@@ -3,10 +3,24 @@ import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
 
 export default function Menu() {
-	const { userMeal, setUserMeal, inputFood, setInputFood, inputFoodGrams, setInputFoodGrams } = useFoodContext();
+	const {
+		userMeal,
+		setUserMeal,
+		currentDate,
+		setCurrentDate,
+		inputFood,
+		setInputFood,
+		inputFoodGrams,
+		setInputFoodGrams,
+	} = useFoodContext();
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
 
+	const handleCurrentDate = () => {
+		const date = new Date();
+		const formattedDate = date.toISOString().split("T")[0];
+		setCurrentDate(formattedDate);
+	};
 	const handleCloseInputFoodContainer = () => {
 		setInputIsOpen(false);
 		setActiveMealId(null);
@@ -48,8 +62,10 @@ export default function Menu() {
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
-				date: new Date().toLocaleDateString(),
+				date: new Date().toISOString().split("T")[0],
 			};
+			console.log(newFood.date);
+			console.log(newFood);
 			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId);
 
 			if (mealIndex !== -1) {
@@ -58,7 +74,6 @@ export default function Menu() {
 				setUserMeal(updatedMeals);
 				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			}
-
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);
@@ -72,6 +87,7 @@ export default function Menu() {
 		if (updatedUserMeals) {
 			setUserMeal(JSON.parse(updatedUserMeals));
 		}
+		handleCurrentDate();
 	}, []);
 
 	return (
@@ -81,6 +97,12 @@ export default function Menu() {
 					<div className='menu__container'>
 						<div className='menu__container-name'>
 							<h3 className='menu__label'>Menu</h3>
+							<input
+								className='menu__date'
+								type='date'
+								value={currentDate}
+								onChange={e => setCurrentDate(e.target.value)}
+							/>
 						</div>
 						<div className='menu__add-food-container'>
 							{userMeal.map(meal => (

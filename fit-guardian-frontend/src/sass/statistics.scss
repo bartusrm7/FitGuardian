@@ -46,18 +46,27 @@ body {
 		cursor: pointer;
 	}
 	&__main-view-container {
+		text-align: center;
 		margin: 1em 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
+	&__macro-name {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 	&__calories-container {
+		position: relative;
 		.statistics__circle {
 			width: 140px;
 			height: 140px;
 		}
 	}
 	&__macros-circle-progress {
+		position: relative;
 		.statistics__circle {
 			margin: 1em 0;
 			width: 100px;

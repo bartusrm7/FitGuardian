@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useFoodContext } from "./FoodContext";
+import { Circle } from "rc-progress";
 import Dashboard from "./Dashboard";
 
 export default function Macronutrients() {
@@ -12,18 +13,6 @@ export default function Macronutrients() {
 		carbs: 0,
 		fats: 0,
 	});
-	const [isWidth, setIsWidth] = useState(true);
-	const resizeWindow = () => {
-		if (window.innerWidth <= 368) {
-			setIsWidth(false);
-		} else if (window.innerWidth >= 568) {
-			setIsWidth(true);
-		} else if (window.innerWidth >= 768) {
-			setIsWidth(false);
-		} else if (window.innerWidth >= 568) {
-			setIsWidth(true);
-		}
-	};
 	const handleAddMacrosToContainers = () => {
 		const newAllMacros = {
 			calories: 0,
@@ -85,47 +74,63 @@ export default function Macronutrients() {
 						<div className='macronutrients__macros-calories-container'>
 							<div className='macronutrients__macro-item'>
 								<div className='macronutrients__macro-name'>{`${userTotalCalories}cal`}</div>
-								<div className='macronutrients__macro-box calories'>
-									<div
-										className='background-percentage-color-cal'
-										style={{
-											width: `${allMacrosPercentageCompleted.calories}%`,
-										}}></div>
-									{`${allMacros.calories}cal`}
+								<div className='macronutrients__macro-circle calories'>
+									<Circle
+										percent={allMacrosPercentageCompleted.calories}
+										strokeWidth={11}
+										strokeColor={"#000046"}
+										trailWidth={11}
+										trailColor={"#60dfff"}
+										gapDegree={30}></Circle>
+									<div className='percentage-circle-macro-name'>{`${allMacrosPercentageCompleted.calories.toFixed(
+										1
+									)}%`}</div>
 								</div>
 							</div>
 							<div className='macronutrients__macros-container'>
 								<div className='macronutrients__macro-item'>
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.proteins}g`}</div>
-									<div className='macronutrients__macro-box item proteins'>
-										<div
-											className='background-percentage-color-macro'
-											style={{
-												width: `${allMacrosPercentageCompleted.proteins}%`,
-											}}></div>
-										{`${allMacros.proteins}g`}
+									<div className='macronutrients__macro-circle item proteins'>
+										<Circle
+											percent={allMacrosPercentageCompleted.proteins}
+											strokeWidth={11}
+											strokeColor={"#000046"}
+											trailWidth={11}
+											trailColor={"#60dfff"}
+											gapDegree={30}></Circle>
+										<div className='percentage-circle-macro-name'>
+											{`${allMacrosPercentageCompleted.proteins.toFixed(1)}%`}
+										</div>
 									</div>
 								</div>
 								<div className='macronutrients__macro-item'>
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.carbs}g`}</div>
-									<div className='macronutrients__macro-box item carbs'>
-										<div
-											className='background-percentage-color-macro'
-											style={{
-												width: `${allMacrosPercentageCompleted.carbs}%`,
-											}}></div>
-										{`${allMacros.carbs}g`}
+									<div className='macronutrients__macro-circle item carbs'>
+										<Circle
+											percent={allMacrosPercentageCompleted.carbs}
+											strokeWidth={11}
+											strokeColor={"#000046"}
+											trailWidth={11}
+											trailColor={"#60dfff"}
+											gapDegree={30}></Circle>
+										<div className='percentage-circle-macro-name'>{`${allMacrosPercentageCompleted.carbs.toFixed(
+											1
+										)}%`}</div>
 									</div>
 								</div>
 								<div className='macronutrients__macro-item'>
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.fats}g`}</div>
-									<div className='macronutrients__macro-box item fats'>
-										<div
-											className='background-percentage-color-macro'
-											style={{
-												width: `${allMacrosPercentageCompleted.fats}%`,
-											}}></div>
-										{`${allMacros.fats}g`}
+									<div className='macronutrients__macro-circle item fats'>
+										<Circle
+											percent={allMacrosPercentageCompleted.fats}
+											strokeWidth={11}
+											strokeColor={"#000046"}
+											trailWidth={11}
+											trailColor={"#60dfff"}
+											gapDegree={30}></Circle>
+										<div className='percentage-circle-macro-name'>{`${allMacrosPercentageCompleted.fats.toFixed(
+											1
+										)}%`}</div>
 									</div>
 								</div>
 							</div>

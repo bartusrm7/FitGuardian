@@ -30,8 +30,17 @@ body {
 		color: #000046;
 	}
 	&__container-name {
-		margin: 2em 0;
+		margin: 2em 0 1em;
+		display: flex;
+		align-items: center;
 		color: #000046;
+	}
+	&__label {
+		margin-right: 1em;
+	}
+	&__date {
+		padding: 0.15em 0.25em;
+		border-radius: 5px;
 	}
 	&__add-food-container {
 		height: 85%;
@@ -40,10 +49,10 @@ body {
 		overflow: scroll;
 	}
 	&__meal-item-container {
-		height: 25vh;
+		margin: 0.5em 0;
 		display: flex;
 		flex-direction: column;
-		overflow-x: scroll;
+		overflow-y: scroll;
 	}
 	&__meal-item {
 		display: flex;
@@ -60,7 +69,7 @@ body {
 	}
 	&__added-food-container {
 		border-radius: 5px;
-		overflow: hidden;
+		overflow-y: scroll;
 	}
 	&__added-food-item {
 		display: flex;
@@ -213,6 +222,9 @@ body {
 		&__container {
 			font-size: 0.9rem;
 		}
+		&__date {
+			padding: 0.25em;
+		}
 		&__input-food,
 		&__add-food-btn {
 			padding: 0.6em;
@@ -228,6 +240,7 @@ body {
 		}
 	}
 }
+
 @media (min-width: 576px) {
 	.menu {
 		&__container {
@@ -260,7 +273,11 @@ body {
 		}
 		&__container-name {
 			margin-top: 50px;
+			justify-content: center;
 			text-align: center;
+		}
+		&__date {
+			margin: 0.5em 0;
 		}
 	}
 }
@@ -283,8 +300,14 @@ body {
 		&__container-name {
 			margin-top: 30px;
 		}
+		&__label {
+			margin-right: 2em;
+		}
 		&__add-food-container {
 			grid-template-columns: repeat(1, 1fr);
+		}
+		&__meal-item-container {
+			margin: 0.25em 0;
 		}
 		&__meal-add-btn {
 			background-color: #000046;

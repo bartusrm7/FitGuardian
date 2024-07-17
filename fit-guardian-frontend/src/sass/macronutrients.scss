@@ -46,45 +46,33 @@ body {
 		align-items: center;
 	}
 	&__macro-name {
-		margin: 0.5em 0;
+		margin: 0.25em 0;
 		font-weight: bold;
 	}
 	&__macros-container {
-		margin: 3em 0;
+		margin: 1em 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
-	.calories {
-		padding-bottom: 5px;
-		height: 50px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.item {
-		height: 35px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.calories,
-	.item {
+	&__macro-circle {
 		position: relative;
-		width: 180px;
-		background-color: #000046;
-		border-radius: 5px;
-		overflow: hidden;
-		z-index: 1;
 	}
-	.background-percentage-color-cal,
-	.background-percentage-color-macro {
+	.calories {
+		width: 140px;
+		height: 140px;
+	}
+	.item {
+		width: 110px;
+		height: 110px;
+	}
+	.percentage-circle-macro-name {
 		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		color: #caf0f8;
+		font-weight: bold;
 	}
 }
 @media (min-width: 368px) {
@@ -92,13 +80,18 @@ body {
 		&__container {
 			font-size: 0.9rem;
 		}
+		&__macros-container {
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: space-evenly;
+		}
 		.calories {
-			width: 190px;
-			height: 65px;
+			width: 150px;
+			height: 150px;
 		}
 		.item {
-			width: 190px;
-			height: 40px;
+			width: 120px;
+			height: 120px;
 		}
 	}
 }
@@ -118,14 +111,10 @@ body {
 			margin: 0 0.25em;
 		}
 		.calories {
-			width: 220px;
-			height: 70px;
 			align-items: center;
 		}
 		.item {
 			display: flex;
-			width: 175px;
-			height: 50px;
 		}
 	}
 }
@@ -144,10 +133,6 @@ body {
 		&__container-name {
 			margin-top: 50px;
 			text-align: center;
-		}
-		.background-percentage-color-cal,
-		.background-percentage-color-macro {
-			background-color: #60dfff;
 		}
 	}
 }
@@ -169,24 +154,19 @@ body {
 		&__container-name {
 			margin-top: 30px;
 		}
-		&__macros-container {
-			flex-direction: column;
-		}
-		&__macro-box {
+		&__macro-circle {
 			color: #caf0f8;
 		}
-		.calories,
+		.calories {
+			width: 160px;
+			height: 160px;
+		}
 		.item {
-			background-color: #60dfff;
+			width: 130px;
+			height: 130px;
+		}
+		.percentage-circle-macro-name {
 			color: #000046;
-		}
-		.item {
-			width: 180px;
-			height: 40px;
-		}
-		.background-percentage-color-cal,
-		.background-percentage-color-macro {
-			background-color: #323be6;
 		}
 	}
 }
@@ -197,8 +177,18 @@ body {
 			font-size: 1.2rem;
 		}
 		&__macros-container {
+			margin: 1em auto;
+			width: 50vw;
 			flex-direction: row;
 			justify-content: space-evenly;
+		}
+		.calories {
+			width: 180px;
+			height: 180px;
+		}
+		.item {
+			width: 140px;
+			height: 140px;
 		}
 	}
 }
