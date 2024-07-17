@@ -41,6 +41,16 @@ body {
 	&__date {
 		padding: 0.15em 0.25em;
 		border-radius: 5px;
+		cursor: pointer;
+	}
+	.arrows {
+		cursor: pointer;
+	}
+	.arrows-left {
+		margin-right: 0.25em;
+	}
+	.arrows-right {
+		margin-left: 0.25em;
 	}
 	&__add-food-container {
 		height: 85%;
@@ -245,6 +255,12 @@ body {
 	.menu {
 		&__container {
 			padding: 1em;
+		}
+		.arrows-left {
+			margin-right: 0.5em;
+		}
+		.arrows-right {
+			margin-left: 0.5em;
 		}
 		&__add-food-container {
 			grid-template-columns: repeat(2, 1fr);

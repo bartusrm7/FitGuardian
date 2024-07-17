@@ -21,6 +21,18 @@ export default function Menu() {
 		const formattedDate = date.toISOString().split("T")[0];
 		setCurrentDate(formattedDate);
 	};
+	const handleNextDay = () => {
+		const nextDay = new Date(currentDate);
+		nextDay.setDate(nextDay.getDate() + 1);
+		const formattedDate = nextDay.toISOString().split("T")[0];
+		setCurrentDate(formattedDate);
+	};
+	const handlePreviousDay = () => {
+		const previousDay = new Date(currentDate);
+		previousDay.setDate(previousDay.getDate() - 1);
+		const formattedDate = previousDay.toISOString().split("T")[0];
+		setCurrentDate(formattedDate);
+	};
 	const handleCloseInputFoodContainer = () => {
 		setInputIsOpen(false);
 		setActiveMealId(null);
@@ -62,18 +74,29 @@ export default function Menu() {
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
-				date: new Date().toISOString().split("T")[0],
+				date: currentDate,
 			};
-			console.log(newFood.date);
-			console.log(newFood);
-			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId);
+			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId && meal.date === currentDate);
 
 			if (mealIndex !== -1) {
 				const updatedMeals = [...userMeal];
 				updatedMeals[mealIndex].food.push(newFood);
 				setUserMeal(updatedMeals);
 				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
+			} else {
+				const updatedMeals = [
+					...userMeal,
+					{
+						id: activeMealId,
+						date: currentDate,
+						name: `Meal ${activeMealId}`,
+						food: [newFood],
+					},
+				];
+				setUserMeal(updatedMeals);
+				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			}
+
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);
@@ -82,6 +105,11 @@ export default function Menu() {
 			console.error("Error fetching data:", error.message);
 		}
 	};
+	const mealsForCurrentDate = [1, 2, 3, 4].map(id => {
+		const existingMeal = userMeal.find(meal => meal.id === id && meal.date === currentDate);
+		return existingMeal || { id, date: currentDate, name: `Meal ${id}`, food: [] };
+	});
+
 	useEffect(() => {
 		const updatedUserMeals = localStorage.getItem("userMeals");
 		if (updatedUserMeals) {
@@ -97,15 +125,21 @@ export default function Menu() {
 					<div className='menu__container'>
 						<div className='menu__container-name'>
 							<h3 className='menu__label'>Menu</h3>
+							<span className='material-symbols-outlined arrows-left arrows' onClick={handlePreviousDay}>
+								keyboard_double_arrow_left
+							</span>
 							<input
 								className='menu__date'
 								type='date'
 								value={currentDate}
 								onChange={e => setCurrentDate(e.target.value)}
 							/>
+							<span className='material-symbols-outlined arrows-right arrows' onClick={handleNextDay}>
+								keyboard_double_arrow_right
+							</span>
 						</div>
 						<div className='menu__add-food-container'>
-							{userMeal.map(meal => (
+							{mealsForCurrentDate.map(meal => (
 								<div key={meal.id} className='menu__meal-item-container'>
 									<div className='menu__meal-item'>
 										<div className='menu__meal-item-name'>{meal.name}</div>
@@ -160,20 +194,6 @@ export default function Menu() {
 								</button>
 							</div>
 						</div>
-						{/* <div className='menu__middle-container'>
-							<div className='menu__food-main-container small-view'>
-								<div className='menu__food-main-type'>C</div>
-								<div className='menu__food-main-type'>P</div>
-								<div className='menu__food-main-type'>C</div>
-								<div className='menu__food-main-type'>F</div>
-							</div>
-							<div className='menu__food-main-container big-view'>
-								<div className='menu__food-main-type'>Calories</div>
-								<div className='menu__food-main-type'>Proteins</div>
-								<div className='menu__food-main-type'>Carbs</div>
-								<div className='menu__food-main-type'>Fats</div>
-							</div>
-						</div> */}
 					</div>
 				</div>
 			</div>
@@ -181,6 +201,4 @@ export default function Menu() {
 			<Dashboard />
 		</div>
 	);
-}
-{
 }

@@ -46,9 +46,9 @@ export default function Statistics() {
 						</div>
 						<div className='statistics__calories-container'>
 							<div className='statistics__calendar-container'>
-								<button className='statistics__period-chosing-btn'>
-									<input type='date' />
-								</button>
+								<span className='material-symbols-outlined arrows-left arrows'>keyboard_double_arrow_left</span>
+								<input type='date' />
+								<span className='material-symbols-outlined arrows-left arrows'>keyboard_double_arrow_right</span>
 							</div>
 
 							<div className='statistics__main-view-container'>
