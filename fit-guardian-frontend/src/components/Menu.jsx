@@ -19,18 +19,14 @@ export default function Menu() {
 	const handleCurrentDate = () => {
 		const date = new Date();
 		const formattedDate = date.toISOString().split("T")[0];
+		localStorage.setItem("currentDate", formattedDate);
 		setCurrentDate(formattedDate);
 	};
-	const handleNextDay = () => {
-		const nextDay = new Date(currentDate);
-		nextDay.setDate(nextDay.getDate() + 1);
-		const formattedDate = nextDay.toISOString().split("T")[0];
-		setCurrentDate(formattedDate);
-	};
-	const handlePreviousDay = () => {
-		const previousDay = new Date(currentDate);
-		previousDay.setDate(previousDay.getDate() - 1);
-		const formattedDate = previousDay.toISOString().split("T")[0];
+	const handlaChangeDay = direction => {
+		const newDate = new Date(currentDate);
+		newDate.setDate(newDate.getDate() + direction);
+		const formattedDate = newDate.toISOString().split("T")[0];
+		localStorage.setItem("currentDate", formattedDate);
 		setCurrentDate(formattedDate);
 	};
 	const handleCloseInputFoodContainer = () => {
@@ -115,7 +111,12 @@ export default function Menu() {
 		if (updatedUserMeals) {
 			setUserMeal(JSON.parse(updatedUserMeals));
 		}
-		handleCurrentDate();
+		const savedDate = localStorage.getItem("currentDate");
+		if (savedDate) {
+			setCurrentDate(savedDate);
+		} else {
+			handleCurrentDate();
+		}
 	}, []);
 
 	return (
@@ -125,7 +126,7 @@ export default function Menu() {
 					<div className='menu__container'>
 						<div className='menu__container-name'>
 							<h3 className='menu__label'>Menu</h3>
-							<span className='material-symbols-outlined arrows-left arrows' onClick={handlePreviousDay}>
+							<span className='material-symbols-outlined arrows-left arrows' onClick={() => handlaChangeDay(-1)}>
 								keyboard_double_arrow_left
 							</span>
 							<input
@@ -134,7 +135,7 @@ export default function Menu() {
 								value={currentDate}
 								onChange={e => setCurrentDate(e.target.value)}
 							/>
-							<span className='material-symbols-outlined arrows-right arrows' onClick={handleNextDay}>
+							<span className='material-symbols-outlined arrows-right arrows' onClick={() => handlaChangeDay(1)}>
 								keyboard_double_arrow_right
 							</span>
 						</div>

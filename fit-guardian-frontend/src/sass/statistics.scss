@@ -29,7 +29,24 @@ body {
 	}
 	&__container-name {
 		margin: 2em 0;
+		display: flex;
+		align-items: center;
 		color: #000046;
+	}
+	&__date {
+		padding: 0.15em 0.25em;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	.arrows {
+		color: #000046;
+		cursor: pointer;
+	}
+	.arrows-left {
+		margin-right: 0.25em;
+	}
+	.arrows-right {
+		margin-left: 0.25em;
 	}
 	&__calendar-container {
 		display: flex;
@@ -52,11 +69,14 @@ body {
 		flex-direction: column;
 		align-items: center;
 	}
+	&__name {
+		font-weight: bold;
+	}
 	&__macro-name {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(-50%);
 	}
 	&__calories-container {
 		position: relative;
@@ -120,6 +140,7 @@ body {
 		}
 		&__container-name {
 			margin-top: 50px;
+			justify-content: center;
 			text-align: center;
 		}
 	}

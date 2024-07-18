@@ -6,13 +6,14 @@ import Dashboard from "./Dashboard";
 
 export default function Macronutrients() {
 	const { userTotalCalories, setUserTotalCalories, userTotalMacros, setUserTotalMacros } = useUserContext();
-	const { userMeal, setUserMeal, allMacros, setAllMacros } = useFoodContext();
+	const { userMeal, setUserMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
 	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
 		calories: 0,
 		proteins: 0,
 		carbs: 0,
 		fats: 0,
 	});
+	const filteredMeals = userMeal.filter(meal => meal.date === currentDate);
 	const handleAddMacrosToContainers = () => {
 		const newAllMacros = {
 			calories: 0,
@@ -20,7 +21,7 @@ export default function Macronutrients() {
 			carbs: 0,
 			fats: 0,
 		};
-		userMeal.forEach(meals => {
+		filteredMeals.forEach(meals => {
 			meals.food.forEach(meal => {
 				newAllMacros.calories += parseFloat(meal.foodCalories);
 				newAllMacros.proteins += parseFloat(meal.foodProteins);
@@ -28,11 +29,15 @@ export default function Macronutrients() {
 				newAllMacros.fats += parseFloat(meal.foodFats);
 			});
 		});
+		const caloriesPercentage = (newAllMacros.calories / userTotalCalories) * 100;
+		const proteinsPercentage = (newAllMacros.proteins / userTotalMacros.proteins) * 100;
+		const carbsPercentage = (newAllMacros.carbs / userTotalMacros.carbs) * 100;
+		const fatsPercentage = (newAllMacros.fats / userTotalMacros.fats) * 100;
 		setAllMacrosPercentageCompleted({
-			calories: (newAllMacros.calories / userTotalCalories) * 100,
-			proteins: (newAllMacros.proteins / userTotalMacros.proteins) * 100,
-			carbs: (newAllMacros.carbs / userTotalMacros.carbs) * 100,
-			fats: (newAllMacros.fats / userTotalMacros.fats) * 100,
+			calories: isNaN(caloriesPercentage) ? 0 : caloriesPercentage,
+			proteins: isNaN(proteinsPercentage) ? 0 : proteinsPercentage,
+			carbs: isNaN(carbsPercentage) ? 0 : carbsPercentage,
+			fats: isNaN(fatsPercentage) ? 0 : fatsPercentage,
 		});
 		localStorage.setItem("allMacros", JSON.stringify(newAllMacros));
 		setAllMacros(newAllMacros);
@@ -58,8 +63,12 @@ export default function Macronutrients() {
 			const userAllMacros = JSON.parse(updatedUserAllMacrosString);
 			setAllMacros(userAllMacros);
 		}
-	}, []);
+	}, [currentDate]);
 	useEffect(() => {
+		const savedDate = localStorage.getItem("currentDate");
+		if (savedDate) {
+			setCurrentDate(savedDate);
+		}
 		handleAddMacrosToContainers();
 	}, [userMeal]);
 
