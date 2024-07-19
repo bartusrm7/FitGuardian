@@ -28,30 +28,21 @@ body {
 		color: #000046;
 	}
 	&__container-name {
-		margin: 2em 0;
-		display: flex;
-		align-items: center;
 		color: #000046;
-	}
-	&__date {
-		padding: 0.15em 0.25em;
-		border-radius: 5px;
-		cursor: pointer;
-	}
-	.arrows {
-		color: #000046;
-		cursor: pointer;
-	}
-	.arrows-left {
-		margin-right: 0.25em;
-	}
-	.arrows-right {
-		margin-left: 0.25em;
 	}
 	&__calendar-container {
+		margin: 1em 0;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	&__date {
+		padding: 0.25em 0.5em;
+		margin: 0 0.25em;
+		background-color: white;
+		font-weight: bold;
+		border-radius: 5px;
+		cursor: pointer;
 	}
 	&__period-chosing-btn {
 		padding: 0.25em 0.5em;
@@ -62,36 +53,22 @@ body {
 		border-radius: 5px;
 		cursor: pointer;
 	}
-	&__main-view-container {
-		text-align: center;
-		margin: 1em 0;
+	&__calories-container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
+	&__main-view-container {
+		margin: 1em 0;
+	}
+	&__macros-progress {
+	}
+	&__item {
+		margin: 1em 0;
+	}
 	&__name {
+		margin: 0.25em 0;
 		font-weight: bold;
-	}
-	&__macro-name {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%);
-	}
-	&__calories-container {
-		position: relative;
-		.statistics__circle {
-			width: 140px;
-			height: 140px;
-		}
-	}
-	&__macros-circle-progress {
-		position: relative;
-		.statistics__circle {
-			margin: 1em 0;
-			width: 100px;
-			height: 100px;
-		}
 	}
 }
 @media (min-width: 368px) {
@@ -108,19 +85,6 @@ body {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: space-evenly;
-		}
-		&__calories-container {
-			.statistics__circle {
-				width: 150px;
-				height: 150px;
-			}
-		}
-		&__macros-circle-progress {
-			.statistics__circle {
-				margin: 0;
-				width: 120px;
-				height: 120px;
-			}
 		}
 	}
 }
@@ -163,6 +127,12 @@ body {
 		&__container-name {
 			margin-top: 30px;
 		}
+		&__date {
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+			}
+		}
 		&__period-chosing-btn {
 			font-size: 1rem;
 			transition: background 0.3s;
@@ -175,19 +145,6 @@ body {
 			flex-direction: column;
 			justify-content: space-evenly;
 		}
-		&__calories-container {
-			.statistics__circle {
-				width: 160px;
-				height: 160px;
-			}
-		}
-		&__macros-circle-progress {
-			.statistics__circle {
-				margin: 0;
-				width: 130px;
-				height: 130px;
-			}
-		}
 	}
 }
 @media (min-width: 992px) {
@@ -198,19 +155,6 @@ body {
 		}
 		&__period-chosing-btn {
 			font-size: 1.1rem;
-		}
-		&__calories-container {
-			.statistics__circle {
-				width: 180px;
-				height: 180px;
-			}
-		}
-		&__macros-circle-progress {
-			.statistics__circle {
-				margin: 0;
-				width: 140px;
-				height: 140px;
-			}
 		}
 	}
 }
