@@ -85,7 +85,7 @@ export default function Macronutrients() {
 								<div className='macronutrients__macro-name'>{`${userTotalCalories}cal`}</div>
 								<div className='macronutrients__macro-circle calories'>
 									<Circle
-										percent={allMacrosPercentageCompleted.calories}
+										percent={Math.min(allMacrosPercentageCompleted.calories, 100)}
 										strokeWidth={11}
 										strokeColor={"#000046"}
 										trailWidth={11}
@@ -101,7 +101,7 @@ export default function Macronutrients() {
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.proteins}g`}</div>
 									<div className='macronutrients__macro-circle item proteins'>
 										<Circle
-											percent={allMacrosPercentageCompleted.proteins}
+											percent={Math.min(allMacrosPercentageCompleted.proteins, 100)}
 											strokeWidth={11}
 											strokeColor={"#000046"}
 											trailWidth={11}
@@ -116,7 +116,7 @@ export default function Macronutrients() {
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.carbs}g`}</div>
 									<div className='macronutrients__macro-circle item carbs'>
 										<Circle
-											percent={allMacrosPercentageCompleted.carbs}
+											percent={Math.min(allMacrosPercentageCompleted.carbs, 100)}
 											strokeWidth={11}
 											strokeColor={"#000046"}
 											trailWidth={11}
@@ -131,7 +131,7 @@ export default function Macronutrients() {
 									<div className='macronutrients__macro-name'>{`${userTotalMacros.fats}g`}</div>
 									<div className='macronutrients__macro-circle item fats'>
 										<Circle
-											percent={allMacrosPercentageCompleted.fats}
+											percent={Math.min(allMacrosPercentageCompleted.fats, 100)}
 											strokeWidth={11}
 											strokeColor={"#000046"}
 											trailWidth={11}

@@ -1,31 +1,39 @@
 import { useEffect, useState } from "react";
 import { useFoodContext } from "./FoodContext";
-import { useUserContext } from "./UserContext";
-import { Circle } from "rc-progress";
 import Dashboard from "./Dashboard";
 
 export default function Statistics() {
-	const { userTotalCalories, setUserTotalCalories, userTotalMacros, setUserTotalMacros } = useUserContext();
-	const { userMeals, setUserMeal, setAllMacros } = useFoodContext();
+	const { setUserMeal, setAllMacros } = useFoodContext();
 	const [periodChoice, setPeriodChoice] = useState("");
-	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
+	const [allMacrosCompleted, setAllMacrosCompleted] = useState({
 		calories: 0,
 		proteins: 0,
 		carbs: 0,
 		fats: 0,
 	});
-	const getDateFromPeriodChoiceDate = () => {
-		const date = new Date();
-		if (periodChoice === "week") {
-			date.setDate(date.getDate() - 7);
-		} else if (periodChoice === "month") {
-			date.setMonth(date.getMonth() - 1);
-		} else if (periodChoice === "year") {
-			date.setFullYear(date.getFullYear() - 1);
+	const [allMacrosAverageCompleted, setAllMacrosAverageCompleted] = useState({
+		calories: 0,
+		proteins: 0,
+		carbs: 0,
+		fats: 0,
+	});
+	const [isActive, setIsActive] = useState(false);
+	const handleActiveChoicePeriodBtn = () => {
+		if (isActive) {
+			// DOKOŃCZYĆ I ZROBIĆ ACTIVE BTN!!!
 		}
-		return date;
 	};
-	const filteredMealsLastPeriodTimes = () => {
+	const filteredDaysInPeriodTimes = period => {
+		const newDate = new Date();
+		if (period === "week") {
+			return 7;
+		} else if (period === "month") {
+			return new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
+		} else if (period === "year") {
+			return newDate.getFullYear() % 4 === 0 ? 366 : 365;
+		}
+	};
+	const filteredMealsLastPeriodTimes = period => {
 		const newDate = new Date();
 		const lastWeek = new Date(newDate);
 		const lastMonth = new Date(newDate);
@@ -34,34 +42,52 @@ export default function Statistics() {
 		lastMonth.setMonth(newDate.getMonth() - 1);
 		lastYear.setFullYear(newDate.getFullYear() - 1);
 
-		const newAllMacrosPercentageCompleted = {
+		const newAllMacrosCompleted = {
 			totalCalories: 0,
 			totalProteins: 0,
 			totalCarbs: 0,
 			totalFats: 0,
 		};
-
 		const getUserMeals = localStorage.getItem("userMeals");
 		const getUpdatedUserMeals = JSON.parse(getUserMeals);
 
 		getUpdatedUserMeals.forEach(meals => {
 			meals.food.forEach(meal => {
-				const totalCalories = parseFloat(meal.foodCalories);
-				const totalProteins = parseFloat(meal.foodProteins);
-				const totalCarbs = parseFloat(meal.foodCarbs);
-				const totalFats = parseFloat(meal.foodFats);
+				const mealDate = new Date(meal.date);
+				if (period === "week" && mealDate >= lastWeek) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				} else if (period === "month" && mealDate >= lastMonth) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				} else if (period === "year" && mealDate >= lastYear) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				}
 			});
 		});
-		setAllMacrosPercentageCompleted({
-			calories: totalCalories,
-			proteins: totalProteins,
-			carbs: totalCarbs,
-			fats: totalFats,
-		});
-	};
+		const dayInPeriod = filteredDaysInPeriodTimes(period);
 
-	// USTAWIĆ ABY PO KLIKNIĘCIU W NASZ BUTTON MOŻNA BYŁO WYŚWIETLIĆ ODPOWIEDNIO TO CO CHCEMY (WEEK,MONTH,YEAR)
-	
+		setAllMacrosCompleted({
+			calories: newAllMacrosCompleted.totalCalories,
+			proteins: newAllMacrosCompleted.totalProteins,
+			carbs: newAllMacrosCompleted.totalCarbs,
+			fats: newAllMacrosCompleted.totalFats,
+		});
+		setAllMacrosAverageCompleted({
+			calories: (newAllMacrosCompleted.totalCalories / dayInPeriod).toFixed(2),
+			proteins: (newAllMacrosCompleted.totalProteins / dayInPeriod).toFixed(2),
+			carbs: (newAllMacrosCompleted.totalCarbs / dayInPeriod).toFixed(2),
+			fats: (newAllMacrosCompleted.totalFats / dayInPeriod).toFixed(2),
+		});
+		localStorage.setItem("macrosALLandAVGstats", newAllMacrosCompleted);
+	};
 	useEffect(() => {
 		const updatedUserMealsString = localStorage.getItem("userMeals");
 		if (updatedUserMealsString) {
@@ -73,9 +99,11 @@ export default function Statistics() {
 			const userAllMacros = JSON.parse(updatedUserAllMacrosString);
 			setAllMacros(userAllMacros);
 		}
-		getDateFromPeriodChoiceDate();
-		filteredMealsLastPeriodTimes();
-	}, []);
+		if (periodChoice) {
+			filteredMealsLastPeriodTimes(periodChoice);
+		}
+		// const updatedAll
+	}, [periodChoice]);
 
 	return (
 		<div>
@@ -101,40 +129,40 @@ export default function Statistics() {
 								<div className='statistics__macros-progress'>
 									<div className='statistics__item'>
 										<div className='statistics__all-macro-name'>
-											All calories statistics: <span>{`123cal`}</span>
+											All calories statistics: <span>{`${allMacrosCompleted.calories}cal`}</span>
 										</div>
 										<div className='statistics__average-macro-name'>
-											All calories average statistics: <span>{`123cal`}</span>
+											All calories average statistics: <span>{`${allMacrosAverageCompleted.calories}cal`}</span>
 										</div>
 									</div>
 								</div>
 								<div className='statistics__macros-progress'>
 									<div className='statistics__item'>
 										<div className='statistics__all-macro-name'>
-											All proteins statistics: <span>{`123g`}</span>
+											All proteins statistics: <span>{`${allMacrosCompleted.proteins}g`}</span>
 										</div>
 										<div className='statistics__average-macro-name'>
-											All proteins average statistics: <span>{`123g`}</span>
+											All proteins average statistics: <span>{`${allMacrosAverageCompleted.proteins}g`}</span>
 										</div>
 									</div>
 								</div>
 								<div className='statistics__macros-progress'>
 									<div className='statistics__item'>
 										<div className='statistics__all-macro-name'>
-											All carbs statistics: <span>{`123g`}</span>
+											All carbs statistics: <span>{`${allMacrosCompleted.carbs}g`}</span>
 										</div>
 										<div className='statistics__average-macro-name'>
-											All carbs average statistics: <span>{`123g`}</span>
+											All carbs average statistics: <span>{`${allMacrosAverageCompleted.carbs}g`}</span>
 										</div>
 									</div>
 								</div>
 								<div className='statistics__macros-progress'>
 									<div className='statistics__item'>
 										<div className='statistics__all-macro-name'>
-											All fats statistics: <span>{`123g`}</span>
+											All fats statistics: <span>{`${allMacrosCompleted.fats}g`}</span>
 										</div>
 										<div className='statistics__average-macro-name'>
-											All fats average statistics: <span>123</span>
+											All fats average statistics: <span>{`${allMacrosAverageCompleted.fats}g`}</span>
 										</div>
 									</div>
 								</div>
