@@ -17,12 +17,7 @@ export default function Statistics() {
 		carbs: 0,
 		fats: 0,
 	});
-	const [isActive, setIsActive] = useState(false);
-	const handleActiveChoicePeriodBtn = () => {
-		if (isActive) {
-			// DOKOŃCZYĆ I ZROBIĆ ACTIVE BTN!!!
-		}
-	};
+	const [activeMacrosStats, setActiveMacrosStats] = useState([]);
 	const filteredDaysInPeriodTimes = period => {
 		const newDate = new Date();
 		if (period === "week") {
@@ -48,6 +43,7 @@ export default function Statistics() {
 			totalCarbs: 0,
 			totalFats: 0,
 		};
+
 		const getUserMeals = localStorage.getItem("userMeals");
 		const getUpdatedUserMeals = JSON.parse(getUserMeals);
 
@@ -72,21 +68,26 @@ export default function Statistics() {
 				}
 			});
 		});
+
 		const dayInPeriod = filteredDaysInPeriodTimes(period);
 
-		setAllMacrosCompleted({
+		const allSaveMacrosCompleted = {
 			calories: newAllMacrosCompleted.totalCalories,
 			proteins: newAllMacrosCompleted.totalProteins,
 			carbs: newAllMacrosCompleted.totalCarbs,
 			fats: newAllMacrosCompleted.totalFats,
-		});
-		setAllMacrosAverageCompleted({
+		};
+		const allSaveMacrosAverageCompleted = {
 			calories: (newAllMacrosCompleted.totalCalories / dayInPeriod).toFixed(2),
 			proteins: (newAllMacrosCompleted.totalProteins / dayInPeriod).toFixed(2),
 			carbs: (newAllMacrosCompleted.totalCarbs / dayInPeriod).toFixed(2),
 			fats: (newAllMacrosCompleted.totalFats / dayInPeriod).toFixed(2),
-		});
-		localStorage.setItem("macrosALLandAVGstats", newAllMacrosCompleted);
+		};
+		setAllMacrosCompleted(allSaveMacrosCompleted);
+		setAllMacrosAverageCompleted(allSaveMacrosAverageCompleted);
+
+		localStorage.setItem("macrosStats", JSON.stringify(allSaveMacrosCompleted));
+		localStorage.setItem("macrosAvgStats", JSON.stringify(allSaveMacrosAverageCompleted));
 	};
 	useEffect(() => {
 		const updatedUserMealsString = localStorage.getItem("userMeals");
@@ -102,7 +103,18 @@ export default function Statistics() {
 		if (periodChoice) {
 			filteredMealsLastPeriodTimes(periodChoice);
 		}
-		// const updatedAll
+		const updatedAllMacrosStats = localStorage.getItem("macrosStats");
+		if (updatedAllMacrosStats) {
+			const allMacrosStats = JSON.parse(updatedAllMacrosStats);
+			setAllMacrosCompleted(allMacrosStats);
+			console.log(allMacrosStats);
+		}
+		const updatedAvgMacrosStats = localStorage.getItem("macrosAvgStats");
+		if (updatedAvgMacrosStats) {
+			const avgMacrosStats = JSON.parse(updatedAvgMacrosStats);
+			setAllMacrosAverageCompleted(avgMacrosStats);
+			console.log(avgMacrosStats);
+		}
 	}, [periodChoice]);
 
 	return (
@@ -114,13 +126,19 @@ export default function Statistics() {
 							<h3 className='statistics__label'>Statistics</h3>
 						</div>
 						<div className='statistics__calendar-container'>
-							<button className='statistics__date' onClick={() => setPeriodChoice("week")}>
+							<button
+								className={`statistics__date ${periodChoice === "week" ? "active" : ""}`}
+								onClick={() => setPeriodChoice("week")}>
 								Last Week
 							</button>
-							<button className='statistics__date' onClick={() => setPeriodChoice("month")}>
+							<button
+								className={`statistics__date ${periodChoice === "month" ? "active" : ""}`}
+								onClick={() => setPeriodChoice("month")}>
 								Last Month
 							</button>
-							<button className='statistics__date' onClick={() => setPeriodChoice("year")}>
+							<button
+								className={`statistics__date ${periodChoice === "year" ? "active" : ""}`}
+								onClick={() => setPeriodChoice("year")}>
 								Last Year
 							</button>
 						</div>
