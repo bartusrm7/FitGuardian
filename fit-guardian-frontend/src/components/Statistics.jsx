@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFoodContext } from "./FoodContext";
 import Dashboard from "./Dashboard";
 
@@ -17,7 +17,6 @@ export default function Statistics() {
 		carbs: 0,
 		fats: 0,
 	});
-	const [activeMacrosStats, setActiveMacrosStats] = useState([]);
 	const filteredDaysInPeriodTimes = period => {
 		const newDate = new Date();
 		if (period === "week") {
@@ -89,6 +88,10 @@ export default function Statistics() {
 		localStorage.setItem("macrosStats", JSON.stringify(allSaveMacrosCompleted));
 		localStorage.setItem("macrosAvgStats", JSON.stringify(allSaveMacrosAverageCompleted));
 	};
+	const handleToggleActiveBtn = period => {
+		setPeriodChoice(period);
+		localStorage.setItem("periodChoice", period);
+	};
 	useEffect(() => {
 		const updatedUserMealsString = localStorage.getItem("userMeals");
 		if (updatedUserMealsString) {
@@ -100,20 +103,19 @@ export default function Statistics() {
 			const userAllMacros = JSON.parse(updatedUserAllMacrosString);
 			setAllMacros(userAllMacros);
 		}
-		if (periodChoice) {
-			filteredMealsLastPeriodTimes(periodChoice);
-		}
 		const updatedAllMacrosStats = localStorage.getItem("macrosStats");
 		if (updatedAllMacrosStats) {
 			const allMacrosStats = JSON.parse(updatedAllMacrosStats);
 			setAllMacrosCompleted(allMacrosStats);
-			console.log(allMacrosStats);
 		}
 		const updatedAvgMacrosStats = localStorage.getItem("macrosAvgStats");
 		if (updatedAvgMacrosStats) {
 			const avgMacrosStats = JSON.parse(updatedAvgMacrosStats);
 			setAllMacrosAverageCompleted(avgMacrosStats);
-			console.log(avgMacrosStats);
+		}
+		const updatedPeriodChoice = localStorage.getItem("periodChoice");
+		if (updatedPeriodChoice) {
+			setPeriodChoice(updatedPeriodChoice);
 		}
 	}, [periodChoice]);
 
@@ -128,17 +130,17 @@ export default function Statistics() {
 						<div className='statistics__calendar-container'>
 							<button
 								className={`statistics__date ${periodChoice === "week" ? "active" : ""}`}
-								onClick={() => setPeriodChoice("week")}>
+								onClick={() => handleToggleActiveBtn("week")}>
 								Last Week
 							</button>
 							<button
 								className={`statistics__date ${periodChoice === "month" ? "active" : ""}`}
-								onClick={() => setPeriodChoice("month")}>
+								onClick={() => handleToggleActiveBtn("month")}>
 								Last Month
 							</button>
 							<button
 								className={`statistics__date ${periodChoice === "year" ? "active" : ""}`}
-								onClick={() => setPeriodChoice("year")}>
+								onClick={() => handleToggleActiveBtn("year")}>
 								Last Year
 							</button>
 						</div>

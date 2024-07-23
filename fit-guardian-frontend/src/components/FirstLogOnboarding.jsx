@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 export default function FirstLogOnboarding() {
 	const {
-		userTotalCalories,
 		setUserTotalCalories,
 		setUserProteins,
 		setUserCarbs,
@@ -122,6 +121,7 @@ export default function FirstLogOnboarding() {
 		} else if (activity === "Very Active") {
 			baseActivityAmount = 1.65;
 		}
+		
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
 	const setMacronutrientsFromTotalCalories = calories => {
@@ -134,7 +134,7 @@ export default function FirstLogOnboarding() {
 		const fats = (calories * fatPercentage) / 9;
 
 		const totalMacros = {
-			proteins: proteins.toFixed(0),	
+			proteins: proteins.toFixed(0),
 			carbs: carbs.toFixed(0),
 			fats: fats.toFixed(0),
 		};

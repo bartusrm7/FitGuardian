@@ -48,6 +48,14 @@ body {
 		flex-direction: column;
 		justify-content: space-between;
 	}
+	.toggle-password-btn {
+		padding: 0.25em;
+		margin-right: 0.25em;
+		font-size: 0.8rem;
+		font-weight: bold;
+		border-radius: 5px;
+		cursor: pointer;
+	}
 	.choices {
 		display: flex;
 		flex-direction: column;
@@ -65,10 +73,27 @@ body {
 		font-size: 0.8rem;
 		border-radius: 5px;
 	}
+	&__user-settings-data {
+		cursor: pointer;
+	}
 	.calories {
 		input {
 			width: 100px;
 		}
+	}
+	input[type="range"].settings__user-settings-data {
+		appearance: none;
+		padding: 2px;
+		margin: 3px 0;
+		height: 15px;
+	}
+	input[type="range"].settings__user-settings-data::-webkit-slider-thumb {
+		appearance: none;
+		width: 13px;
+		height: 13px;
+		background-color: #000046;
+		border: 1px solid #60dfff;
+		border-radius: 5px;
 	}
 	&__input-macro-container {
 		div {
@@ -88,6 +113,16 @@ body {
 		font-weight: bold;
 		border-radius: 5px;
 		cursor: pointer;
+	}
+	.active {
+		background-color: #60dfff;
+	}
+}
+@media (max-width: 368px) {
+	.settings {
+		input[type="range"].settings__user-settings-data {
+			width: 70%;
+		}
 	}
 }
 @media (min-width: 368px) {
@@ -115,6 +150,14 @@ body {
 		&__user-settings-data,
 		&__user-settings-name {
 			font-size: 0.9rem;
+		}
+		input[type="range"].settings__user-settings-data {
+			margin: 2px 0;
+			height: 18px;
+		}
+		input[type="range"].settings__user-settings-data::-webkit-slider-thumb {
+			width: 15px;
+			height: 15px;
 		}
 		&__input-macro-container {
 			width: 100%;
@@ -188,8 +231,18 @@ body {
 		&__over-container {
 			height: 100%;
 		}
+		.toggle-password-btn {
+			padding: 0.25em 0.5em;
+			font-size: 0.9rem;
+		}
 		&__user-settings-item {
 			width: 100%;
+		}
+		.toggle-password-btn {
+			transition: background 0.3s;
+			&:hover {
+				background-color: #60dfff;
+			}
 		}
 		.choices {
 			position: relative;
@@ -199,6 +252,16 @@ body {
 				left: -75px;
 				display: flex;
 			}
+		}
+		input[type="range"].settings__user-settings-data {
+			height: 22px;
+			border: 1px solid #000046;
+		}
+		input[type="range"].settings__user-settings-data::-webkit-slider-thumb {
+			width: 17px;
+			height: 17px;
+			background-color: #60dfff;
+			border: 1px solid #000046;
 		}
 		&__user-settings-data,
 		&__user-settings-name {

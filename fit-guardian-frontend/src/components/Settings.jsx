@@ -22,6 +22,7 @@ export default function Settings() {
 		activityOptions: ["Sedentary", "Light", "Moderate", "Active", "Very Active"],
 	});
 	const [editedUserData, setEditedUserData] = useState(null);
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const validateEmail = email => {
 		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return re.test(email);
@@ -29,7 +30,9 @@ export default function Settings() {
 	const validatePassword = password => {
 		return password.length >= 8;
 	};
-
+	const handleToggleActiveBtn = () => {
+		setIsPasswordVisible(!isPasswordVisible);
+	};
 	const setMacronutrientsFromTotalCalories = () => {
 		const proteinPercentage = 0.2;
 		const carbPercentage = 0.5;
@@ -51,22 +54,92 @@ export default function Settings() {
 		setUserFats(fats.toFixed(0));
 
 		localStorage.setItem("userMacros", JSON.stringify(userTotalMacros));
-		console.log(userTotalMacros);
+	};
+	const setNewMacronutrientsFromTotalCalories = (age, height, weight, gender, goal, activity) => {
+		let basedAge = 1;
+		if (age >= 40 && age <= 50) {
+			basedAge = 0.9;
+		} else if (age >= 51 && age <= 60) {
+			basedAge = 0.8;
+		} else if (age >= 61) {
+			basedAge = 0.7;
+		}
+
+		let basedHeight = 0;
+		if (height >= 170 && height <= 190) {
+			basedHeight = 100;
+		} else if (height >= 191 && height <= 220) {
+			basedHeight = 200;
+		} else if (height >= 211) {
+			basedHeight = 300;
+		}
+
+		let basedWeight = 0;
+		if (weight >= 75 && weight <= 90) {
+			basedWeight = 200;
+		} else if (weight >= 91 && weight <= 110) {
+			basedWeight = 300;
+		} else if (weight >= 111) {
+			basedWeight = 400;
+		}
+
+		let baseCalories = 0;
+		if (gender === "Male") {
+			baseCalories = 2200;
+		} else if (gender === "Female") {
+			baseCalories = 1800;
+		}
+
+		let baseGoalAmount = 0;
+		if (goal === "Lose weight") {
+			baseGoalAmount = -300;
+		} else if (goal === "Gain weight") {
+			baseGoalAmount = 300;
+		}
+
+		let baseActivityAmount = 1;
+		if (activity === "Light") {
+			baseActivityAmount = 1.25;
+		} else if (activity === "Moderate") {
+			baseActivityAmount = 1.35;
+		} else if (activity === "Active") {
+			baseActivityAmount = 1.5;
+		} else if (activity === "Very Active") {
+			baseActivityAmount = 1.65;
+		}
+
+		const totalUserChoices =
+			(baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
+		setUserTotalCalories(totalUserChoices);
+		setMacronutrientsFromTotalCalories();
 	};
 	const handleInputChange = (name, value) => {
-		setEditedUserData(prevState => ({
-			...prevState,
-			userChoices: {
-				...prevState.userChoices,
+		setEditedUserData(prevState => {
+			const newUserChoices = {
+				...prevState.newUserChoices,
 				[name]: value,
-			},
-			userData: {
-				...prevState.userData,
+			};
+			const newUserData = {
+				...prevState.newUserData,
 				[name]: value,
-			},
-		}));
-	};
+			};
 
+			setNewMacronutrientsFromTotalCalories(
+				newUserChoices.age,
+				newUserChoices.height,
+				newUserChoices.weight,
+				newUserChoices.gender,
+				newUserChoices.goal,
+				newUserChoices.activity
+			);
+
+			return {
+				...prevState,
+				userChoices: newUserChoices,
+				userData: newUserData,
+			};
+		});
+	};
 	const handleSaveChanges = () => {
 		if (editedUserData) {
 			const { userData } = editedUserData;
@@ -85,7 +158,6 @@ export default function Settings() {
 			localStorage.setItem("userCalories", userTotalCalories);
 		}
 	};
-
 	useEffect(() => {
 		const userChoicesString = localStorage.getItem("userChoices");
 		const userDataString = localStorage.getItem("userData");
@@ -111,7 +183,14 @@ export default function Settings() {
 				setUserCarbs(userMacros.carbs);
 				setUserFats(userMacros.fats);
 			} else {
-				setMacronutrientsFromTotalCalories();
+				setNewMacronutrientsFromTotalCalories(
+					userChoices.age,
+					userChoices.height,
+					userChoices.weight,
+					userChoices.gender,
+					userChoices.goal,
+					userChoices.activity
+				);
 			}
 		}
 	}, []);
@@ -139,21 +218,20 @@ export default function Settings() {
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>EMAIL:</div>
-											<input
-												type='email'
-												className='settings__user-settings-data'
-												value={editedUserData.userData.userEmail}
-												onChange={e => handleInputChange("userEmail", e.target.value)}
-											/>
+											<div className='settings__user-settings-data'>{editedUserData.userData.userEmail}</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>PASSWORD:</div>
-											<input
-												type='password'
-												className='settings__user-settings-data'
-												value={editedUserData.userData.userPassword}
-												onChange={e => handleInputChange("userPassword", e.target.value)}
-											/>
+											<div className='settings__user-settings-data'>
+												<button
+													className={`toggle-password-btn ${isPasswordVisible ? "active" : ""}`}
+													onClick={handleToggleActiveBtn}>
+													SHOW
+												</button>
+												{isPasswordVisible
+													? editedUserData.userData.userPassword
+													: editedUserData.userData.userPassword.replace(/./g, "*")}
+											</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>BIRTHDAY DATE:</div>
