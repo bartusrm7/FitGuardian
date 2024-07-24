@@ -33,14 +33,14 @@ export default function Settings() {
 	const handleToggleActiveBtn = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
-	const setMacronutrientsFromTotalCalories = () => {
+	const setMacronutrientsFromTotalCalories = totalCalories => {
 		const proteinPercentage = 0.2;
 		const carbPercentage = 0.5;
 		const fatPercentage = 0.3;
 
-		const proteins = (proteinPercentage * userTotalCalories) / 4;
-		const carbs = (carbPercentage * userTotalCalories) / 4;
-		const fats = (fatPercentage * userTotalCalories) / 9;
+		const proteins = (proteinPercentage * totalCalories) / 4;
+		const carbs = (carbPercentage * totalCalories) / 4;
+		const fats = (fatPercentage * totalCalories) / 9;
 
 		const totalMacros = {
 			proteins: proteins.toFixed(0),
@@ -111,28 +111,28 @@ export default function Settings() {
 		const totalUserChoices =
 			(baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 		setUserTotalCalories(totalUserChoices);
-		setMacronutrientsFromTotalCalories();
+		setMacronutrientsFromTotalCalories(totalUserChoices);
 	};
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => {
 			const newUserChoices = {
-				...prevState.newUserChoices,
+				...prevState.userChoices,
 				[name]: value,
 			};
 			const newUserData = {
-				...prevState.newUserData,
+				...prevState.userData,
 				[name]: value,
 			};
-
-			setNewMacronutrientsFromTotalCalories(
-				newUserChoices.age,
-				newUserChoices.height,
-				newUserChoices.weight,
-				newUserChoices.gender,
-				newUserChoices.goal,
-				newUserChoices.activity
-			);
-
+			setTimeout(() => {
+				setNewMacronutrientsFromTotalCalories(
+					newUserChoices.age,
+					newUserChoices.height,
+					newUserChoices.weight,
+					newUserChoices.gender,
+					newUserChoices.goal,
+					newUserChoices.activity
+				);
+			}, 0);
 			return {
 				...prevState,
 				userChoices: newUserChoices,
@@ -310,7 +310,7 @@ export default function Settings() {
 											<div
 												className='settings__user-settings-data'
 												onChange={e => setUserTotalCalories(e.target.value)}>
-												{`${userTotalCalories}cal`}
+												{`${userTotalCalories.toFixed(0)}cal`}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>

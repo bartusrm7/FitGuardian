@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
+import { useState } from "react";
 
 export default function Reg() {
 	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const [opacityClass, setOpacityClass] = useState("display-opacity");
 	const navigate = useNavigate();
 
 	const validateEmail = email => {
@@ -47,7 +49,10 @@ export default function Reg() {
 			setUserName("");
 			setUserEmail("");
 			setUserPassword("");
-			navigate("/firstlog-onboarding");
+			setOpacityClass("hide-opacity");
+			setTimeout(() => {
+				navigate("/firstlog-onboarding");
+			}, 300);
 		} catch (error) {
 			console.error("Error", error);
 		}
@@ -55,7 +60,7 @@ export default function Reg() {
 
 	return (
 		<div>
-			<div className='reg'>
+			<div className={`reg ${opacityClass}`}>
 				<div className='reg__main-container'>
 					<div className='reg__container'>
 						<Link to='/'>

@@ -11,12 +11,22 @@ body {
 	background: linear-gradient(#316fe4, #323be6);
 	letter-spacing: 0;
 }
+.display-opacity {
+	opacity: 1;
+}
+.hide-opacity {
+	opacity: 0;
+}
+.log {
+	transition: opacity 0.3s;
+}
 .log,
 .reg {
 	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: 0.3s;
 	&__main-container {
 		width: 250px;
 		height: 300px;

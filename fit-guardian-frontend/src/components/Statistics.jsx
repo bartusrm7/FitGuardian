@@ -67,7 +67,6 @@ export default function Statistics() {
 				}
 			});
 		});
-
 		const dayInPeriod = filteredDaysInPeriodTimes(period);
 
 		const allSaveMacrosCompleted = {
@@ -117,6 +116,7 @@ export default function Statistics() {
 		if (updatedPeriodChoice) {
 			setPeriodChoice(updatedPeriodChoice);
 		}
+		filteredMealsLastPeriodTimes(periodChoice);
 	}, [periodChoice]);
 
 	return (

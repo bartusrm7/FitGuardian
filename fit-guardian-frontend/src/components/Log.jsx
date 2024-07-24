@@ -1,8 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
+import { useState } from "react";
 
 export default function Log() {
 	const { setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const [opacityClass, setOpacityClass] = useState("display-opacity");
 	const navigate = useNavigate();
 
 	const validateEmail = email => {
@@ -46,7 +48,10 @@ export default function Log() {
 			setUserEmail("");
 			setUserPassword("");
 			setUserName(userName);
-			navigate("/menu");
+			setOpacityClass("hide-opacity");
+			setTimeout(() => {
+				navigate("/menu");
+			}, 300);
 		} catch (error) {
 			console.error("Error", error);
 		}
@@ -54,7 +59,7 @@ export default function Log() {
 
 	return (
 		<div>
-			<div className='log'>
+			<div className={`log ${opacityClass}`}>
 				<div className='log__main-container'>
 					<div className='log__container'>
 						<Link to='/'>

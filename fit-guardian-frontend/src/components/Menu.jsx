@@ -66,7 +66,7 @@ export default function Menu() {
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
 				foodName: inputFood,
-				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}kcal`,
+				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}cal`,
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
