@@ -17,16 +17,13 @@ body {
 .hide-opacity {
 	opacity: 0;
 }
-.log {
-	transition: opacity 0.3s;
-}
 .log,
 .reg {
 	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	transition: 0.3s;
+	transition: opacity 0.3s ease-out;
 	&__main-container {
 		width: 250px;
 		height: 300px;

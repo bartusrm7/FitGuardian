@@ -11,7 +11,14 @@ body {
 	background: -webkit-linear-gradient(#316fe4, #323be6);
 	background: linear-gradient(#316fe4, #323be6);
 }
+.display-opacity {
+	opacity: 1;
+}
+.hide-opacity {
+	opacity: 0;
+}
 .firstlog-onboarding {
+	transition: opacity 0.3s ease-out;
 	&__main-container {
 		width: 100vw;
 		height: 100vh;

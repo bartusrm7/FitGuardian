@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 export default function Statistics() {
 	const { setUserMeal, setAllMacros } = useFoodContext();
 	const [periodChoice, setPeriodChoice] = useState("");
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [allMacrosCompleted, setAllMacrosCompleted] = useState({
 		calories: 0,
 		proteins: 0,
@@ -118,10 +119,13 @@ export default function Statistics() {
 		}
 		filteredMealsLastPeriodTimes(periodChoice);
 	}, [periodChoice]);
+	useEffect(() => {
+		setOpacityClass("display-opacity");
+	});
 
 	return (
 		<div>
-			<div className='statistics'>
+			<div className={`statistics ${opacityClass}`}>
 				<div className='statistics__main-container'>
 					<div className='statistics__container'>
 						<div className='statistics__container-name'>

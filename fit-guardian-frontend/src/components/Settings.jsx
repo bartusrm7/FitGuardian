@@ -23,6 +23,8 @@ export default function Settings() {
 	});
 	const [editedUserData, setEditedUserData] = useState(null);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+
 	const validateEmail = email => {
 		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return re.test(email);
@@ -194,10 +196,13 @@ export default function Settings() {
 			}
 		}
 	}, []);
+	useEffect(() => {
+		setOpacityClass("display-opacity");
+	}, []);
 
 	return (
 		<div>
-			<div className='settings'>
+			<div className={`settings ${opacityClass}`}>
 				<div className='settings__main-container'>
 					<div className='settings__container'>
 						<div className='settings__container-name'>

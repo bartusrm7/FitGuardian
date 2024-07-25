@@ -15,6 +15,7 @@ export default function Menu() {
 	} = useFoodContext();
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
 	const handleCurrentDate = () => {
 		const date = new Date();
@@ -118,10 +119,13 @@ export default function Menu() {
 			handleCurrentDate();
 		}
 	}, []);
+	useEffect(() => {
+		setOpacityClass("display-opacity");
+	}, []);
 
 	return (
 		<div>
-			<div className='menu'>
+			<div className={`menu ${opacityClass}`}>
 				<div className='menu__main-container'>
 					<div className='menu__container'>
 						<div className='menu__container-name'>
@@ -173,7 +177,7 @@ export default function Menu() {
 								</div>
 							))}
 						</div>
-						<div className={`menu__background-shadow ${inputIsOpen ? "open" : ""}`}>
+						<div className={`menu__background-shadow ${inputIsOpen ? "open" : "close"}`}>
 							<div className='menu__cancel-btn' onClick={handleCloseInputFoodContainer}>
 								<span className='material-symbols-outlined'>close</span>
 							</div>

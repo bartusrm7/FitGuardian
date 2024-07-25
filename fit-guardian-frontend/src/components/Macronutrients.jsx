@@ -13,6 +13,8 @@ export default function Macronutrients() {
 		carbs: 0,
 		fats: 0,
 	});
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+
 	const filteredMeals = userMeal.filter(meal => meal.date === currentDate);
 	const handleAddMacrosToContainers = () => {
 		const newAllMacros = {
@@ -71,10 +73,13 @@ export default function Macronutrients() {
 		}
 		handleAddMacrosToContainers();
 	}, [userMeal]);
+	useEffect(() => {
+		setOpacityClass("display-opacity");
+	}, []);
 
 	return (
 		<div>
-			<div className='macronutrients'>
+			<div className={`macronutrients ${opacityClass}`}>
 				<div className='macronutrients__main-container'>
 					<div className='macronutrients__container'>
 						<div className='macronutrients__container-name'>

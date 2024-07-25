@@ -22,7 +22,7 @@ export default function FirstLogOnboarding() {
 		userActivity,
 		setUserActivity,
 	} = useUserContext();
-
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const navigate = useNavigate();
 	const [userChoices, setUserChoices] = useState({
 		age: userAge,
@@ -121,7 +121,7 @@ export default function FirstLogOnboarding() {
 		} else if (activity === "Very Active") {
 			baseActivityAmount = 1.65;
 		}
-		
+
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
 	const setMacronutrientsFromTotalCalories = calories => {
@@ -169,10 +169,13 @@ export default function FirstLogOnboarding() {
 			alert("Some field is empty. Fill all fields to continue!");
 		}
 	};
+	useEffect(() => {
+		setOpacityClass("display-opacity");
+	}, []);
 
 	return (
 		<div>
-			<div className='firstlog-onboarding'>
+			<div className={`firstlog-onboarding ${opacityClass}`}>
 				<div className='firstlog-onboarding__main-container'>
 					<div className='firstlog-onboarding__container'>
 						<div className='firstlog-onboarding__container-name'>

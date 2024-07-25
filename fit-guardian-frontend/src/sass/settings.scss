@@ -11,6 +11,12 @@ body {
 	background: linear-gradient(#316fe4, #323be6);
 	letter-spacing: 2px;
 }
+.display-opacity {
+	opacity: 1;
+}
+.hide-opacity {
+	opacity: 0;
+}
 .settings {
 	position: absolute;
 	width: 100vw;
@@ -18,6 +24,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: opacity 0.3s ease-out;
 	&__main-container {
 		width: 100vw;
 		height: 100vh;
