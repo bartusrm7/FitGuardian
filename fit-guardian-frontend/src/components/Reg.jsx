@@ -3,8 +3,9 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Reg() {
-	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { userID, userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
 
 	const validateEmail = email => {
@@ -16,12 +17,22 @@ export default function Reg() {
 	};
 
 	const userRegisterData = async () => {
+		setErrorMessage("");
+		if (!userName) {
+			setErrorMessage("Empty field!");
+		}
+		if (!userEmail) {
+			setErrorMessage("Empty field!");
+		}
 		if (!validateEmail(userEmail)) {
-			console.log("Register failed!");
+			setErrorMessage("Empty field!");
 			return;
 		}
+		if (!userPassword) {
+			setErrorMessage("Empty field!");
+		}
 		if (!validatePassword(userPassword)) {
-			console.log("Password is to short!");
+			setErrorMessage("Empty field!");
 			return;
 		}
 		try {
@@ -31,6 +42,7 @@ export default function Reg() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
+					userID: userID,
 					userName: userName,
 					userEmail: userEmail,
 					userPassword: userPassword,
@@ -40,15 +52,17 @@ export default function Reg() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-			const saveUserData = { userName: userName, userEmail: userEmail, userPassword: userPassword };
+			const saveUserData = { userID: userID, userName: userName, userEmail: userEmail, userPassword: userPassword };
 
 			localStorage.setItem("accessToken", data.accessToken);
 			localStorage.setItem("userData", JSON.stringify(saveUserData));
 			localStorage.setItem("userName", userName);
+			localStorage.setItem("userID", data.userID);
 
 			setUserName("");
 			setUserEmail("");
 			setUserPassword("");
+			setErrorMessage("");
 			navigate("/firstlog-onboarding");
 		} catch (error) {
 			console.error("Error", error);
@@ -74,27 +88,39 @@ export default function Reg() {
 								<span className='material-symbols-outlined'>person</span>
 								<input
 									type='text'
-									placeholder='Account name'
+									placeholder={errorMessage || "Account name"}
 									value={userName}
-									onChange={e => setUserName(e.target.value)}
+									onChange={e => {
+										setUserName(e.target.value);
+										setErrorMessage("");
+									}}
+									style={{ borderColor: errorMessage ? "red" : "" }}
 								/>
 							</div>
 							<div className='reg__input-item-container'>
 								<span className='material-symbols-outlined'>mail</span>
 								<input
 									type='email'
-									placeholder='Email'
+									placeholder={errorMessage || "Email"}
 									value={userEmail}
-									onChange={e => setUserEmail(e.target.value)}
+									onChange={e => {
+										setUserEmail(e.target.value);
+										setErrorMessage("");
+									}}
+									style={{ borderColor: errorMessage ? "red" : "" }}
 								/>
 							</div>
 							<div className='reg__input-item-container'>
 								<span className='material-symbols-outlined'>lock</span>
 								<input
 									type='password'
-									placeholder='Password'
+									placeholder={errorMessage || "Password"}
 									value={userPassword}
-									onChange={e => setUserPassword(e.target.value)}
+									onChange={e => {
+										setUserPassword(e.target.value);
+										setErrorMessage("");
+									}}
+									style={{ borderColor: errorMessage ? "red" : "" }}
 								/>
 							</div>
 						</div>

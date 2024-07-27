@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const port = 5174;
@@ -23,7 +24,7 @@ const validatePassword = password => {
 
 app.post("/register", (req, res) => {
 	const { userName, userEmail, userPassword } = req.body;
-	const newUser = { userName, userEmail, userPassword };
+	const newUser = { userID: uuidv4(), userName, userEmail, userPassword };
 	const userExist = users.some(user => user.userName === userName || user.userEmail === userEmail);
 
 	if (userExist) {
@@ -37,12 +38,13 @@ app.post("/register", (req, res) => {
 	}
 
 	users.push(newUser);
-	res.status(200).json({ message: "User registered successfully!", users });
+	res.status(200).json({ message: "User registered successfully!", users, userID: newUser.userID });
 });
 
 app.post("/login", (req, res) => {
 	const { userEmail, userPassword } = req.body;
 	const user = users.find(user => user.userEmail === userEmail || user.userPassword === userPassword);
+
 	if (!user) {
 		return res.status(401).json({ message: "Invalid username or password!" });
 	}
@@ -50,7 +52,11 @@ app.post("/login", (req, res) => {
 	const payload = { userEmail: user.userEmail };
 	const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
 
-	res.json({ accessToken: accessToken, userName: user.userName });
+	res.status(200).json({
+		message: "User logged successfully!",
+		accessToken: accessToken,
+		user,
+	});
 });
 
 app.listen(port, () => {

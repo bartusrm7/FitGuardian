@@ -45,7 +45,7 @@ export default function Statistics() {
 		};
 
 		const getUserMeals = localStorage.getItem("userMeals");
-		const getUpdatedUserMeals = JSON.parse(getUserMeals);
+		const getUpdatedUserMeals = getUserMeals ? JSON.parse(getUserMeals) : [];
 
 		getUpdatedUserMeals.forEach(meals => {
 			meals.food.forEach(meal => {

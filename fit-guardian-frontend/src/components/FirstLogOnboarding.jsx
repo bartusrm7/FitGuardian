@@ -166,7 +166,7 @@ export default function FirstLogOnboarding() {
 			setMacronutrientsFromTotalCalories(userCalories);
 			navigate("/menu");
 		} else {
-			alert("Some field is empty. Fill all fields to continue!");
+			alert("Some field is empty. Complete all fields to continue!");
 		}
 	};
 	useEffect(() => {

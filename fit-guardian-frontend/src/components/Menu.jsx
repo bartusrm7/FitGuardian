@@ -1,6 +1,7 @@
 import Dashboard from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
+import { useLogRegContext } from "./LogRegContext";
 
 export default function Menu() {
 	const {
@@ -13,6 +14,8 @@ export default function Menu() {
 		inputFoodGrams,
 		setInputFoodGrams,
 	} = useFoodContext();
+	const { userID } = useLogRegContext();
+	const [mealToUserID, setMealToUserID] = useState([]);
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
@@ -118,6 +121,8 @@ export default function Menu() {
 		} else {
 			handleCurrentDate();
 		}
+		const updatedUserID = localStorage.getItem("userID");
+		console.log(updatedUserID);
 	}, []);
 	useEffect(() => {
 		setOpacityClass("display-opacity");

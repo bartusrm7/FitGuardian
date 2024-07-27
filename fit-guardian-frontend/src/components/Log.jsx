@@ -3,8 +3,9 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Log() {
-	const { setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { userID, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
 
 	const validateEmail = email => {
@@ -16,12 +17,18 @@ export default function Log() {
 	};
 
 	const userLoginData = async () => {
+		if (!userEmail) {
+			setErrorMessage("Empty field!");
+		}
 		if (!validateEmail(userEmail)) {
-			console.log("Invalid email format!");
+			setErrorMessage("Empty field!");
 			return;
 		}
+		if (!userPassword) {
+			setErrorMessage("Empty field!");
+		}
 		if (!validatePassword(userPassword)) {
-			console.log("Password is to short!");
+			setErrorMessage("Empty field!");
 			return;
 		}
 		try {
@@ -31,14 +38,16 @@ export default function Log() {
 					"Content-type": "application/json",
 				},
 				body: JSON.stringify({
+					userID: userID,
 					userEmail: userEmail,
 					userPassword: userPassword,
 				}),
 			});
-			if (!response) {
+			const data = await response.json();
+
+			if (!response.ok) {
 				throw Error("Login failed!!");
 			}
-			const data = await response.json();
 			if (!data.accessToken) {
 				return;
 			}
@@ -55,7 +64,7 @@ export default function Log() {
 	};
 	useEffect(() => {
 		setOpacityClass("display-opacity");
-	},[]);
+	}, []);
 
 	return (
 		<div>
@@ -72,19 +81,29 @@ export default function Log() {
 							<div className='log__input-item-container'>
 								<span className='material-symbols-outlined'>mail</span>
 								<input
+									className='email'
 									type='email'
-									placeholder='Email'
+									placeholder={errorMessage || "Email"}
 									value={userEmail}
-									onChange={e => setUserEmail(e.target.value)}
+									onChange={e => {
+										setUserEmail(e.target.value);
+										setErrorMessage();
+									}}
+									style={{ borderColor: errorMessage ? "red" : "" }}
 								/>
 							</div>
 							<div className='log__input-item-container'>
 								<span className='material-symbols-outlined'>lock</span>
 								<input
+									className='password'
 									type='password'
-									placeholder='Password'
+									placeholder={errorMessage || "Password"}
 									value={userPassword}
-									onChange={e => setUserPassword(e.target.value)}
+									onChange={e => {
+										setUserPassword(e.target.value);
+										setErrorMessage("");
+									}}
+									style={{ borderColor: errorMessage ? "red" : "" }}
 								/>
 							</div>
 						</div>
