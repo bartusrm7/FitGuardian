@@ -14,8 +14,9 @@ export default function Menu() {
 		inputFoodGrams,
 		setInputFoodGrams,
 	} = useFoodContext();
-	const { userID } = useLogRegContext();
-	const [mealToUserID, setMealToUserID] = useState([]);
+	// const { userID, setUserID, userEmail, setUserEmail } = useLogRegContext();
+	const [mealToCorrectUserEmail, setMealToCorrectUserEmail] = useState({});
+	const [userCurrentEmail, setUserCurrentEmail] = useState("");
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
@@ -53,6 +54,10 @@ export default function Menu() {
 		});
 		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
 		setUserMeal(updatedMealsAfterRemovedItem);
+		setMealToCorrectUserEmail(prevState => ({
+			...prevState,
+			[userCurrentEmail]: updatedMealsAfterRemovedItem,
+		}));
 	};
 	const handleAddFoodItem = async () => {
 		try {
@@ -81,6 +86,10 @@ export default function Menu() {
 			if (mealIndex !== -1) {
 				const updatedMeals = [...userMeal];
 				updatedMeals[mealIndex].food.push(newFood);
+				setMealToCorrectUserEmail(prevState => ({
+					...prevState,
+					[userCurrentEmail]: [...updatedMeals],
+				}));
 				setUserMeal(updatedMeals);
 				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			} else {
@@ -95,7 +104,13 @@ export default function Menu() {
 				];
 				setUserMeal(updatedMeals);
 				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
+
+				setMealToCorrectUserEmail(prevState => ({
+					...prevState,
+					[userCurrentEmail]: [...updatedMeals],
+				}));
 			}
+			console.log(mealToCorrectUserEmail);
 
 			setInputFood("");
 			setInputFoodGrams("");
@@ -121,8 +136,11 @@ export default function Menu() {
 		} else {
 			handleCurrentDate();
 		}
-		const updatedUserID = localStorage.getItem("userID");
-		console.log(updatedUserID);
+		const updatedUserEmail = localStorage.getItem("userData");
+		if (updatedUserEmail) {
+			const savedEmail = JSON.parse(updatedUserEmail);
+			setUserCurrentEmail(savedEmail.userEmail);
+		}
 	}, []);
 	useEffect(() => {
 		setOpacityClass("display-opacity");
