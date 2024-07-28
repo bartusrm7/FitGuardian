@@ -1,7 +1,6 @@
 import Dashboard from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
-import { useLogRegContext } from "./LogRegContext";
 
 export default function Menu() {
 	const {
@@ -14,7 +13,6 @@ export default function Menu() {
 		inputFoodGrams,
 		setInputFoodGrams,
 	} = useFoodContext();
-	// const { userID, setUserID, userEmail, setUserEmail } = useLogRegContext();
 	const [mealToCorrectUserEmail, setMealToCorrectUserEmail] = useState({});
 	const [userCurrentEmail, setUserCurrentEmail] = useState("");
 	const [inputIsOpen, setInputIsOpen] = useState(false);
@@ -86,12 +84,13 @@ export default function Menu() {
 			if (mealIndex !== -1) {
 				const updatedMeals = [...userMeal];
 				updatedMeals[mealIndex].food.push(newFood);
+				setUserMeal(updatedMeals);
+				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
+
 				setMealToCorrectUserEmail(prevState => ({
 					...prevState,
 					[userCurrentEmail]: [...updatedMeals],
 				}));
-				setUserMeal(updatedMeals);
-				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			} else {
 				const updatedMeals = [
 					...userMeal,
@@ -142,6 +141,7 @@ export default function Menu() {
 			setUserCurrentEmail(savedEmail.userEmail);
 		}
 	}, []);
+
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
