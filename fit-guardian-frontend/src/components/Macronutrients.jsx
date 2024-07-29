@@ -15,7 +15,11 @@ export default function Macronutrients() {
 	});
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
-	const filteredMeals = userMeal.filter(meal => meal.date === currentDate);
+	console.log(userMeal);
+	const filteredMeals = Object.values(userMeal)
+		.flat()
+		.filter(meal => meal.date === currentDate);
+	console.log(filteredMeals);
 	const handleAddMacrosToContainers = () => {
 		const newAllMacros = {
 			calories: 0,
@@ -45,7 +49,7 @@ export default function Macronutrients() {
 		setAllMacros(newAllMacros);
 	};
 	useEffect(() => {
-		const updatedUserTotalCaloriesString = localStorage.getItem("userCalories");
+		const updatedUserTotalCaloriesString = localStorage.getItem("userCurrentCalories");
 		if (updatedUserTotalCaloriesString) {
 			const userCalories = JSON.parse(updatedUserTotalCaloriesString);
 			setUserTotalCalories(userCalories);

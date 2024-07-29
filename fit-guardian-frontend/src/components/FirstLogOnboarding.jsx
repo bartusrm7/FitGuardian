@@ -163,7 +163,7 @@ export default function FirstLogOnboarding() {
 			localStorage.setItem("userChoices", JSON.stringify(userData));
 			localStorage.setItem("userCurrentChoices", JSON.stringify(userData));
 			localStorage.setItem("userCalories", userCalories);
-			localStorage.setItem("userCalories", userCalories);
+			localStorage.setItem("userCurrentCalories", userCalories);
 
 			setUserTotalCalories(userCalories);
 			setMacronutrientsFromTotalCalories(userCalories);
