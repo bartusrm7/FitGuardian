@@ -3,7 +3,7 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Reg() {
-	const { userID, userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
@@ -18,18 +18,12 @@ export default function Reg() {
 
 	const userRegisterData = async () => {
 		setErrorMessage("");
-		if (!userName) {
-			setErrorMessage("Empty field!");
-		}
-		if (!userEmail) {
+		if (!userName || !userEmail || !userPassword) {
 			setErrorMessage("Empty field!");
 		}
 		if (!validateEmail(userEmail)) {
 			setErrorMessage("Empty field!");
 			return;
-		}
-		if (!userPassword) {
-			setErrorMessage("Empty field!");
 		}
 		if (!validatePassword(userPassword)) {
 			setErrorMessage("Empty field!");
@@ -41,23 +35,31 @@ export default function Reg() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({
-					userID: userID,
-					userName: userName,
-					userEmail: userEmail,
-					userPassword: userPassword,
-				}),
+				body: JSON.stringify({ userName, userEmail, userPassword }),
 			});
 			if (!response.ok) {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-			const saveUserData = { userID: userID, userName: userName, userEmail: userEmail, userPassword: userPassword };
+			const newUserData = { userName, userEmail, userPassword };
 
+			const userDataJSON = localStorage.getItem("userData");
+			let userData = [];
+
+			if (userDataJSON) {
+				try {
+					userData = JSON.parse(userDataJSON);
+				} catch (error) {
+					console.error("Error parsing userData:", error);
+					userData = [];
+				}
+			}
+			userData.push(newUserData);
+
+			localStorage.setItem("userData", JSON.stringify(userData));
+			localStorage.setItem("currentUserData", JSON.stringify(newUserData));
 			localStorage.setItem("accessToken", data.accessToken);
-			localStorage.setItem("userData", JSON.stringify(saveUserData));
 			localStorage.setItem("userName", userName);
-			localStorage.setItem("userID", data.userID);
 
 			setUserName("");
 			setUserEmail("");

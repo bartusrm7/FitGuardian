@@ -25,13 +25,6 @@ export default function Settings() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
-	const validateEmail = email => {
-		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return re.test(email);
-	};
-	const validatePassword = password => {
-		return password.length >= 8;
-	};
 	const handleToggleActiveBtn = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
@@ -55,7 +48,7 @@ export default function Settings() {
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
 
-		localStorage.setItem("userMacros", JSON.stringify(userTotalMacros));
+		localStorage.setItem("userCurrentMacros", JSON.stringify(userTotalMacros));
 	};
 	const setNewMacronutrientsFromTotalCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
@@ -122,7 +115,7 @@ export default function Settings() {
 				[name]: value,
 			};
 			const newUserData = {
-				...prevState.userData,
+				...prevState.userCurrentData,
 				[name]: value,
 			};
 			setTimeout(() => {
@@ -138,43 +131,34 @@ export default function Settings() {
 			return {
 				...prevState,
 				userChoices: newUserChoices,
-				userData: newUserData,
+				userCurrentData: newUserData,
 			};
 		});
 	};
 	const handleSaveChanges = () => {
 		if (editedUserData) {
-			const { userData } = editedUserData;
-			if (!validateEmail(userData.userEmail)) {
-				console.log("Invalid email format!");
-				return;
-			}
-			if (!validatePassword(userData.userPassword)) {
-				console.log("Password is to short!");
-				return;
-			}
 			setUserAllData(editedUserData);
-			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
-			localStorage.setItem("userData", JSON.stringify(editedUserData.userData));
-			localStorage.setItem("userName", userData.userName);
-			localStorage.setItem("userCalories", userTotalCalories);
+			localStorage.setItem("userCurrentChoices", JSON.stringify(editedUserData.userChoices));
+			localStorage.setItem("userName", editedUserData.userCurrentData.userName);
+			localStorage.setItem("userCurrentCalories", userTotalCalories);
 		}
 	};
-	useEffect(() => {
-		const userChoicesString = localStorage.getItem("userChoices");
-		const userDataString = localStorage.getItem("userData");
-		const userCaloriesString = localStorage.getItem("userCalories");
-		const userMacrosString = localStorage.getItem("userMacros");
 
-		if (userChoicesString && userDataString) {
+	useEffect(() => {
+		const userChoicesString = localStorage.getItem("userCurrentChoices");
+		const userCurrentDataString = localStorage.getItem("currentUserData");
+		const userCaloriesString = localStorage.getItem("userCurrentCalories");
+		const userMacrosString = localStorage.getItem("userCurrentMacros");
+
+		if (userChoicesString && userCurrentDataString) {
 			const userChoices = JSON.parse(userChoicesString);
-			const userData = JSON.parse(userDataString);
+			const userCurrentData = JSON.parse(userCurrentDataString);
 			const userCalories = JSON.parse(userCaloriesString);
 			const userMacros = JSON.parse(userMacrosString);
 
 			const updatedUserChoices = {
 				userChoices: userChoices,
-				userData: userData,
+				userCurrentData: userCurrentData,
 				userCalories: userCalories,
 				userMacros: userMacros,
 			};
@@ -185,17 +169,11 @@ export default function Settings() {
 				setUserCarbs(userMacros.carbs);
 				setUserFats(userMacros.fats);
 			} else {
-				setNewMacronutrientsFromTotalCalories(
-					userChoices.age,
-					userChoices.height,
-					userChoices.weight,
-					userChoices.gender,
-					userChoices.goal,
-					userChoices.activity
-				);
+				setNewMacronutrientsFromTotalCalories(updatedUserChoices);
 			}
 		}
 	}, []);
+
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
@@ -217,13 +195,13 @@ export default function Settings() {
 											<input
 												type='text'
 												className='settings__user-settings-data'
-												value={editedUserData.userData.userName}
+												value={editedUserData.userCurrentData.userName}
 												onChange={e => handleInputChange("userName", e.target.value)}
 											/>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>EMAIL:</div>
-											<div className='settings__user-settings-data'>{editedUserData.userData.userEmail}</div>
+											<div className='settings__user-settings-data'>{editedUserData.userCurrentData.userEmail}</div>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>PASSWORD:</div>
@@ -233,9 +211,9 @@ export default function Settings() {
 													onClick={handleToggleActiveBtn}>
 													SHOW
 												</button>
-												{isPasswordVisible
+												{/* {isPasswordVisible
 													? editedUserData.userData.userPassword
-													: editedUserData.userData.userPassword.replace(/./g, "*")}
+													: editedUserData.userData.userPassword.replace(/./g, "*")} */}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>

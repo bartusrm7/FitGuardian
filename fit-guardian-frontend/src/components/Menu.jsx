@@ -13,7 +13,6 @@ export default function Menu() {
 		inputFoodGrams,
 		setInputFoodGrams,
 	} = useFoodContext();
-	const [mealToCorrectUserEmail, setMealToCorrectUserEmail] = useState({});
 	const [userCurrentEmail, setUserCurrentEmail] = useState("");
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
@@ -28,6 +27,7 @@ export default function Menu() {
 	const handlaChangeDay = direction => {
 		const newDate = new Date(currentDate);
 		newDate.setDate(newDate.getDate() + direction);
+
 		const formattedDate = newDate.toISOString().split("T")[0];
 		localStorage.setItem("currentDate", formattedDate);
 		setCurrentDate(formattedDate);
@@ -41,21 +41,20 @@ export default function Menu() {
 		setActiveMealId(mealId);
 	};
 	const handleRemoveFoodItem = (mealId, foodIndex) => {
-		const updatedMealsAfterRemovedItem = userMeal.map(meal => {
-			if (meal.id === mealId) {
-				return {
-					...meal,
-					food: meal.food.filter((food, index) => index !== foodIndex),
-				};
-			}
-			return meal;
-		});
-		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
+		const updatedMealsAfterRemovedItem = { ...userMeal };
+		if (updatedMealsAfterRemovedItem[userCurrentEmail]) {
+			updatedMealsAfterRemovedItem[userCurrentEmail] = updatedMealsAfterRemovedItem[userCurrentEmail].map(meal => {
+				if (meal.id === mealId) {
+					return {
+						...meal,
+						food: meal.food.filter((food, index) => index !== foodIndex),
+					};
+				}
+				return meal;
+			});
+		}
 		setUserMeal(updatedMealsAfterRemovedItem);
-		setMealToCorrectUserEmail(prevState => ({
-			...prevState,
-			[userCurrentEmail]: updatedMealsAfterRemovedItem,
-		}));
+		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
 	};
 	const handleAddFoodItem = async () => {
 		try {
@@ -70,6 +69,7 @@ export default function Menu() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
+
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
 				foodName: inputFood,
@@ -79,37 +79,27 @@ export default function Menu() {
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				date: currentDate,
 			};
-			const mealIndex = userMeal.findIndex(meal => meal.id === activeMealId && meal.date === currentDate);
+			const updatedMeals = { ...userMeal };
+			if (!updatedMeals[userCurrentEmail]) {
+				updatedMeals[userCurrentEmail] = [];
+			}
+
+			const mealIndex = updatedMeals[userCurrentEmail].findIndex(
+				meal => meal.id === activeMealId && meal.date === currentDate
+			);
 
 			if (mealIndex !== -1) {
-				const updatedMeals = [...userMeal];
-				updatedMeals[mealIndex].food.push(newFood);
-				setUserMeal(updatedMeals);
-				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
-
-				setMealToCorrectUserEmail(prevState => ({
-					...prevState,
-					[userCurrentEmail]: [...updatedMeals],
-				}));
+				updatedMeals[userCurrentEmail][mealIndex].food.push(newFood);
 			} else {
-				const updatedMeals = [
-					...userMeal,
-					{
-						id: activeMealId,
-						date: currentDate,
-						name: `Meal ${activeMealId}`,
-						food: [newFood],
-					},
-				];
-				setUserMeal(updatedMeals);
-				localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
-
-				setMealToCorrectUserEmail(prevState => ({
-					...prevState,
-					[userCurrentEmail]: [...updatedMeals],
-				}));
+				updatedMeals[userCurrentEmail].push({
+					id: activeMealId,
+					date: currentDate,
+					name: `Meal ${activeMealId}`,
+					food: [newFood],
+				});
 			}
-			console.log(mealToCorrectUserEmail);
+			setUserMeal(updatedMeals);
+			localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 
 			setInputFood("");
 			setInputFoodGrams("");
@@ -120,7 +110,7 @@ export default function Menu() {
 		}
 	};
 	const mealsForCurrentDate = [1, 2, 3, 4].map(id => {
-		const existingMeal = userMeal.find(meal => meal.id === id && meal.date === currentDate);
+		const existingMeal = (userMeal[userCurrentEmail] || []).find(meal => meal.id === id && meal.date === currentDate);
 		return existingMeal || { id, date: currentDate, name: `Meal ${id}`, food: [] };
 	});
 
@@ -129,13 +119,15 @@ export default function Menu() {
 		if (updatedUserMeals) {
 			setUserMeal(JSON.parse(updatedUserMeals));
 		}
+
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
 			setCurrentDate(savedDate);
 		} else {
 			handleCurrentDate();
 		}
-		const updatedUserEmail = localStorage.getItem("userData");
+
+		const updatedUserEmail = localStorage.getItem("currentUserData");
 		if (updatedUserEmail) {
 			const savedEmail = JSON.parse(updatedUserEmail);
 			setUserCurrentEmail(savedEmail.userEmail);
