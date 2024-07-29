@@ -211,9 +211,9 @@ export default function Settings() {
 													onClick={handleToggleActiveBtn}>
 													SHOW
 												</button>
-												{/* {isPasswordVisible
-													? editedUserData.userData.userPassword
-													: editedUserData.userData.userPassword.replace(/./g, "*")} */}
+												{isPasswordVisible
+													? editedUserData.userCurrentData.userPassword
+													: editedUserData.userCurrentData.userPassword.replace(/./g, "*")}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>
@@ -293,7 +293,7 @@ export default function Settings() {
 											<div
 												className='settings__user-settings-data'
 												onChange={e => setUserTotalCalories(e.target.value)}>
-												{`${userTotalCalories.toFixed(0)}cal`}
+												{`${userTotalCalories}cal`}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>
