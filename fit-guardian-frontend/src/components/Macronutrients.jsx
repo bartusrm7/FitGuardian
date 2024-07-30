@@ -15,11 +15,9 @@ export default function Macronutrients() {
 	});
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
-	console.log(userMeal);
 	const filteredMeals = Object.values(userMeal)
 		.flat()
 		.filter(meal => meal.date === currentDate);
-	console.log(filteredMeals);
 	const handleAddMacrosToContainers = () => {
 		const newAllMacros = {
 			calories: 0,

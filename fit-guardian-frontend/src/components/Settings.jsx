@@ -7,7 +7,6 @@ export default function Settings() {
 		setUserAllData,
 		userTotalCalories,
 		setUserTotalCalories,
-		userTotalMacros,
 		setUserTotalMacros,
 		userProteins,
 		setUserProteins,
@@ -16,6 +15,7 @@ export default function Settings() {
 		userFats,
 		setUserFats,
 	} = useUserContext();
+	const [currentUserName, setCurrentUserName] = useState("");
 	const [userOptions, setUserOptions] = useState({
 		genderOptions: ["Male", "Female"],
 		goalOptions: ["Lose weight", "Maintain weight", "Gain weight"],
@@ -48,7 +48,8 @@ export default function Settings() {
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
 
-		localStorage.setItem("userCurrentMacros", JSON.stringify(userTotalMacros));
+		localStorage.setItem("userMacros", JSON.stringify(totalMacros));
+		localStorage.setItem("userCurrentMacros", JSON.stringify(totalMacros));
 	};
 	const setNewMacronutrientsFromTotalCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
@@ -138,33 +139,42 @@ export default function Settings() {
 	const handleSaveChanges = () => {
 		if (editedUserData) {
 			setUserAllData(editedUserData);
-			localStorage.setItem("userCurrentChoices", JSON.stringify(editedUserData.userChoices));
-			localStorage.setItem("userName", editedUserData.userCurrentData.userName);
+			localStorage.setItem("userName", JSON.stringify(editedUserData.userCurrentData.userName));
+			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
+			localStorage.setItem("userCalories", userTotalCalories);
 			localStorage.setItem("userCurrentCalories", userTotalCalories);
+			setCurrentUserName(editedUserData.userCurrentData.userName);
 		}
 	};
 
 	useEffect(() => {
-		const userChoicesString = localStorage.getItem("userCurrentChoices");
+		const userNameString = localStorage.getItem("userName");
+		const userChoicesString = localStorage.getItem("userChoices");
 		const userCurrentDataString = localStorage.getItem("currentUserData");
-		const userCaloriesString = localStorage.getItem("userCurrentCalories");
-		const userMacrosString = localStorage.getItem("userCurrentMacros");
+		const userCaloriesString = localStorage.getItem("userCalories");
+		const userMacrosString = localStorage.getItem("userMacros");
+		const userCurrentMacrosString = localStorage.getItem("userCurrentMacros");
 
 		if (userChoicesString && userCurrentDataString) {
+			const userName = JSON.parse(userNameString);
 			const userChoices = JSON.parse(userChoicesString);
 			const userCurrentData = JSON.parse(userCurrentDataString);
 			const userCalories = JSON.parse(userCaloriesString);
 			const userMacros = JSON.parse(userMacrosString);
+			const userCurrentMacros = JSON.parse(userCurrentMacrosString);
 
 			const updatedUserChoices = {
+				userName: userName,
 				userChoices: userChoices,
 				userCurrentData: userCurrentData,
 				userCalories: userCalories,
 				userMacros: userMacros,
+				userCurrentMacros: userCurrentMacros,
 			};
+			setCurrentUserName(userName);
 			setEditedUserData(updatedUserChoices);
 			setUserTotalCalories(userCalories);
-			if (userMacros) {
+			if (userMacros || userCurrentMacros) {
 				setUserProteins(userMacros.proteins);
 				setUserCarbs(userMacros.carbs);
 				setUserFats(userMacros.fats);
@@ -195,7 +205,7 @@ export default function Settings() {
 											<input
 												type='text'
 												className='settings__user-settings-data'
-												value={editedUserData.userCurrentData.userName}
+												value={currentUserName}
 												onChange={e => handleInputChange("userName", e.target.value)}
 											/>
 										</div>

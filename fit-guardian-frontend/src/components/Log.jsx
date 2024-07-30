@@ -3,7 +3,7 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Log() {
-	const { userID, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
@@ -37,11 +37,7 @@ export default function Log() {
 				headers: {
 					"Content-type": "application/json",
 				},
-				body: JSON.stringify({
-					userID: userID,
-					userEmail: userEmail,
-					userPassword: userPassword,
-				}),
+				body: JSON.stringify({ userEmail, userPassword }),
 			});
 			const data = await response.json();
 
@@ -51,8 +47,11 @@ export default function Log() {
 			if (!data.accessToken) {
 				return;
 			}
-			localStorage.setItem("accessToken", data.accessToken);
 			const userName = localStorage.getItem("userName");
+			const loggedUser = { userName, userEmail, userPassword };
+
+			localStorage.setItem("currentUserData", JSON.stringify(loggedUser));
+			localStorage.setItem("accessToken", data.accessToken);
 
 			setUserEmail("");
 			setUserPassword("");
