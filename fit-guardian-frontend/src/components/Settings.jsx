@@ -15,7 +15,6 @@ export default function Settings() {
 		userFats,
 		setUserFats,
 	} = useUserContext();
-	const [currentUserName, setCurrentUserName] = useState("");
 	const [userOptions, setUserOptions] = useState({
 		genderOptions: ["Male", "Female"],
 		goalOptions: ["Lose weight", "Maintain weight", "Gain weight"],
@@ -143,12 +142,10 @@ export default function Settings() {
 			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userCalories", userTotalCalories);
 			localStorage.setItem("userCurrentCalories", userTotalCalories);
-			setCurrentUserName(editedUserData.userCurrentData.userName);
 		}
 	};
 
 	useEffect(() => {
-		const userNameString = localStorage.getItem("userName");
 		const userChoicesString = localStorage.getItem("userChoices");
 		const userCurrentDataString = localStorage.getItem("currentUserData");
 		const userCaloriesString = localStorage.getItem("userCalories");
@@ -156,7 +153,6 @@ export default function Settings() {
 		const userCurrentMacrosString = localStorage.getItem("userCurrentMacros");
 
 		if (userChoicesString && userCurrentDataString) {
-			const userName = JSON.parse(userNameString);
 			const userChoices = JSON.parse(userChoicesString);
 			const userCurrentData = JSON.parse(userCurrentDataString);
 			const userCalories = JSON.parse(userCaloriesString);
@@ -164,14 +160,12 @@ export default function Settings() {
 			const userCurrentMacros = JSON.parse(userCurrentMacrosString);
 
 			const updatedUserChoices = {
-				userName: userName,
 				userChoices: userChoices,
 				userCurrentData: userCurrentData,
 				userCalories: userCalories,
 				userMacros: userMacros,
 				userCurrentMacros: userCurrentMacros,
 			};
-			setCurrentUserName(userName);
 			setEditedUserData(updatedUserChoices);
 			setUserTotalCalories(userCalories);
 			if (userMacros || userCurrentMacros) {
@@ -205,7 +199,7 @@ export default function Settings() {
 											<input
 												type='text'
 												className='settings__user-settings-data'
-												value={currentUserName}
+												value={editedUserData.userChoices.userName}
 												onChange={e => handleInputChange("userName", e.target.value)}
 											/>
 										</div>
