@@ -118,6 +118,8 @@ export default function Settings() {
 				...prevState.userCurrentData,
 				[name]: value,
 			};
+			localStorage.setItem("userData", JSON.stringify(newUserData));
+			localStorage.setItem("currentUserData", JSON.stringify(newUserData));
 			setTimeout(() => {
 				setNewMacronutrientsFromTotalCalories(
 					newUserChoices.age,
@@ -140,38 +142,35 @@ export default function Settings() {
 			setUserAllData(editedUserData);
 			localStorage.setItem("userName", JSON.stringify(editedUserData.userCurrentData.userName));
 			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
+			localStorage.setItem("userCurrentChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userCalories", userTotalCalories);
 			localStorage.setItem("userCurrentCalories", userTotalCalories);
 		}
 	};
 
 	useEffect(() => {
-		const userChoicesString = localStorage.getItem("userChoices");
+		const userCurrentChoicesString = localStorage.getItem("userCurrentChoices");
 		const userCurrentDataString = localStorage.getItem("currentUserData");
-		const userCaloriesString = localStorage.getItem("userCalories");
-		const userMacrosString = localStorage.getItem("userMacros");
+		const userCurrentCaloriesString = localStorage.getItem("userCurrentCalories");
 		const userCurrentMacrosString = localStorage.getItem("userCurrentMacros");
-
-		if (userChoicesString && userCurrentDataString) {
-			const userChoices = JSON.parse(userChoicesString);
+		if (userCurrentChoicesString && userCurrentDataString) {
+			const userChoices = JSON.parse(userCurrentChoicesString);
 			const userCurrentData = JSON.parse(userCurrentDataString);
-			const userCalories = JSON.parse(userCaloriesString);
-			const userMacros = JSON.parse(userMacrosString);
+			const userCurrentCalories = JSON.parse(userCurrentCaloriesString);
 			const userCurrentMacros = JSON.parse(userCurrentMacrosString);
 
 			const updatedUserChoices = {
 				userChoices: userChoices,
 				userCurrentData: userCurrentData,
-				userCalories: userCalories,
-				userMacros: userMacros,
+				userCurrentCalories: userCurrentCalories,
 				userCurrentMacros: userCurrentMacros,
 			};
 			setEditedUserData(updatedUserChoices);
-			setUserTotalCalories(userCalories);
-			if (userMacros || userCurrentMacros) {
-				setUserProteins(userMacros.proteins);
-				setUserCarbs(userMacros.carbs);
-				setUserFats(userMacros.fats);
+			setUserTotalCalories(userCurrentCalories);
+			if (userCurrentMacros) {
+				setUserProteins(userCurrentMacros.proteins);
+				setUserCarbs(userCurrentMacros.carbs);
+				setUserFats(userCurrentMacros.fats);
 			} else {
 				setNewMacronutrientsFromTotalCalories(updatedUserChoices);
 			}
@@ -199,7 +198,7 @@ export default function Settings() {
 											<input
 												type='text'
 												className='settings__user-settings-data'
-												value={editedUserData.userChoices.userName}
+												value={editedUserData.userCurrentData.userName}
 												onChange={e => handleInputChange("userName", e.target.value)}
 											/>
 										</div>
