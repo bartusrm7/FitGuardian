@@ -80,8 +80,11 @@ body {
 		font-size: 0.8rem;
 		border-radius: 5px;
 	}
-	&__user-settings-data {
-		cursor: pointer;
+	&__user-settings-item {
+		input,
+		select {
+			cursor: pointer;
+		}
 	}
 	.calories {
 		input {

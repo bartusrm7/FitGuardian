@@ -96,6 +96,7 @@ export default function Statistics() {
 		setPeriodChoice(period);
 		localStorage.setItem("periodChoice", period);
 	};
+	
 	useEffect(() => {
 		const updatedUserMealsString = localStorage.getItem("userMeals");
 		if (updatedUserMealsString) {

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLogRegContext } from "./LogRegContext";
 
 export default function Dashboard() {
 	const [hamburger, setHamgurger] = useState(false);
+	const { userName, setUserName } = useLogRegContext();
 	const navigate = useNavigate();
 
 	const handleHamburger = () => setHamgurger(!hamburger);
@@ -34,7 +36,7 @@ export default function Dashboard() {
 							<h3 className='dashboard__label'>FitGuardian</h3>
 							<div className='dashboard__account-name'>
 								<span className='material-symbols-outlined'>person</span>
-								{JSON.parse(localStorage.getItem("userName"))}
+								{localStorage.getItem("userName")}
 							</div>
 							<div className='dashboard__menu-item'>
 								<Link to='/menu' onClick={handleCloseMenu}>
