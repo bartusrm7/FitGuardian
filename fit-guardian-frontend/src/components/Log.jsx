@@ -36,6 +36,7 @@ export default function Log() {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 				},
 				body: JSON.stringify({ userEmail, userPassword }),
 			});
@@ -44,10 +45,11 @@ export default function Log() {
 			}
 			const data = await response.json();
 			localStorage.setItem("accessToken", data.accessToken);
+			localStorage.setItem("userName", data.user.userName);
+			setUserName(data.user.userName);
 
 			setUserEmail("");
 			setUserPassword("");
-			setUserName(userName);
 			navigate("/menu");
 		} catch (error) {
 			console.error("Error", error);

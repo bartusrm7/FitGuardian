@@ -144,8 +144,8 @@ export default function FirstLogOnboarding() {
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
 
-		localStorage.setItem("userMacros", JSON.stringify(totalMacros));
-		localStorage.setItem("userCurrentMacros", JSON.stringify(totalMacros));
+		// localStorage.setItem("userMacros", JSON.stringify(totalMacros));
+		// localStorage.setItem("userCurrentMacros", JSON.stringify(totalMacros));
 	};
 	const saveUserChoices = () => {
 		const userData = {
@@ -160,10 +160,10 @@ export default function FirstLogOnboarding() {
 		if (isDataCompleted) {
 			const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 
-			localStorage.setItem("userChoices", JSON.stringify(userData));
-			localStorage.setItem("userCurrentChoices", JSON.stringify(userData));
-			localStorage.setItem("userCalories", userCalories);
-			localStorage.setItem("userCurrentCalories", userCalories);
+			// localStorage.setItem("userChoices", JSON.stringify(userData));
+			// localStorage.setItem("userCurrentChoices", JSON.stringify(userData));
+			// localStorage.setItem("userCalories", userCalories);
+			// localStorage.setItem("userCurrentCalories", userCalories);
 
 			setUserTotalCalories(userCalories);
 			setMacronutrientsFromTotalCalories(userCalories);

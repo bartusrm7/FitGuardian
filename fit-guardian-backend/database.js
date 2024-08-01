@@ -19,6 +19,7 @@ db.serialize(() => {
   )`);
 
 	db.run(`CREATE TABLE IF NOT EXISTS userMeal (
+	userEmail TEXT NOT NULL,
 	foodID INTEGER NOT NULL,
 	foodName TEXT NOT NULL,
 	foodCalories INTEGER NOT NULL,

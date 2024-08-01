@@ -12,28 +12,32 @@ export default function Dashboard() {
 	const handleCloseMenu = () => setHamgurger(hamburger);
 	const handleLogout = () => {
 		localStorage.removeItem("accessToken");
+		localStorage.removeItem("userName");
 		setUserName("");
 		navigate("/");
 	};
 
+	// useEffect(() => {
+	// 	const fetchUserName = () => {
+	// 		const response = fetch("/user-name", {
+	// 			headers: {
+	// 				Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+	// 			},
+	// 		});
+	// 		if (!response.ok) {
+	// 			setError(`Fetch error!`);
+	// 			return;
+	// 		}
+	// 		const data = response.json();
+	// 		localStorage.setItem("userName", data.user.userName);
+	// 		setUserName(data.user.userName);
+	// 	};
+	// 	fetchUserName();
+	// }, []);
+
 	useEffect(() => {
-		const fetchUserName = async () => {
-			try {
-				const response = await fetch("/user-name", {
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-					},
-				});
-				if (!response.ok) {
-					setError(`Fetch error!`, err);
-				}
-				const data = await response.json();
-				setUserName(data.userName);
-			} catch (err) {
-				setError(`Fetch error!`, err);
-			}
-		};
-		fetchUserName();
+		const getName = localStorage.getItem("userName");
+		setUserName(getName);
 	}, []);
 
 	return (

@@ -32,7 +32,7 @@ const verifyToken = (req, res, next) => {
 		next();
 	});
 };
--+
+
 app.post("/user-name", verifyToken, (req, res) => {
 	const userEmail = req.user.userEmail;
 
@@ -74,7 +74,13 @@ app.post("/register", (req, res) => {
 				if (err) {
 					return res.status(500).json({ message: "Error inserting user!", error: err.message });
 				}
-				res.status(200).json({ message: "User registered successfully!", users: newUser });
+				const payload = { userEmail: newUser.userEmail };
+				const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+				res.status(200).json({
+					message: "User registered successfully!",
+					accessToken: accessToken,
+					user: { userName: newUser.userName, userEmail: newUser.userEmail },
+				});
 			}
 		);
 	});
@@ -104,6 +110,26 @@ app.post("/login", (req, res) => {
 
 app.post("/add-meal", (req, res) => {
 	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats } = req.body;
+
+	if (
+		!userEmail ||
+		!foodID ||
+		!foodName ||
+		foodCalories == null ||
+		foodProteins == null ||
+		foodCarbs == null ||
+		foodFats == null
+	) {
+		return res.status(400).json({ message: "All fields are required." });
+	}
+	const query = `INSERT INTO userMeal (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	db.run(query, [userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats], function (err) {
+		if (err) {
+			return res.status(500).json({ message: "Database error!", error: err.message });
+		}
+
+		res.status(200).json({ message: "Meal added successfully!", mealID: this.lastID });
+	});
 });
 
 app.listen(port, () => {
