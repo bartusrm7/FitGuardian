@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const db = require("./database");
@@ -10,8 +9,6 @@ const port = 5174;
 
 app.use(express.json());
 app.use(cors());
-
-let users = [];
 
 const validateEmail = email => {
 	const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,51 +22,58 @@ const validatePassword = password => {
 app.post("/register", (req, res) => {
 	const { userName, userEmail, userPassword } = req.body;
 
-	db.get(`SELECT * FROM users WHERE userEmail = ? OR userName = ?`, [userName, userEmail], (err, row) => {
+	if (!validateEmail(userEmail)) {
+		return res.status(400).json({ message: "Invalid email format!" });
+	}
+	if (!validatePassword(userPassword)) {
+		return res.status(400).json({ message: "Password is too short!" });
+	}
+
+	const newUser = { userName, userEmail, userPassword };
+
+	db.get("SELECT * FROM users WHERE userEmail = ? OR userName = ?", [userEmail, userName], (err, row) => {
 		if (err) {
-			console.error(err);
-			return res.status(500).json({ message: "Internal server error!" });
+			return res.status(500).json({ message: "Database error!", error: err.message });
 		}
 		if (row) {
 			return res.status(400).json({ message: "User already exists!" });
 		}
-	});
 
-	const newUser = { userName, userEmail, userPassword };
-
-	db.run(
-		`INSERT INTO users ( userName, userEmail, userPassword) VALUES (?, ?, ?, ?)`,
-		[newUser.userName, newUser.userEmail, newUser.userPassword],
-		err => {
-			if (err) {
-				console.error(err);
-				return res.status(500).json({ message: "Internal server error" });
+		db.run(
+			"INSERT INTO users (userName, userEmail, userPassword) VALUES (?, ?, ?)",
+			[newUser.userName, newUser.userEmail, newUser.userPassword],
+			function (err) {
+				if (err) {
+					return res.status(500).json({ message: "Error inserting user!", error: err.message });
+				}
+				res.status(200).json({ message: "User registered successfully!", users: newUser });
 			}
-			res.status(200).json({ message: "User registered successfully!" });
-		}
-	);
-
-	res.status(200).json({ message: "User registered successfully!", users });
+		);
+	});
 });
 
 app.post("/login", (req, res) => {
 	const { userEmail, userPassword } = req.body;
-	const user = users.find(user => user.userEmail === userEmail || user.userPassword === userPassword);
 
-	if (!user) {
-		return res.status(401).json({ message: "Invalid username or password!" });
-	}
+	db.get("SELECT * FROM users WHERE userEmail = ? AND userPassword = ?", [userEmail, userPassword], (err, row) => {
+		if (err) {
+			return res.status(500).json({ message: "Database error!", error: err.message });
+		}
+		if (!row) {
+			return res.status(401).json({ message: "Invalid username or password!" });
+		}
 
-	const payload = { userEmail: user.userEmail };
-	const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
+		const payload = { userEmail: row.userEmail };
+		const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
 
-	res.status(200).json({
-		message: "User logged successfully!",
-		accessToken: accessToken,
-		user,
+		res.status(200).json({
+			message: "User logged in successfully!",
+			accessToken: accessToken,
+			user: row,
+		});
 	});
 });
 
 app.listen(port, () => {
-	console.log(`http://localhost:${port}`);
+	console.log(`Server running at http://localhost:${port}`);
 });
