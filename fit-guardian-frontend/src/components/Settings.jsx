@@ -118,35 +118,57 @@ export default function Settings() {
 				...prevState.userCurrentData,
 				[name]: value,
 			};
-			localStorage.setItem("userData", JSON.stringify(newUserData));
-			localStorage.setItem("currentUserData", JSON.stringify(newUserData));
-			setTimeout(() => {
-				setNewMacronutrientsFromTotalCalories(
-					newUserChoices.age,
-					newUserChoices.height,
-					newUserChoices.weight,
-					newUserChoices.gender,
-					newUserChoices.goal,
-					newUserChoices.activity
-				);
-			}, 0);
-			return {
-				...prevState,
-				userChoices: newUserChoices,
-				userCurrentData: newUserData,
-			};
+			// NAPRAWIĆ USER DATA ŻEBY DOCHODZIŁO DO PAKOWANIA DO OBJECTU
+			const updatedCurrentUserDataString = localStorage.getItem("currentUserData");
+			if (updatedCurrentUserDataString) {
+				const currentUserData = JSON.parse(updatedCurrentUserDataString);
+				const currentUserEmail = currentUserData.userEmail;
+				console.log(currentUserEmail);
+
+				const allUserDataString = localStorage.getItem("userData");
+				console.log(allUserDataString);
+				let allUserData = {};
+				if (allUserDataString) {
+					allUserData = JSON.parse(allUserDataString);
+				}
+
+				allUserData[currentUserEmail] = {
+					...allUserData[currentUserEmail],
+					userChoices: newUserChoices,
+					userCurrentData: newUserData,
+				};
+				localStorage.setItem("userData", JSON.stringify(allUserData[currentUserEmail]));
+				localStorage.setItem("currentUserData", JSON.stringify(newUserData));
+
+				setTimeout(() => {
+					setNewMacronutrientsFromTotalCalories(
+						newUserChoices.age,
+						newUserChoices.height,
+						newUserChoices.weight,
+						newUserChoices.gender,
+						newUserChoices.goal,
+						newUserChoices.activity
+					);
+				}, 0);
+				return {
+					...prevState,
+					userChoices: newUserChoices,
+					userCurrentData: newUserData,
+				};
+			}
 		});
 	};
+	// String.format("%f, %d", 10, 12) -> w C jest to printf z formatowaniem, w javie String.format()
+
 	const handleSaveChanges = () => {
 		if (editedUserData) {
 			setUserAllData(editedUserData);
 			localStorage.setItem("userName", JSON.stringify(editedUserData.userCurrentData.userName));
-			localStorage.setItem("userChoices", JSON.stringify(editedUserData.userChoices));
 			localStorage.setItem("userCurrentChoices", JSON.stringify(editedUserData.userChoices));
-			localStorage.setItem("userCalories", userTotalCalories);
 			localStorage.setItem("userCurrentCalories", userTotalCalories);
 		}
 	};
+	//ZAPISAĆ INICJALIZACJĘ W USEEFFECT!!!!!!!!!!!!!!!!!!!!!
 
 	useEffect(() => {
 		const userCurrentChoicesString = localStorage.getItem("userCurrentChoices");
@@ -176,7 +198,6 @@ export default function Settings() {
 			}
 		}
 	}, []);
-
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
