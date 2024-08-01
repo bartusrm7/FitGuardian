@@ -39,18 +39,10 @@ export default function Log() {
 				},
 				body: JSON.stringify({ userEmail, userPassword }),
 			});
-			const data = await response.json();
-
 			if (!response.ok) {
 				throw Error("Login failed!!");
 			}
-			if (!data.accessToken) {
-				return;
-			}
-			const userName = localStorage.getItem("userName");
-			const loggedUser = { userName, userEmail, userPassword };
-
-			localStorage.setItem("currentUserData", JSON.stringify(loggedUser));
+			const data = await response.json();
 			localStorage.setItem("accessToken", data.accessToken);
 
 			setUserEmail("");

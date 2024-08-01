@@ -41,25 +41,7 @@ export default function Reg() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-			// const newUserData = { userName, userEmail, userPassword };
-
-			// const userDataJSON = localStorage.getItem("userData");
-			// let userData = [];
-
-			// if (userDataJSON) {
-			// 	try {
-			// 		userData = JSON.parse(userDataJSON);
-			// 	} catch (error) {
-			// 		console.error("Error parsing userData:", error);
-			// 		userData = [];
-			// 	}
-			// }
-			// userData.push(newUserData);
-
-			// localStorage.setItem("userData", JSON.stringify(userData));
-			// localStorage.setItem("currentUserData", JSON.stringify(newUserData));
-			// localStorage.setItem("accessToken", data.accessToken);
-			// localStorage.setItem("userName", userName);
+			localStorage.setItem("accessToken", data.accessToken);
 
 			setUserName("");
 			setUserEmail("");

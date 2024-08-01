@@ -19,6 +19,34 @@ const validatePassword = password => {
 	return password.length >= 8;
 };
 
+const verifyToken = (req, res, next) => {
+	const authHeader = req.headers["authorization"];
+	const token = authHeader && authHeader.split(" ")[1];
+
+	if (token == null) return res.status(401).json({ message: "Unauthorized" });
+
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+		if (err) return res.status(403).json({ message: "Forbidden" });
+
+		req.user = user;
+		next();
+	});
+};
+-+
+app.post("/user-name", verifyToken, (req, res) => {
+	const userEmail = req.user.userEmail;
+
+	db.get(`SELECT userName FROM users WHERE userEmail = ?`, [userEmail], (err, row) => {
+		if (err) {
+			return res.status(500).json({ message: "Database error!" });
+		}
+		if (!row) {
+			return res.status(404).json({ message: "User not found!" });
+		}
+		res.json({ userName: row.userName });
+	});
+});
+
 app.post("/register", (req, res) => {
 	const { userName, userEmail, userPassword } = req.body;
 
@@ -72,6 +100,10 @@ app.post("/login", (req, res) => {
 			user: row,
 		});
 	});
+});
+
+app.post("/add-meal", (req, res) => {
+	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats } = req.body;
 });
 
 app.listen(port, () => {
