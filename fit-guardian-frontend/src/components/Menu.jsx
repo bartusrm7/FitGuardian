@@ -56,6 +56,22 @@ export default function Menu() {
 		setUserMeal(updatedMealsAfterRemovedItem);
 		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
 	};
+	const addMealToBackend = async mealData => {
+		try {
+			const response = await fetch("http://localhost:5174/add-meal", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(mealData),
+			});
+			if (!response.ok) {
+				throw new Error("Failed to add meal to backend!");
+			}
+		} catch (error) {
+			console.error("Error adding meal to backend:", error);
+		}
+	};
 	const handleAddFoodItem = async () => {
 		try {
 			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${inputFood}`, {
@@ -72,6 +88,7 @@ export default function Menu() {
 
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
+				// userEmail:
 				foodName: inputFood,
 				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}cal`,
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
@@ -101,6 +118,7 @@ export default function Menu() {
 			setUserMeal(updatedMeals);
 			localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 
+			addMealToBackend();
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);

@@ -122,7 +122,7 @@ app.post("/add-meal", (req, res) => {
 	) {
 		return res.status(400).json({ message: "All fields are required." });
 	}
-	const query = `INSERT INTO userMeal (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	const query = `INSERT INTO userMeals (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 	db.run(query, [userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats], function (err) {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });

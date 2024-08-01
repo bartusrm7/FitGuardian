@@ -3,7 +3,8 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Log() {
-	const { setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { authToken, setAuthToken, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } =
+		useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
@@ -36,7 +37,6 @@ export default function Log() {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 				},
 				body: JSON.stringify({ userEmail, userPassword }),
 			});
@@ -47,6 +47,7 @@ export default function Log() {
 			localStorage.setItem("accessToken", data.accessToken);
 			localStorage.setItem("userName", data.user.userName);
 			setUserName(data.user.userName);
+			setAuthToken(data.accessToken);
 
 			setUserEmail("");
 			setUserPassword("");

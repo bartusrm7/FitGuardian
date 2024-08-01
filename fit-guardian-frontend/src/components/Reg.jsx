@@ -3,7 +3,8 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Reg() {
-	const { userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } = useLogRegContext();
+	const { authToken, setAuthToken, userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } =
+		useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
@@ -44,6 +45,7 @@ export default function Reg() {
 			localStorage.setItem("accessToken", data.accessToken);
 			localStorage.setItem("userName", data.user.userName);
 			setUserName(data.user.userName);
+			setAuthToken(data.accessToken);
 
 			setUserEmail("");
 			setUserPassword("");
