@@ -17,7 +17,17 @@ db.serialize(() => {
     userName TEXT NOT NULL,
     userEmail TEXT NOT NULL UNIQUE,
     userPassword TEXT NOT NULL
-  )`);
+	)`);
+
+	db.run(`CREATE TABLE IF NOT EXISTS userChoices (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	userAge INTEGER NOT NULL,
+	userGender TEXT NOT NULL,
+	userHeight INTEGER NOT NULL,
+	userWeight INTEGER NOT NULL,
+	userGoal TEXT NOT NULL,
+	userActivity TEXT NOT NULL
+	)`);
 
 	db.run(`CREATE TABLE IF NOT EXISTS userMeals (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,6 +39,15 @@ db.serialize(() => {
 	foodCarbs INTEGER NOT NULL,
 	foodFats INTEGER NOT NULL,
 	foodDate INTEGER NOT NULL
+	)`);
+
+	db.run(`CREATE TABLE IF NOT EXISTS userMacros (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	userEmail TEXT NOT NULL,
+	userCalories INTEGER NOT NULL,
+	userProteins INTEGER NOT NULL,
+	userCarbs INTEGER NOT NULL,
+	userFats INTEGER NOT NULL
 	)`);
 });
 

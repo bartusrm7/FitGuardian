@@ -68,7 +68,6 @@ export default function FirstLogOnboarding() {
 			contextSetters[name](value);
 		}
 	};
-
 	const calculateCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
 		if (age >= 40 && age <= 50) {
@@ -121,7 +120,6 @@ export default function FirstLogOnboarding() {
 		} else if (activity === "Very Active") {
 			baseActivityAmount = 1.65;
 		}
-
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
 	const setMacronutrientsFromTotalCalories = calories => {
@@ -143,33 +141,38 @@ export default function FirstLogOnboarding() {
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
-
-		// localStorage.setItem("userMacros", JSON.stringify(totalMacros));
-		// localStorage.setItem("userCurrentMacros", JSON.stringify(totalMacros));
 	};
-	const saveUserChoices = () => {
+	const saveUserChoices = async () => {
 		const userData = {
-			age: userAge,
-			gender: userGender,
-			height: userHeight,
-			weight: userWeight,
-			goal: userGoal,
-			activity: userActivity,
+			userAge: userAge,
+			userGender: userGender,
+			userHeight: userHeight,
+			userWeight: userWeight,
+			userGoal: userGoal,
+			userActivity: userActivity,
 		};
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
 			const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 
-			// localStorage.setItem("userChoices", JSON.stringify(userData));
-			// localStorage.setItem("userCurrentChoices", JSON.stringify(userData));
-			// localStorage.setItem("userCalories", userCalories);
-			// localStorage.setItem("userCurrentCalories", userCalories);
-
-			setUserTotalCalories(userCalories);
-			setMacronutrientsFromTotalCalories(userCalories);
-			navigate("/menu");
-		} else {
-			alert("Some field is empty. Complete all fields to continue!");
+			try {
+				const response = await fetch("http://localhost:5174/save-user-data", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(userData),
+				});
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
+				const data = await response.json();
+				setUserTotalCalories(userCalories);
+				setMacronutrientsFromTotalCalories(userCalories);
+				navigate("/menu");
+			} catch (error) {
+				console.error("Error saving user data:", error.message);
+			}
 		}
 	};
 	useEffect(() => {

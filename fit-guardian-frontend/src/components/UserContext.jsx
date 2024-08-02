@@ -4,6 +4,7 @@ const UserContext = createContext();
 
 export default function UserProvider({ children }) {
 	const [userAllData, setUserAllData] = useState("");
+	const [userCurrentEmail, setUserCurrentEmail] = useState("");
 
 	const [userTotalCalories, setUserTotalCalories] = useState("");
 	const [userTotalMacros, setUserTotalMacros] = useState("");
@@ -23,6 +24,8 @@ export default function UserProvider({ children }) {
 			value={{
 				userAllData,
 				setUserAllData,
+				userCurrentEmail,
+				setUserCurrentEmail,
 				userTotalCalories,
 				setUserTotalCalories,
 				userTotalMacros,

@@ -5,7 +5,14 @@ import { Circle } from "rc-progress";
 import Dashboard from "./Dashboard";
 
 export default function Macronutrients() {
-	const { userTotalCalories, setUserTotalCalories, userTotalMacros, setUserTotalMacros } = useUserContext();
+	const {
+		userCurrentEmail,
+		setUserCurrentEmail,
+		userTotalCalories,
+		setUserTotalCalories,
+		userTotalMacros,
+		setUserTotalMacros,
+	} = useUserContext();
 	const { userMeal, setUserMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
 	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
 		calories: 0,
@@ -18,7 +25,42 @@ export default function Macronutrients() {
 	const filteredMeals = Object.values(userMeal)
 		.flat()
 		.filter(meal => meal.date === currentDate);
-	const handleAddMacrosToContainers = () => {
+	const handleAddMacrosToContainers = async () => {
+		try {
+			const userEmail = localStorage.getItem("userEmail");
+			console.log(userEmail);
+			if (!userEmail) {
+				throw new Error("No user email found");
+			}
+			const response = await fetch("http://localhost:5174/food-info", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userEmail }),
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			console.log(data.meals);
+
+			setUserCurrentEmail(userEmail);
+		} catch (error) {
+			console.error("Error fetching food info:", error.message);
+		}
+		let totalCalories = 0;
+		let totalProteins = 0;
+		let totalCarbs = 0;
+		let totalFats = 0;
+
+		data.meals.forEach(meal => {
+			totalCalories.calories += parseFloat(meal.foodCalories);
+			totalProteins.proteins += parseFloat(meal.foodProteins);
+			totalCarbs.carbs += parseFloat(meal.foodCarbs);
+			totalFats.fats += parseFloat(meal.foodFats);
+		});
+
 		const newAllMacros = {
 			calories: 0,
 			proteins: 0,
@@ -46,6 +88,7 @@ export default function Macronutrients() {
 		localStorage.setItem("allMacros", JSON.stringify(newAllMacros));
 		setAllMacros(newAllMacros);
 	};
+
 	useEffect(() => {
 		const updatedUserTotalCaloriesString = localStorage.getItem("userCurrentCalories");
 		if (updatedUserTotalCaloriesString) {
@@ -68,6 +111,7 @@ export default function Macronutrients() {
 			setAllMacros(userAllMacros);
 		}
 	}, [currentDate]);
+
 	useEffect(() => {
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
@@ -75,6 +119,7 @@ export default function Macronutrients() {
 		}
 		handleAddMacrosToContainers();
 	}, [userMeal]);
+
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);

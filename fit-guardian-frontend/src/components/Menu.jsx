@@ -1,6 +1,7 @@
 import Dashboard from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
+import { useUserContext } from "./UserContext";
 
 export default function Menu() {
 	const {
@@ -13,7 +14,7 @@ export default function Menu() {
 		inputFoodGrams,
 		setInputFoodGrams,
 	} = useFoodContext();
-	const [userCurrentEmail, setUserCurrentEmail] = useState("");
+	const { userCurrentEmail, setUserCurrentEmail } = useUserContext();
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");

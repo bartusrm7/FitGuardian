@@ -4,7 +4,6 @@ import { useLogRegContext } from "./LogRegContext";
 
 export default function Dashboard() {
 	const [hamburger, setHamgurger] = useState(false);
-	// const [error, setError] = useState(false);
 	const { userName, setUserName } = useLogRegContext();
 	const navigate = useNavigate();
 
@@ -16,25 +15,6 @@ export default function Dashboard() {
 		setUserName("");
 		navigate("/");
 	};
-
-	// useEffect(() => {
-	// 	const fetchUserName = () => {
-	// 		const response = fetch("/user-data", {
-	// 			headers: {
-	// 				Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-	// 			},
-	// 		});
-	// 		if (!response.ok) {
-	// 			setError(`Fetch error!`);
-	// 			return;
-	// 		}
-	// 		const data = response.json();
-	// 		localStorage.setItem("userName", data.user.userName);
-	// 		setUserName(data.user.userName);
-	// 	};
-	// 	fetchUserName();
-	// }, []);
-
 	useEffect(() => {
 		const getName = localStorage.getItem("userName");
 		setUserName(getName);
