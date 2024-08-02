@@ -25,10 +25,52 @@ export default function Macronutrients() {
 	const filteredMeals = Object.values(userMeal)
 		.flat()
 		.filter(meal => meal.date === currentDate);
+
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
+	const fetchUserMacros = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/get-macros", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userEmail: userCurrentEmail }),
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setUserTotalCalories(data.macros.userCalories);
+			setUserTotalMacros({
+				proteins: data.macros.userProteins,
+				carbs: data.macros.userCarbs,
+				fats: data.macros.userFats,
+			});
+		} catch (error) {
+			console.error("Error fetching user macros:", error.message);
+		}
+	};
 	const handleAddMacrosToContainers = async () => {
 		try {
 			const userEmail = localStorage.getItem("userEmail");
-			console.log(userEmail);
 			if (!userEmail) {
 				throw new Error("No user email found");
 			}
@@ -118,6 +160,8 @@ export default function Macronutrients() {
 			setCurrentDate(savedDate);
 		}
 		handleAddMacrosToContainers();
+		getUserEmail();
+		fetchUserMacros();
 	}, [userMeal]);
 
 	useEffect(() => {

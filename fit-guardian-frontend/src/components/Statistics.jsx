@@ -90,8 +90,8 @@ export default function Statistics() {
 		setAllMacrosCompleted(allSaveMacrosCompleted);
 		setAllMacrosAverageCompleted(allSaveMacrosAverageCompleted);
 
-		localStorage.setItem("macrosStats", JSON.stringify(allSaveMacrosCompleted));
-		localStorage.setItem("macrosAvgStats", JSON.stringify(allSaveMacrosAverageCompleted));
+		// localStorage.setItem("macrosStats", JSON.stringify(allSaveMacrosCompleted));
+		// localStorage.setItem("macrosAvgStats", JSON.stringify(allSaveMacrosAverageCompleted));
 	};
 	const handleToggleActiveBtn = period => {
 		setPeriodChoice(period);

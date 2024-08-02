@@ -41,21 +41,33 @@ export default function Menu() {
 		setInputIsOpen(!inputIsOpen);
 		setActiveMealId(mealId);
 	};
-	const handleRemoveFoodItem = (mealId, foodIndex) => {
-		const updatedMealsAfterRemovedItem = { ...userMeal };
-		if (updatedMealsAfterRemovedItem[userCurrentEmail]) {
-			updatedMealsAfterRemovedItem[userCurrentEmail] = updatedMealsAfterRemovedItem[userCurrentEmail].map(meal => {
-				if (meal.id === mealId) {
-					return {
-						...meal,
-						food: meal.food.filter((food, index) => index !== foodIndex),
-					};
-				}
-				return meal;
+	const handleRemoveFoodItem = async foodID => {
+		try {
+			const response = await fetch("http://localhost:5174/remove-meal", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userEmail: userCurrentEmail, foodID }),
 			});
-		}
-		setUserMeal(updatedMealsAfterRemovedItem);
-		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
+
+			if (!response.ok) {
+				throw new Error("Failed to remove meal from backend!");
+			}
+			const updatedMealsAfterRemovedItem = { ...userMeal };
+			if (updatedMealsAfterRemovedItem[userCurrentEmail]) {
+				updatedMealsAfterRemovedItem[userCurrentEmail] = updatedMealsAfterRemovedItem[userCurrentEmail]
+					.map(meal => {
+						return {
+							...meal,
+							food: meal.food.filter(food => food.foodID !== foodID),
+						};
+					})
+					.filter(meal => meal.food.length > 0);
+			}
+			setUserMeal(updatedMealsAfterRemovedItem);
+			localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
+		} catch (error) {}
 	};
 	const getUserEmail = async () => {
 		try {
@@ -106,7 +118,6 @@ export default function Menu() {
 				},
 				body: JSON.stringify(newFood),
 			});
-			console.log(newFood);
 			if (!responseBackend.ok) {
 				throw Error("Failed to add meal to backend!");
 			}
@@ -116,11 +127,9 @@ export default function Menu() {
 			if (!updatedMeals[userCurrentEmail]) {
 				updatedMeals[userCurrentEmail] = [];
 			}
-
 			const mealIndex = updatedMeals[userCurrentEmail].findIndex(
-				meal => meal.id === activeMealId && meal.foodDate === currentDate
+				meal => meal.id === activeMealId && meal.date === currentDate
 			);
-
 			if (mealIndex !== -1) {
 				updatedMeals[userCurrentEmail][mealIndex].food.push(newFood);
 			} else {
@@ -131,6 +140,7 @@ export default function Menu() {
 					food: [newFood],
 				});
 			}
+			localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 			setUserMeal(updatedMeals);
 			setInputFood("");
 			setInputFoodGrams("");
@@ -150,18 +160,11 @@ export default function Menu() {
 		if (updatedUserMeals) {
 			setUserMeal(JSON.parse(updatedUserMeals));
 		}
-
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
 			setCurrentDate(savedDate);
 		} else {
 			handleCurrentDate();
-		}
-
-		const updatedUserEmail = localStorage.getItem("currentUserData");
-		if (updatedUserEmail) {
-			const savedEmail = JSON.parse(updatedUserEmail);
-			setUserCurrentEmail(savedEmail.userEmail);
 		}
 		getUserEmail();
 	}, []);
