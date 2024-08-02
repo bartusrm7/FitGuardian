@@ -29,7 +29,7 @@ export default function Menu() {
 		newDate.setDate(newDate.getDate() + direction);
 
 		const formattedDate = newDate.toISOString().split("T")[0];
-		// localStorage.setItem("currentDate", formattedDate);
+		localStorage.setItem("currentDate", formattedDate);
 		setCurrentDate(formattedDate);
 	};
 	const handleCloseInputFoodContainer = () => {

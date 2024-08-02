@@ -1,11 +1,10 @@
 import LogReg from "./LogReg";
-
-const isAuthenticated = () => {
-	return localStorage.getItem("accessToken");
-};
+import { useLogRegContext } from "./LogRegContext";
 
 export default function ProtectedRoute({ children }) {
-	if (!isAuthenticated()) {
+	const { authToken } = useLogRegContext();
+
+	if (!authToken) {
 		return <LogReg to='/' />;
 	}
 	return children;

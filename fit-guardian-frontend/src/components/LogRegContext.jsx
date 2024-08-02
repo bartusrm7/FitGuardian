@@ -8,6 +8,7 @@ export default function LogRegProvider({ children }) {
 	const [userName, setUserName] = useState("");
 	const [userEmail, setUserEmail] = useState("");
 	const [userPassword, setUserPassword] = useState("");
+
 	useEffect(() => {
 		const token = localStorage.getItem("accessToken");
 		setAuthToken(token);
