@@ -109,7 +109,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/add-meal", (req, res) => {
-	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats } = req.body;
+	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate } = req.body;
 
 	if (
 		!userEmail ||
@@ -118,17 +118,22 @@ app.post("/add-meal", (req, res) => {
 		foodCalories == null ||
 		foodProteins == null ||
 		foodCarbs == null ||
-		foodFats == null
+		foodFats == null ||
+		foodDate == null
 	) {
 		return res.status(400).json({ message: "All fields are required." });
 	}
-	const query = `INSERT INTO userMeals (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-	db.run(query, [userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats], function (err) {
-		if (err) {
-			return res.status(500).json({ message: "Database error!", error: err.message });
+	const query = `INSERT INTO userMeals (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+	db.run(
+		query,
+		[userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate],
+		function (err) {
+			if (err) {
+				return res.status(500).json({ message: "Database error!", error: err.message });
+			}
+			res.status(200).json({ message: "Meal added successfully!", mealID: this.lastID });
 		}
-		res.status(200).json({ message: "Meal added successfully!", mealID: this.lastID });
-	});
+	);
 });
 
 app.listen(port, () => {

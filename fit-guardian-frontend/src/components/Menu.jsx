@@ -74,22 +74,6 @@ export default function Menu() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
-	const addMealToBackend = async mealData => {
-		try {
-			const response = await fetch("http://localhost:5174/add-meal", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(mealData),
-			});
-			if (!response.ok) {
-				throw new Error("Failed to add meal to backend!");
-			}
-		} catch (error) {
-			console.error("Error adding meal to backend:", error);
-		}
-	};
 	const handleAddFoodItem = async () => {
 		try {
 			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${inputFood}`, {
@@ -103,24 +87,37 @@ export default function Menu() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
-				// userEmail:
+				userEmail: userCurrentEmail,
+				foodID: activeMealId,
 				foodName: inputFood,
 				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}cal`,
 				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
-				date: currentDate,
+				foodDate: currentDate,
 			};
+			const responseBackend = await fetch("http://localhost:5174/add-meal", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(newFood),
+			});
+			console.log(newFood);
+			if (!responseBackend.ok) {
+				throw Error("Failed to add meal to backend!");
+			}
+			const result = await responseBackend.json();
+
 			const updatedMeals = { ...userMeal };
 			if (!updatedMeals[userCurrentEmail]) {
 				updatedMeals[userCurrentEmail] = [];
 			}
 
 			const mealIndex = updatedMeals[userCurrentEmail].findIndex(
-				meal => meal.id === activeMealId && meal.date === currentDate
+				meal => meal.id === activeMealId && meal.foodDate === currentDate
 			);
 
 			if (mealIndex !== -1) {
@@ -134,9 +131,6 @@ export default function Menu() {
 				});
 			}
 			setUserMeal(updatedMeals);
-			localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
-
-			addMealToBackend();
 			setInputFood("");
 			setInputFoodGrams("");
 			setInputIsOpen(false);

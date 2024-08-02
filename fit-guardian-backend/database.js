@@ -27,7 +27,8 @@ db.serialize(() => {
 	foodCalories INTEGER NOT NULL,
 	foodProteins INTEGER NOT NULL,
 	foodCarbs INTEGER NOT NULL,
-	foodFats INTEGER NOT NULL
+	foodFats INTEGER NOT NULL,
+	foodDate INTEGER NOT NULL
 	)`);
 });
 
