@@ -56,6 +56,24 @@ export default function Menu() {
 		setUserMeal(updatedMealsAfterRemovedItem);
 		localStorage.setItem("userMeals", JSON.stringify(updatedMealsAfterRemovedItem));
 	};
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
 	const addMealToBackend = async mealData => {
 		try {
 			const response = await fetch("http://localhost:5174/add-meal", {
@@ -150,6 +168,7 @@ export default function Menu() {
 			const savedEmail = JSON.parse(updatedUserEmail);
 			setUserCurrentEmail(savedEmail.userEmail);
 		}
+		getUserEmail();
 	}, []);
 
 	useEffect(() => {
@@ -218,12 +237,14 @@ export default function Menu() {
 								<input
 									className='menu__input-food'
 									type='text'
+									placeholder='Enter your food...'
 									value={inputFood}
 									onChange={e => setInputFood(e.target.value)}
 								/>
 								<input
 									className='menu__input-food grams'
 									type='number'
+									placeholder='Grams'
 									value={inputFoodGrams}
 									onChange={e => setInputFoodGrams(e.target.value)}
 								/>

@@ -13,12 +13,14 @@ const db = new sqlite3.Database(dbPath, err => {
 
 db.serialize(() => {
 	db.run(`CREATE TABLE IF NOT EXISTS users (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
     userName TEXT NOT NULL,
     userEmail TEXT NOT NULL UNIQUE,
     userPassword TEXT NOT NULL
   )`);
 
 	db.run(`CREATE TABLE IF NOT EXISTS userMeals (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	userEmail TEXT NOT NULL,
 	foodID INTEGER NOT NULL,
 	foodName TEXT NOT NULL,

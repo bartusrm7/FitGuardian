@@ -4,7 +4,7 @@ import { useLogRegContext } from "./LogRegContext";
 
 export default function Dashboard() {
 	const [hamburger, setHamgurger] = useState(false);
-	const [error, setError] = useState(false);
+	// const [error, setError] = useState(false);
 	const { userName, setUserName } = useLogRegContext();
 	const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export default function Dashboard() {
 
 	// useEffect(() => {
 	// 	const fetchUserName = () => {
-	// 		const response = fetch("/user-name", {
+	// 		const response = fetch("/user-data", {
 	// 			headers: {
 	// 				Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 	// 			},

@@ -33,17 +33,17 @@ const verifyToken = (req, res, next) => {
 	});
 };
 
-app.post("/user-name", verifyToken, (req, res) => {
+app.post("/user-data", verifyToken, (req, res) => {
 	const userEmail = req.user.userEmail;
 
-	db.get(`SELECT userName FROM users WHERE userEmail = ?`, [userEmail], (err, row) => {
+	db.get(`SELECT userName, userEmail FROM users WHERE userEmail = ?`, [userEmail], (err, row) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!" });
 		}
 		if (!row) {
 			return res.status(404).json({ message: "User not found!" });
 		}
-		res.json({ userName: row.userName });
+		res.json({ userName: row.userName, userEmail: row.userEmail });
 	});
 });
 
@@ -127,7 +127,6 @@ app.post("/add-meal", (req, res) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}
-
 		res.status(200).json({ message: "Meal added successfully!", mealID: this.lastID });
 	});
 });
