@@ -46,7 +46,6 @@ export default function Statistics() {
 
 		const getUserMeals = localStorage.getItem("userMeals");
 		const getUpdatedUserMeals = getUserMeals ? JSON.parse(getUserMeals) : [];
-		console.log(getUpdatedUserMeals);
 
 		Object.values(getUpdatedUserMeals).forEach(mealsArray => {
 			if (Array.isArray(mealsArray)) {

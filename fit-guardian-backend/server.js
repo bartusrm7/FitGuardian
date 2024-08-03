@@ -109,12 +109,12 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/save-user-data", (req, res) => {
-	const { userAge, userGender, userHeight, userWeight, userGoal, userActivity } = req.body;
+	const { userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity } = req.body;
 	if (!userAge || !userGender || !userHeight || !userWeight || !userGoal || !userActivity) {
 		return res.status(400).json({ message: "All fields are required." });
 	}
-	const query = `INSERT INTO userChoices (userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?)`;
-	db.run(query, [userAge, userGender, userHeight, userWeight, userGoal, userActivity], err => {
+	const query = `INSERT INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	db.run(query, [userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity], err => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}
@@ -184,30 +184,14 @@ app.post("/food-info", (req, res) => {
 	});
 });
 
-app.post("/add-macros", (req, res) => {
+app.post("/get-macros", (req, res) => {
 	const { userEmail, userCalories, userProteins, userCarbs, userFats } = req.body;
-	if (!userEmail || userCalories == null || userProteins == null || userCarbs == null || userFats == null) {
+	if (!userEmail || !userCalories || !userProteins || !userCarbs || !userFats) {
 		return res.status(400).json({ message: "All fields are required!" });
 	}
 
-	const query = `INSERT INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats)
-	VALUES (?, ?, ?, ?, ?)`;
-	db.run(query, [userEmail, userCalories, userProteins, userCarbs, userFats], function (err) {
-		if (err) {
-			return res.status(500).json({ message: "Database error!", error: err.message });
-		}
-		res.status(200).json({ message: "Macros added successfully!" });
-	});
-});
-
-app.post("/get-macros", (req, res) => {
-	const { userEmail } = req.body;
-	if (!userEmail) {
-		return res.status(400).json({ message: "User email is required!" });
-	}
-
-	const query = `SELECT * FROM userMacros WHERE userEmail = ?`;
-	db.get(query, [userEmail], (err, row) => {
+	const query = `INSERT INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	db.get(query, [userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity], (err, row) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}

@@ -7,7 +7,11 @@ export default function UserProvider({ children }) {
 	const [userCurrentEmail, setUserCurrentEmail] = useState("");
 
 	const [userTotalCalories, setUserTotalCalories] = useState("");
-	const [userTotalMacros, setUserTotalMacros] = useState("");
+	const [userTotalMacros, setUserTotalMacros] = useState({
+		proteins: 0,
+		carbs: 0,
+		fats: 0,
+	});
 	const [userProteins, setUserProteins] = useState("");
 	const [userCarbs, setUserCarbs] = useState("");
 	const [userFats, setUserFats] = useState("");

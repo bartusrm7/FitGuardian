@@ -58,6 +58,7 @@ export default function Macronutrients() {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 			const data = await response.json();
+
 			setUserTotalCalories(data.macros.userCalories);
 			setUserTotalMacros({
 				proteins: data.macros.userProteins,
@@ -85,7 +86,6 @@ export default function Macronutrients() {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 			const data = await response.json();
-			console.log(data.meals);
 
 			setUserCurrentEmail(userEmail);
 		} catch (error) {
@@ -96,12 +96,12 @@ export default function Macronutrients() {
 		let totalCarbs = 0;
 		let totalFats = 0;
 
-		data.meals.forEach(meal => {
-			totalCalories.calories += parseFloat(meal.foodCalories);
-			totalProteins.proteins += parseFloat(meal.foodProteins);
-			totalCarbs.carbs += parseFloat(meal.foodCarbs);
-			totalFats.fats += parseFloat(meal.foodFats);
-		});
+		// data.meals.forEach(meal => {
+		// 	totalCalories.calories += parseFloat(meal.foodCalories);
+		// 	totalProteins.proteins += parseFloat(meal.foodProteins);
+		// 	totalCarbs.carbs += parseFloat(meal.foodCarbs);
+		// 	totalFats.fats += parseFloat(meal.foodFats);
+		// });
 
 		const newAllMacros = {
 			calories: 0,
@@ -161,10 +161,13 @@ export default function Macronutrients() {
 		}
 		handleAddMacrosToContainers();
 		getUserEmail();
-		fetchUserMacros();
 	}, [userMeal]);
 
 	useEffect(() => {
+		if (userCurrentEmail) {
+			fetchUserMacros();
+			handleAddMacrosToContainers();
+		}
 		setOpacityClass("display-opacity");
 	}, []);
 

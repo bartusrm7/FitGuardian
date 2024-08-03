@@ -21,6 +21,7 @@ db.serialize(() => {
 
 	db.run(`CREATE TABLE IF NOT EXISTS userChoices (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	userEmail TEXT NOT NULL,
 	userAge INTEGER NOT NULL,
 	userGender TEXT NOT NULL,
 	userHeight INTEGER NOT NULL,

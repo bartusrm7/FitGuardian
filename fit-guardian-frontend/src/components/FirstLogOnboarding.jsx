@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function FirstLogOnboarding() {
 	const {
+		userCurrentEmail,
+		setUserCurrentEmail,
 		setUserTotalCalories,
 		setUserProteins,
 		setUserCarbs,
@@ -136,14 +138,33 @@ export default function FirstLogOnboarding() {
 			carbs: carbs.toFixed(0),
 			fats: fats.toFixed(0),
 		};
-
 		setUserTotalMacros(totalMacros);
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
 	};
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
 	const saveUserChoices = async () => {
 		const userData = {
+			userEmail: userCurrentEmail,
 			userAge: userAge,
 			userGender: userGender,
 			userHeight: userHeight,
@@ -167,15 +188,18 @@ export default function FirstLogOnboarding() {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 				const data = await response.json();
+
 				setUserTotalCalories(userCalories);
 				setMacronutrientsFromTotalCalories(userCalories);
 				navigate("/menu");
+				console.log(object);
 			} catch (error) {
 				console.error("Error saving user data:", error.message);
 			}
 		}
 	};
 	useEffect(() => {
+		getUserEmail();
 		setOpacityClass("display-opacity");
 	}, []);
 
