@@ -219,8 +219,8 @@ app.post("/food-info", (req, res) => {
 	});
 });
 
-app.get("/user-macros", (req, res) => {
-	const { userEmail } = req.params;
+app.post("/user-macros", (req, res) => {
+	const { userEmail } = req.body;
 	if (!userEmail) {
 		return res.status(400).json({ message: "User email is required!" });
 	}

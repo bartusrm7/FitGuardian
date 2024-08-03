@@ -13,13 +13,10 @@ export default function Macronutrients() {
 		userTotalMacros,
 		setUserTotalMacros,
 		userProteins,
-		setUserProteins,
 		userCarbs,
-		setUserCarbs,
 		userFats,
-		setUserFats,
 	} = useUserContext();
-	const { userMeal, setUserMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
+	const { userMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
 	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
 		calories: 0,
 		proteins: 0,
@@ -105,7 +102,6 @@ export default function Macronutrients() {
 		});
 		setAllMacros(newAllMacros);
 	};
-
 	useEffect(() => {
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
@@ -119,7 +115,7 @@ export default function Macronutrients() {
 			handleAddMacrosToContainers();
 		}
 		setOpacityClass("display-opacity");
-	}, []);
+	}, [userCurrentEmail, userMeal, currentDate]);
 
 	return (
 		<div>
