@@ -13,6 +13,7 @@ export default function FirstLogOnboarding() {
 		setUserCarbs,
 		userFats,
 		setUserFats,
+		userTotalMacros,
 		setUserTotalMacros,
 		userAge,
 		setUserAge,
@@ -127,6 +128,26 @@ export default function FirstLogOnboarding() {
 		}
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
 	const setMacronutrientsFromTotalCalories = calories => {
 		const proteinPercentage = 0.2;
 		const carbPercentage = 0.5;
@@ -145,67 +166,42 @@ export default function FirstLogOnboarding() {
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
+
+		return totalMacros;
 	};
-	const getUserEmail = async () => {
+	const saveUserChoices = async () => {
+		const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
+		const userMacros = setMacronutrientsFromTotalCalories(userCalories);
+
 		try {
-			const response = await fetch("http://localhost:5174/user-data", {
+			const response = await fetch("http://localhost:5174/save-user-data", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
 				},
+				body: JSON.stringify({
+					userEmail: userCurrentEmail,
+					userAge,
+					userGender,
+					userHeight,
+					userWeight,
+					userGoal,
+					userActivity,
+					userCalories,
+					userProteins: userMacros.proteins,
+					userCarbs: userMacros.carbs,
+					userFats: userMacros.fats,
+				}),
 			});
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 			const data = await response.json();
-			localStorage.setItem("userEmail", data.userEmail);
-			setUserCurrentEmail(data.userEmail);
+
+			setUserTotalCalories(userCalories);
+			navigate("/menu");
 		} catch (error) {
-			console.error("Error fetching user email:", error.message);
-		}
-	};
-	const saveUserChoices = async () => {
-		const userData = {
-			userEmail: userCurrentEmail,
-			userAge: userAge,
-			userGender: userGender,
-			userHeight: userHeight,
-			userWeight: userWeight,
-			userGoal: userGoal,
-			userActivity: userActivity,
-		};
-		const isDataCompleted = Object.values(userData).every(value => value !== "");
-		if (isDataCompleted) {
-			const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
-			const userMacros = setUserTotalMacros(userCalories);
-
-			try {
-				const response = await fetch("http://localhost:5174/save-user-data", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						...userData,
-						userCalories,
-						userProteins: userProteins,
-						userCarbs: userCarbs,
-						userFats: userFats,
-					}),
-				});
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
-				const data = await response.json();
-				console.log(data);
-
-				setUserTotalCalories(userCalories);
-				setMacronutrientsFromTotalCalories(userMacros);
-				navigate("/menu");
-			} catch (error) {
-				console.error("Error saving user data:", error.message);
-			}
+			console.error("Error saving user data:", error.message);
 		}
 	};
 

@@ -123,34 +123,32 @@ app.post("/save-user-data", (req, res) => {
 		userFats,
 	} = req.body;
 
-	if (
-		!userEmail ||
-		!userAge ||
-		!userGender ||
-		!userHeight ||
-		!userWeight ||
-		!userGoal ||
-		!userActivity ||
-		userCalories == null ||
-		userProteins == null ||
-		userCarbs == null ||
-		userFats == null
-	) {
+	if (!userEmail || userCalories == null || userProteins == null || userCarbs == null || userFats == null) {
 		return res.status(400).json({ message: "All fields are required!" });
 	}
 
-	const userChoicesQuery = `INSERT OR REPLACE INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	const userChoicesQuery = `
+        INSERT OR REPLACE INTO userChoices (
+            userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
 	db.run(
 		userChoicesQuery,
 		[userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity],
 		function (err) {
 			if (err) {
+				console.error("Error saving user choices:", err.message);
 				return res.status(500).json({ message: "Database error while saving user choices!", error: err.message });
 			}
 
-			const userMacrosQuery = `INSERT OR REPLACE INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
+			const userMacrosQuery = `
+                INSERT OR REPLACE INTO userMacros (
+                    userEmail, userCalories, userProteins, userCarbs, userFats
+                ) VALUES (?, ?, ?, ?, ?)
+            `;
 			db.run(userMacrosQuery, [userEmail, userCalories, userProteins, userCarbs, userFats], function (err) {
 				if (err) {
+					console.error("Error saving user macros:", err.message);
 					return res.status(500).json({ message: "Database error while saving user macros!", error: err.message });
 				}
 				res.status(200).json({ message: "User data saved successfully!" });
@@ -221,19 +219,19 @@ app.post("/food-info", (req, res) => {
 	});
 });
 
-app.post("/get-macros", (req, res) => {
-	const { userEmail, userCalories, userProteins, userCarbs, userFats } = req.body;
-	if (!userEmail || !userCalories || !userProteins || !userCarbs || !userFats) {
-		return res.status(400).json({ message: "All fields are required!" });
+app.get("/user-macros", (req, res) => {
+	const { userEmail } = req.params;
+	if (!userEmail) {
+		return res.status(400).json({ message: "User email is required!" });
 	}
+	const query = `SELECT userCalories, userProteins, userCarbs, userFats FROM userMacros WHERE userEmail = ?`;
 
-	const query = `INSERT INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
-	db.get(query, [userEmail, userCalories, userProteins, userCarbs, userFats], (err, row) => {
+	db.get(query, [userEmail], (err, row) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}
 		if (!row) {
-			return res.status(404).json({ message: "Macros not found!" });
+			return res.status(404).json({ message: "Macros not found for this user!" });
 		}
 		res.status(200).json({ macros: row });
 	});

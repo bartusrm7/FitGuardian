@@ -12,6 +12,12 @@ export default function Macronutrients() {
 		setUserTotalCalories,
 		userTotalMacros,
 		setUserTotalMacros,
+		userProteins,
+		setUserProteins,
+		userCarbs,
+		setUserCarbs,
+		userFats,
+		setUserFats,
 	} = useUserContext();
 	const { userMeal, setUserMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
 	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
@@ -47,18 +53,24 @@ export default function Macronutrients() {
 	};
 	const handleAddMacrosToContainers = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/get-macros", {
+			const response = await fetch("http://localhost:5174/user-macros", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ userEmail: userCurrentEmail }),
+				body: JSON.stringify({
+					userEmail: userCurrentEmail,
+					userTotalCalories: userTotalCalories,
+					userProteins: userProteins,
+					userCarbs: userCarbs,
+					userFats: userFats,
+				}),
 			});
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 			const data = await response.json();
-			console.log(data);
+
 			setUserTotalCalories(data.macros.userCalories);
 			setUserTotalMacros({
 				proteins: data.macros.userProteins,
@@ -68,68 +80,31 @@ export default function Macronutrients() {
 		} catch (error) {
 			console.error("Error fetching user macros:", error.message);
 		}
-		let totalCalories = 0;
-		let totalProteins = 0;
-		let totalCarbs = 0;
-		let totalFats = 0;
-
-		// data.meals.forEach(meal => {
-		// 	totalCalories.calories += parseFloat(meal.foodCalories);
-		// 	totalProteins.proteins += parseFloat(meal.foodProteins);
-		// 	totalCarbs.carbs += parseFloat(meal.foodCarbs);
-		// 	totalFats.fats += parseFloat(meal.foodFats);
-		// });
-
 		const newAllMacros = {
 			calories: 0,
 			proteins: 0,
 			carbs: 0,
 			fats: 0,
 		};
-		filteredMeals.forEach(meals => {
-			meals.food.forEach(meal => {
-				newAllMacros.calories += parseFloat(meal.foodCalories);
-				newAllMacros.proteins += parseFloat(meal.foodProteins);
-				newAllMacros.carbs += parseFloat(meal.foodCarbs);
-				newAllMacros.fats += parseFloat(meal.foodFats);
-			});
+		filteredMeals.forEach(meal => {
+			newAllMacros.calories += parseFloat(meal.foodCalories);
+			newAllMacros.proteins += parseFloat(meal.foodProteins);
+			newAllMacros.carbs += parseFloat(meal.foodCarbs);
+			newAllMacros.fats += parseFloat(meal.foodFats);
 		});
 		const caloriesPercentage = (newAllMacros.calories / userTotalCalories) * 100;
 		const proteinsPercentage = (newAllMacros.proteins / userTotalMacros.proteins) * 100;
 		const carbsPercentage = (newAllMacros.carbs / userTotalMacros.carbs) * 100;
 		const fatsPercentage = (newAllMacros.fats / userTotalMacros.fats) * 100;
+
 		setAllMacrosPercentageCompleted({
 			calories: isNaN(caloriesPercentage) ? 0 : caloriesPercentage,
 			proteins: isNaN(proteinsPercentage) ? 0 : proteinsPercentage,
 			carbs: isNaN(carbsPercentage) ? 0 : carbsPercentage,
 			fats: isNaN(fatsPercentage) ? 0 : fatsPercentage,
 		});
-		localStorage.setItem("allMacros", JSON.stringify(newAllMacros));
 		setAllMacros(newAllMacros);
 	};
-
-	// useEffect(() => {
-	// 	const updatedUserTotalCaloriesString = localStorage.getItem("userCurrentCalories");
-	// 	if (updatedUserTotalCaloriesString) {
-	// 		const userCalories = JSON.parse(updatedUserTotalCaloriesString);
-	// 		setUserTotalCalories(userCalories);
-	// 	}
-	// 	const updatedUserTotalMacrosString = localStorage.getItem("userMacros");
-	// 	if (updatedUserTotalMacrosString) {
-	// 		const userMacros = JSON.parse(updatedUserTotalMacrosString);
-	// 		setUserTotalMacros(userMacros);
-	// 	}
-	// 	const updatedUserMealsString = localStorage.getItem("userMeals");
-	// 	if (updatedUserMealsString) {
-	// 		const userMeals = JSON.parse(updatedUserMealsString);
-	// 		setUserMeal(userMeals);
-	// 	}
-	// 	const updatedUserAllMacrosString = localStorage.getItem("allMacros");
-	// 	if (updatedUserAllMacrosString) {
-	// 		const userAllMacros = JSON.parse(updatedUserAllMacrosString);
-	// 		setAllMacros(userAllMacros);
-	// 	}
-	// }, [currentDate]);
 
 	useEffect(() => {
 		const savedDate = localStorage.getItem("currentDate");
