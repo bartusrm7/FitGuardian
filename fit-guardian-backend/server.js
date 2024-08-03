@@ -109,17 +109,54 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/save-user-data", (req, res) => {
-	const { userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity } = req.body;
-	if (!userAge || !userGender || !userHeight || !userWeight || !userGoal || !userActivity) {
-		return res.status(400).json({ message: "All fields are required." });
+	const {
+		userEmail,
+		userAge,
+		userGender,
+		userHeight,
+		userWeight,
+		userGoal,
+		userActivity,
+		userCalories,
+		userProteins,
+		userCarbs,
+		userFats,
+	} = req.body;
+
+	if (
+		!userEmail ||
+		!userAge ||
+		!userGender ||
+		!userHeight ||
+		!userWeight ||
+		!userGoal ||
+		!userActivity ||
+		userCalories == null ||
+		userProteins == null ||
+		userCarbs == null ||
+		userFats == null
+	) {
+		return res.status(400).json({ message: "All fields are required!" });
 	}
-	const query = `INSERT INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-	db.run(query, [userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity], err => {
-		if (err) {
-			return res.status(500).json({ message: "Database error!", error: err.message });
+
+	const userChoicesQuery = `INSERT OR REPLACE INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	db.run(
+		userChoicesQuery,
+		[userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity],
+		function (err) {
+			if (err) {
+				return res.status(500).json({ message: "Database error while saving user choices!", error: err.message });
+			}
+
+			const userMacrosQuery = `INSERT OR REPLACE INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
+			db.run(userMacrosQuery, [userEmail, userCalories, userProteins, userCarbs, userFats], function (err) {
+				if (err) {
+					return res.status(500).json({ message: "Database error while saving user macros!", error: err.message });
+				}
+				res.status(200).json({ message: "User data saved successfully!" });
+			});
 		}
-		res.status(200).json({ message: "User data saved successfully." });
-	});
+	);
 });
 
 app.post("/add-meal", (req, res) => {
@@ -190,8 +227,8 @@ app.post("/get-macros", (req, res) => {
 		return res.status(400).json({ message: "All fields are required!" });
 	}
 
-	const query = `INSERT INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-	db.get(query, [userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity], (err, row) => {
+	const query = `INSERT INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
+	db.get(query, [userEmail, userCalories, userProteins, userCarbs, userFats], (err, row) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}

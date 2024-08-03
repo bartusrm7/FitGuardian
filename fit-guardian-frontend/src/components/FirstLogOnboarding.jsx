@@ -7,8 +7,11 @@ export default function FirstLogOnboarding() {
 		userCurrentEmail,
 		setUserCurrentEmail,
 		setUserTotalCalories,
+		userProteins,
 		setUserProteins,
+		userCarbs,
 		setUserCarbs,
+		userFats,
 		setUserFats,
 		setUserTotalMacros,
 		userAge,
@@ -175,6 +178,7 @@ export default function FirstLogOnboarding() {
 		const isDataCompleted = Object.values(userData).every(value => value !== "");
 		if (isDataCompleted) {
 			const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
+			const userMacros = setUserTotalMacros(userCalories);
 
 			try {
 				const response = await fetch("http://localhost:5174/save-user-data", {
@@ -182,22 +186,29 @@ export default function FirstLogOnboarding() {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(userData),
+					body: JSON.stringify({
+						...userData,
+						userCalories,
+						userProteins: userProteins,
+						userCarbs: userCarbs,
+						userFats: userFats,
+					}),
 				});
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 				const data = await response.json();
+				console.log(data);
 
 				setUserTotalCalories(userCalories);
-				setMacronutrientsFromTotalCalories(userCalories);
+				setMacronutrientsFromTotalCalories(userMacros);
 				navigate("/menu");
-				console.log(object);
 			} catch (error) {
 				console.error("Error saving user data:", error.message);
 			}
 		}
 	};
+
 	useEffect(() => {
 		getUserEmail();
 		setOpacityClass("display-opacity");

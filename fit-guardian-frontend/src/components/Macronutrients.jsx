@@ -45,7 +45,7 @@ export default function Macronutrients() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
-	const fetchUserMacros = async () => {
+	const handleAddMacrosToContainers = async () => {
 		try {
 			const response = await fetch("http://localhost:5174/get-macros", {
 				method: "POST",
@@ -58,7 +58,7 @@ export default function Macronutrients() {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 			const data = await response.json();
-
+			console.log(data);
 			setUserTotalCalories(data.macros.userCalories);
 			setUserTotalMacros({
 				proteins: data.macros.userProteins,
@@ -67,29 +67,6 @@ export default function Macronutrients() {
 			});
 		} catch (error) {
 			console.error("Error fetching user macros:", error.message);
-		}
-	};
-	const handleAddMacrosToContainers = async () => {
-		try {
-			const userEmail = localStorage.getItem("userEmail");
-			if (!userEmail) {
-				throw new Error("No user email found");
-			}
-			const response = await fetch("http://localhost:5174/food-info", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ userEmail }),
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-			const data = await response.json();
-
-			setUserCurrentEmail(userEmail);
-		} catch (error) {
-			console.error("Error fetching food info:", error.message);
 		}
 		let totalCalories = 0;
 		let totalProteins = 0;
@@ -131,41 +108,39 @@ export default function Macronutrients() {
 		setAllMacros(newAllMacros);
 	};
 
-	useEffect(() => {
-		const updatedUserTotalCaloriesString = localStorage.getItem("userCurrentCalories");
-		if (updatedUserTotalCaloriesString) {
-			const userCalories = JSON.parse(updatedUserTotalCaloriesString);
-			setUserTotalCalories(userCalories);
-		}
-		const updatedUserTotalMacrosString = localStorage.getItem("userMacros");
-		if (updatedUserTotalMacrosString) {
-			const userMacros = JSON.parse(updatedUserTotalMacrosString);
-			setUserTotalMacros(userMacros);
-		}
-		const updatedUserMealsString = localStorage.getItem("userMeals");
-		if (updatedUserMealsString) {
-			const userMeals = JSON.parse(updatedUserMealsString);
-			setUserMeal(userMeals);
-		}
-		const updatedUserAllMacrosString = localStorage.getItem("allMacros");
-		if (updatedUserAllMacrosString) {
-			const userAllMacros = JSON.parse(updatedUserAllMacrosString);
-			setAllMacros(userAllMacros);
-		}
-	}, [currentDate]);
+	// useEffect(() => {
+	// 	const updatedUserTotalCaloriesString = localStorage.getItem("userCurrentCalories");
+	// 	if (updatedUserTotalCaloriesString) {
+	// 		const userCalories = JSON.parse(updatedUserTotalCaloriesString);
+	// 		setUserTotalCalories(userCalories);
+	// 	}
+	// 	const updatedUserTotalMacrosString = localStorage.getItem("userMacros");
+	// 	if (updatedUserTotalMacrosString) {
+	// 		const userMacros = JSON.parse(updatedUserTotalMacrosString);
+	// 		setUserTotalMacros(userMacros);
+	// 	}
+	// 	const updatedUserMealsString = localStorage.getItem("userMeals");
+	// 	if (updatedUserMealsString) {
+	// 		const userMeals = JSON.parse(updatedUserMealsString);
+	// 		setUserMeal(userMeals);
+	// 	}
+	// 	const updatedUserAllMacrosString = localStorage.getItem("allMacros");
+	// 	if (updatedUserAllMacrosString) {
+	// 		const userAllMacros = JSON.parse(updatedUserAllMacrosString);
+	// 		setAllMacros(userAllMacros);
+	// 	}
+	// }, [currentDate]);
 
 	useEffect(() => {
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
 			setCurrentDate(savedDate);
 		}
-		handleAddMacrosToContainers();
 		getUserEmail();
 	}, [userMeal]);
 
 	useEffect(() => {
 		if (userCurrentEmail) {
-			fetchUserMacros();
 			handleAddMacrosToContainers();
 		}
 		setOpacityClass("display-opacity");
