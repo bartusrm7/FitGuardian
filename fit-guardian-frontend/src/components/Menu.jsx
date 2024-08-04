@@ -154,21 +154,6 @@ export default function Menu() {
 		const existingMeal = (userMeal[userCurrentEmail] || []).find(meal => meal.id === id && meal.date === currentDate);
 		return existingMeal || { id, date: currentDate, name: `Meal ${id}`, food: [] };
 	});
-	const getMacrosFromBackend = async () => {
-		try {
-			const response = await fetch("http://localhost:5174/get-macros", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({}),
-			});
-			if (!response.ok) {
-				throw Error("Failed to get macros from backend!");
-			}
-			const data = await response.json();
-		} catch (error) {}
-	};
 
 	useEffect(() => {
 		const updatedUserMeals = localStorage.getItem("userMeals");

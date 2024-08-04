@@ -16,7 +16,7 @@ export default function Macronutrients() {
 		userCarbs,
 		userFats,
 	} = useUserContext();
-	const { userMeal, setAllMacros, currentDate, setCurrentDate } = useFoodContext();
+	const { setAllMacros, currentDate, setCurrentDate } = useFoodContext();
 	const [allMacrosPercentageCompleted, setAllMacrosPercentageCompleted] = useState({
 		calories: 0,
 		proteins: 0,
@@ -24,10 +24,7 @@ export default function Macronutrients() {
 		fats: 0,
 	});
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
-
-	const filteredMeals = Object.values(userMeal)
-		.flat()
-		.filter(meal => meal.date === currentDate);
+	const [userMeals, setUserMeals] = useState([]);
 
 	const getUserEmail = async () => {
 		try {
@@ -48,6 +45,26 @@ export default function Macronutrients() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
+
+	const getMealsFromBackend = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/food-info", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userEmail: userCurrentEmail }),
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setUserMeals(data.meals);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
+
 	const handleAddMacrosToContainers = async () => {
 		try {
 			const response = await fetch("http://localhost:5174/user-macros", {
@@ -64,7 +81,7 @@ export default function Macronutrients() {
 				}),
 			});
 			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
+				throw new Error(`HTTP error! Error:${response.status}`);
 			}
 			const data = await response.json();
 
@@ -83,6 +100,8 @@ export default function Macronutrients() {
 			carbs: 0,
 			fats: 0,
 		};
+		const filteredMeals = userMeals.filter(meal => meal.foodDate === currentDate);
+
 		filteredMeals.forEach(meal => {
 			newAllMacros.calories += parseFloat(meal.foodCalories);
 			newAllMacros.proteins += parseFloat(meal.foodProteins);
@@ -102,20 +121,25 @@ export default function Macronutrients() {
 		});
 		setAllMacros(newAllMacros);
 	};
-	useEffect(() => {
-		const savedDate = localStorage.getItem("currentDate");
-		if (savedDate) {
-			setCurrentDate(savedDate);
-		}
-		getUserEmail();
-	}, [userMeal]);
+
+	// ZROBIĆ WYWOŁANIE getMealsFromBackend; DODAĆ WSZYSTKIE POSIŁKI DO filteredMeals, A NASTĘPNIE DO handleAddMacrosToContainers
 
 	useEffect(() => {
-		if (userCurrentEmail) {
-			handleAddMacrosToContainers();
+		getUserEmail();
+		const savedDate = localStorage.getItem("currentDate");
+		setCurrentDate(savedDate);
+	}, []);
+
+	useEffect(() => {
+		if (userCurrentEmail && currentDate) {
+			getMealsFromBackend();
 		}
+	}, [userCurrentEmail, currentDate, userTotalCalories]);
+
+	useEffect(() => {
+		handleAddMacrosToContainers(userMeals);
 		setOpacityClass("display-opacity");
-	}, [userCurrentEmail, userMeal, currentDate]);
+	}, [userMeals]);
 
 	return (
 		<div>

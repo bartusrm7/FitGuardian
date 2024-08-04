@@ -208,14 +208,14 @@ app.post("/remove-meal", (req, res) => {
 app.post("/food-info", (req, res) => {
 	const { userEmail } = req.body;
 	if (!userEmail) {
-		return res.status(500).json({ message: "Database error!", error: err.message });
+		return res.status(500).json({ message: "Database error!" });
 	}
 	const query = `SELECT foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate FROM userMeals WHERE userEmail = ?`;
 	db.all(query, [userEmail], (err, rows) => {
 		if (err) {
 			return res.status(500).json({ message: "Database error!", error: err.message });
 		}
-		res.status(200).json({ meals: rows });
+		res.status(200).json({ userEmail, meals: rows });
 	});
 });
 
