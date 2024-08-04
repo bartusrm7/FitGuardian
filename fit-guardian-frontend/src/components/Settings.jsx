@@ -5,6 +5,8 @@ import { useUserContext } from "./UserContext";
 export default function Settings() {
 	const {
 		setUserAllData,
+		userCurrentEmail,
+		setUserCurrentEmail,
 		userTotalCalories,
 		setUserTotalCalories,
 		setUserTotalMacros,
@@ -14,6 +16,12 @@ export default function Settings() {
 		setUserCarbs,
 		userFats,
 		setUserFats,
+		userAge,
+		userGender,
+		userHeight,
+		userWeight,
+		userGoal,
+		userActivity,
 	} = useUserContext();
 	const [userOptions, setUserOptions] = useState({
 		genderOptions: ["Male", "Female"],
@@ -118,15 +126,12 @@ export default function Settings() {
 				...prevState.userCurrentData,
 				[name]: value,
 			};
-			// NAPRAWIĆ USER DATA ŻEBY DOCHODZIŁO DO PAKOWANIA DO OBJECTU
 			const updatedCurrentUserDataString = localStorage.getItem("currentUserData");
 			if (updatedCurrentUserDataString) {
 				const currentUserData = JSON.parse(updatedCurrentUserDataString);
 				const currentUserEmail = currentUserData.userEmail;
-				console.log(currentUserEmail);
 
 				const allUserDataString = localStorage.getItem("userData");
-				console.log(allUserDataString);
 				let allUserData = {};
 				if (allUserDataString) {
 					allUserData = JSON.parse(allUserDataString);
@@ -158,7 +163,6 @@ export default function Settings() {
 			}
 		});
 	};
-	// String.format("%f, %d", 10, 12) -> w C jest to printf z formatowaniem, w javie String.format()
 
 	const handleSaveChanges = () => {
 		if (editedUserData) {
@@ -168,7 +172,6 @@ export default function Settings() {
 			localStorage.setItem("userCurrentCalories", userTotalCalories);
 		}
 	};
-	//ZAPISAĆ INICJALIZACJĘ W USEEFFECT!!!!!!!!!!!!!!!!!!!!!
 
 	useEffect(() => {
 		const userCurrentChoicesString = localStorage.getItem("userCurrentChoices");
@@ -198,6 +201,52 @@ export default function Settings() {
 			}
 		}
 	}, []);
+
+	useEffect(() => {
+		const getUserEmail = async () => {
+			try {
+				const response = await fetch("http://localhost:5174/user-data", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+					},
+				});
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
+				const data = await response.json();
+				setUserCurrentEmail(data.userEmail);
+			} catch (error) {
+				console.error("Error fetching user email:", error.message);
+			}
+		};
+		getUserEmail();
+	}, []);
+
+	useEffect(() => {
+		const getUserDataAndMacrosFromBackend = async () => {
+			if (!userCurrentEmail) return;
+
+			try {
+				const response = await fetch("http://localhost:5174/pass-user-data", {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json",
+					},
+					body: JSON.stringify({ userEmail: userCurrentEmail }),
+				});
+				if (!response.ok) {
+					throw Error("Login failed!!");
+				}
+				const data = await response.json();
+				console.log(data);
+			} catch (error) {
+				console.error("Error fetching user data:", error.message);
+			}
+		};
+		getUserDataAndMacrosFromBackend();
+	}, [userCurrentEmail]);
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);

@@ -157,6 +157,44 @@ app.post("/save-user-data", (req, res) => {
 	);
 });
 
+app.post("/pass-user-data", (req, res) => {
+	const { userEmail } = req.body;
+
+	if (!userEmail) {
+		return res.status(400).json({ message: "User email is required!" });
+	}
+	const userChoicesQuery = `SELECT * FROM userChoices WHERE userEmail = ?`;
+	const userMacrosQuery = `SELECT * FROM userMacros WHERE userEmail = ?`;
+
+	db.get(userChoicesQuery, [userEmail], (err, userChoices) => {
+		if (err) {
+			return res.status(500).json({ message: err.message });
+		}
+		db.get(userMacrosQuery, [userEmail], (err, userMacros) => {
+			if (err) {
+				return res.status(500).json({ message: err.message });
+			}
+			if (userChoices && userMacros) {
+				res.json({
+					userEmail: userChoices.userEmail,
+					userAge: userChoices.userAge,
+					userGender: userChoices.userGender,
+					userHeight: userChoices.userHeight,
+					userWeight: userChoices.userWeight,
+					userGoal: userChoices.userGoal,
+					userActivity: userChoices.userActivity,
+					userCalories: userMacros.userCalories,
+					userProteins: userMacros.userProteins,
+					userCarbs: userMacros.userCarbs,
+					userFats: userMacros.userFats,
+				});
+			} else {
+				res.status(404).json({ message: "User not found!" });
+			}
+		});
+	});
+});
+
 app.post("/add-meal", (req, res) => {
 	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate } = req.body;
 
