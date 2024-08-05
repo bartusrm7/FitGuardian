@@ -4,6 +4,7 @@ import { useUserContext } from "./UserContext";
 
 export default function Settings() {
 	const {
+		userAllData,
 		setUserAllData,
 		userCurrentEmail,
 		setUserCurrentEmail,
@@ -49,14 +50,10 @@ export default function Settings() {
 			carbs: carbs.toFixed(0),
 			fats: fats.toFixed(0),
 		};
-
 		setUserTotalMacros(totalMacros);
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
-
-		localStorage.setItem("userMacros", JSON.stringify(totalMacros));
-		localStorage.setItem("userCurrentMacros", JSON.stringify(totalMacros));
 	};
 	const setNewMacronutrientsFromTotalCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
@@ -116,8 +113,29 @@ export default function Settings() {
 		setUserTotalCalories(totalUserChoices);
 		setMacronutrientsFromTotalCalories(totalUserChoices);
 	};
+
+	const getUserDataAndMacrosFromBackend = async () => {
+		if (!userCurrentEmail) return;
+		try {
+			const response = await fetch("http://localhost:5174/pass-user-data", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({ userEmail: userCurrentEmail }),
+			});
+			if (!response.ok) {
+				throw Error("Login failed!");
+			}
+			const data = await response.json();
+			console.log(data);
+			setUserAllData(data);
+		} catch (error) {
+			console.error("Error fetching user data:", error.message);
+		}
+	};
 	const handleInputChange = (name, value) => {
-		setEditedUserData(prevState => {
+		setUserAllData(prevState => {
 			const newUserChoices = {
 				...prevState.userChoices,
 				[name]: value,
@@ -126,52 +144,9 @@ export default function Settings() {
 				...prevState.userCurrentData,
 				[name]: value,
 			};
-			const updatedCurrentUserDataString = localStorage.getItem("currentUserData");
-			if (updatedCurrentUserDataString) {
-				const currentUserData = JSON.parse(updatedCurrentUserDataString);
-				const currentUserEmail = currentUserData.userEmail;
-
-				const allUserDataString = localStorage.getItem("userData");
-				let allUserData = {};
-				if (allUserDataString) {
-					allUserData = JSON.parse(allUserDataString);
-				}
-
-				allUserData[currentUserEmail] = {
-					...allUserData[currentUserEmail],
-					userChoices: newUserChoices,
-					userCurrentData: newUserData,
-				};
-				localStorage.setItem("userData", JSON.stringify(allUserData[currentUserEmail]));
-				localStorage.setItem("currentUserData", JSON.stringify(newUserData));
-
-				setTimeout(() => {
-					setNewMacronutrientsFromTotalCalories(
-						newUserChoices.age,
-						newUserChoices.height,
-						newUserChoices.weight,
-						newUserChoices.gender,
-						newUserChoices.goal,
-						newUserChoices.activity
-					);
-				}, 0);
-				return {
-					...prevState,
-					userChoices: newUserChoices,
-					userCurrentData: newUserData,
-				};
-			}
 		});
 	};
-
-	const handleSaveChanges = () => {
-		if (editedUserData) {
-			setUserAllData(editedUserData);
-			localStorage.setItem("userName", JSON.stringify(editedUserData.userCurrentData.userName));
-			localStorage.setItem("userCurrentChoices", JSON.stringify(editedUserData.userChoices));
-			localStorage.setItem("userCurrentCalories", userTotalCalories);
-		}
-	};
+	const handleSaveChanges = () => {};
 
 	useEffect(() => {
 		const userCurrentChoicesString = localStorage.getItem("userCurrentChoices");
@@ -201,6 +176,7 @@ export default function Settings() {
 			}
 		}
 	}, []);
+	// USUNĄĆ WSZYSTKO, ZROBIĆ NOWY STAN DO PRZECHOWYWANIA MOICH DANYCH I ZROBIĆ ABY MOŻNA BYŁO AKTUALIZOWAĆ CAŁY KOD CAŁY CZAS!!!
 
 	useEffect(() => {
 		const getUserEmail = async () => {
@@ -225,28 +201,9 @@ export default function Settings() {
 	}, []);
 
 	useEffect(() => {
-		const getUserDataAndMacrosFromBackend = async () => {
-			if (!userCurrentEmail) return;
-
-			try {
-				const response = await fetch("http://localhost:5174/pass-user-data", {
-					method: "POST",
-					headers: {
-						"Content-type": "application/json",
-					},
-					body: JSON.stringify({ userEmail: userCurrentEmail }),
-				});
-				if (!response.ok) {
-					throw Error("Login failed!!");
-				}
-				const data = await response.json();
-				console.log(data);
-			} catch (error) {
-				console.error("Error fetching user data:", error.message);
-			}
-		};
 		getUserDataAndMacrosFromBackend();
 	}, [userCurrentEmail]);
+
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
@@ -261,144 +218,136 @@ export default function Settings() {
 						</div>
 						<div className='settings__over-container'>
 							<div className='settings__user-settings-container'>
-								{editedUserData && (
-									<>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>NAME:</div>
-											<input
-												type='text'
-												className='settings__user-settings-data'
-												value={editedUserData.userCurrentData.userName}
-												onChange={e => handleInputChange("userName", e.target.value)}
-											/>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>NAME:</div>
+									<input
+										type='text'
+										className='settings__user-settings-data'
+										value={userAllData.userName}
+										onChange={e => handleInputChange("userName", e.target.value)}
+									/>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>EMAIL:</div>
+									<div className='settings__user-settings-data'>{userAllData.userEmail}</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>PASSWORD:</div>
+									<div className='settings__user-settings-data'>
+										<button
+											className={`toggle-password-btn ${isPasswordVisible ? "active" : ""}`}
+											onClick={handleToggleActiveBtn}>
+											SHOW
+										</button>
+										{/* {isPasswordVisible ? userAllData.userPassword : userAllData.userPassword.replace(/./g, "*")} */}
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>BIRTHDAY DATE:</div>
+									<div
+										className='settings__user-settings-data'
+										onChange={e => handleInputChange("age", e.target.value)}>
+										{userAllData.userAge}
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>GENDER:</div>
+									<div
+										className='settings__user-settings-data'
+										onChange={e => handleInputChange("gender", e.target.value)}>
+										{userAllData.userGender}
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>HEIGHT:</div>
+									<div className='choices'>
+										<span>{`${userAllData.userHeight}cm`}</span>
+										<input
+											type='range'
+											min={140}
+											max={250}
+											className='settings__user-settings-data'
+											value={userAllData.userHeight}
+											onChange={e => handleInputChange("height", e.target.value)}
+										/>
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>WEIGHT:</div>
+									<div className='choices'>
+										<span>{`${userAllData.userWeight}kg`}</span>
+										<input
+											type='range'
+											min={40}
+											max={150}
+											className='settings__user-settings-data'
+											value={userAllData.userWeight}
+											onChange={e => handleInputChange("weight", e.target.value)}
+										/>
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>GOAL:</div>
+									<select
+										className='settings__user-settings-data'
+										value={userAllData.userGoal}
+										onChange={e => handleInputChange("goal", e.target.value)}>
+										<option value=''></option>
+										{userOptions.goalOptions.map((option, index) => (
+											<option key={index} value={option}>
+												{option}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>ACTIVITY:</div>
+									<select
+										className='settings__user-settings-data'
+										value={userAllData.userActivity}
+										onChange={e => handleInputChange("activity", e.target.value)}>
+										<option value=''></option>
+										{userOptions.activityOptions.map((option, index) => (
+											<option key={index} value={option}>
+												{option}
+											</option>
+										))}
+									</select>
+								</div>
+								<div className='settings__user-settings-item calories'>
+									<div className='settings__user-settings-name'>CALORIES:</div>
+									<div className='settings__user-settings-data' onChange={e => setUserTotalCalories(e.target.value)}>
+										{`${userAllData.userCalories}cal`}
+									</div>
+								</div>
+								<div className='settings__user-settings-item'>
+									<div className='settings__user-settings-name'>MACROS:</div>
+									<div className='settings__input-macro-container'>
+										<div
+											className='settings__user-settings-data'
+											onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+											<span>P:</span>
+											{`${userAllData.userProteins}g`}
 										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>EMAIL:</div>
-											<div className='settings__user-settings-data'>{editedUserData.userCurrentData.userEmail}</div>
+										<div
+											className='settings__user-settings-data'
+											onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+											<span>C:</span>
+											{`${userAllData.userCarbs}g`}
 										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>PASSWORD:</div>
-											<div className='settings__user-settings-data'>
-												<button
-													className={`toggle-password-btn ${isPasswordVisible ? "active" : ""}`}
-													onClick={handleToggleActiveBtn}>
-													SHOW
-												</button>
-												{isPasswordVisible
-													? editedUserData.userCurrentData.userPassword
-													: editedUserData.userCurrentData.userPassword.replace(/./g, "*")}
-											</div>
+										<div
+											className='settings__user-settings-data'
+											onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+											<span>F:</span>
+											{`${userAllData.userFats}g`}
 										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>BIRTHDAY DATE:</div>
-											<div
-												className='settings__user-settings-data'
-												onChange={e => handleInputChange("age", e.target.value)}>
-												{editedUserData.userChoices.age}
-											</div>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>GENDER:</div>
-											<div
-												className='settings__user-settings-data'
-												onChange={e => handleInputChange("gender", e.target.value)}>
-												{editedUserData.userChoices.gender}
-											</div>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>HEIGHT:</div>
-											<div className='choices'>
-												<span>{`${editedUserData.userChoices.height}cm`}</span>
-												<input
-													type='range'
-													min={140}
-													max={250}
-													className='settings__user-settings-data'
-													value={editedUserData.userChoices.height}
-													onChange={e => handleInputChange("height", e.target.value)}
-												/>
-											</div>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>WEIGHT:</div>
-											<div className='choices'>
-												<span>{`${editedUserData.userChoices.weight}kg`}</span>
-												<input
-													type='range'
-													min={40}
-													max={150}
-													className='settings__user-settings-data'
-													value={editedUserData.userChoices.weight}
-													onChange={e => handleInputChange("weight", e.target.value)}
-												/>
-											</div>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>GOAL:</div>
-											<select
-												className='settings__user-settings-data'
-												value={editedUserData.userChoices.goal}
-												onChange={e => handleInputChange("goal", e.target.value)}>
-												<option value=''></option>
-												{userOptions.goalOptions.map((option, index) => (
-													<option key={index} value={option}>
-														{option}
-													</option>
-												))}
-											</select>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>ACTIVITY:</div>
-											<select
-												className='settings__user-settings-data'
-												value={editedUserData.userChoices.activity}
-												onChange={e => handleInputChange("activity", e.target.value)}>
-												<option value=''></option>
-												{userOptions.activityOptions.map((option, index) => (
-													<option key={index} value={option}>
-														{option}
-													</option>
-												))}
-											</select>
-										</div>
-										<div className='settings__user-settings-item calories'>
-											<div className='settings__user-settings-name'>CALORIES:</div>
-											<div
-												className='settings__user-settings-data'
-												onChange={e => setUserTotalCalories(e.target.value)}>
-												{`${userTotalCalories}cal`}
-											</div>
-										</div>
-										<div className='settings__user-settings-item'>
-											<div className='settings__user-settings-name'>MACROS:</div>
-											<div className='settings__input-macro-container'>
-												<div
-													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
-													<span>P:</span>
-													{`${userProteins}g`}
-												</div>
-												<div
-													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
-													<span>C:</span>
-													{`${userCarbs}g`}
-												</div>
-												<div
-													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
-													<span>F:</span>
-													{`${userFats}g`}
-												</div>
-											</div>
-										</div>
-										<div className='settings__edited-data-btn-container'>
-											<button className='settings__edited-data-btn' onClick={handleSaveChanges}>
-												SAVE CHANGES
-											</button>
-										</div>
-									</>
-								)}
+									</div>
+								</div>
+								<div className='settings__edited-data-btn-container'>
+									<button className='settings__edited-data-btn' onClick={handleSaveChanges}>
+										SAVE CHANGES
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>

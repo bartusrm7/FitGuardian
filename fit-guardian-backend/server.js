@@ -165,6 +165,7 @@ app.post("/pass-user-data", (req, res) => {
 	}
 	const userChoicesQuery = `SELECT * FROM userChoices WHERE userEmail = ?`;
 	const userMacrosQuery = `SELECT * FROM userMacros WHERE userEmail = ?`;
+	const userDataQuery = `SELECT * FROM users WHERE userEmail = ?`;
 
 	db.get(userChoicesQuery, [userEmail], (err, userChoices) => {
 		if (err) {
@@ -174,23 +175,31 @@ app.post("/pass-user-data", (req, res) => {
 			if (err) {
 				return res.status(500).json({ message: err.message });
 			}
-			if (userChoices && userMacros) {
-				res.json({
-					userEmail: userChoices.userEmail,
-					userAge: userChoices.userAge,
-					userGender: userChoices.userGender,
-					userHeight: userChoices.userHeight,
-					userWeight: userChoices.userWeight,
-					userGoal: userChoices.userGoal,
-					userActivity: userChoices.userActivity,
-					userCalories: userMacros.userCalories,
-					userProteins: userMacros.userProteins,
-					userCarbs: userMacros.userCarbs,
-					userFats: userMacros.userFats,
-				});
-			} else {
-				res.status(404).json({ message: "User not found!" });
-			}
+			db.get(userDataQuery, [userEmail], (err, userData) => {
+				if (err) {
+					return res.status(500).json({ message: err.message });
+				}
+
+				if (userChoices && userMacros) {
+					res.json({
+						userName: userData.userName,
+						userEmail: userData.userEmail,
+						userPassword: userData.userPassword,
+						userAge: userChoices.userAge,
+						userGender: userChoices.userGender,
+						userHeight: userChoices.userHeight,
+						userWeight: userChoices.userWeight,
+						userGoal: userChoices.userGoal,
+						userActivity: userChoices.userActivity,
+						userCalories: userMacros.userCalories,
+						userProteins: userMacros.userProteins,
+						userCarbs: userMacros.userCarbs,
+						userFats: userMacros.userFats,
+					});
+				} else {
+					res.status(404).json({ message: "User not found!" });
+				}
+			});
 		});
 	});
 });
