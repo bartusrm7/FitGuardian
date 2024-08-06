@@ -31,9 +31,8 @@ const verifyToken = (req, res, next) => {
 		req.user = user;
 		next();
 	});
-};-
-
-app.post("/user-data", verifyToken, (req, res) => {
+};
+-app.post("/user-data", verifyToken, (req, res) => {
 	const userEmail = req.user.userEmail;
 
 	db.get(`SELECT userName, userEmail FROM users WHERE userEmail = ?`, [userEmail], (err, row) => {
@@ -126,6 +125,8 @@ app.post("/save-user-data", (req, res) => {
 	if (!userEmail || userCalories == null || userProteins == null || userCarbs == null || userFats == null) {
 		return res.status(400).json({ message: "All fields are required!" });
 	}
+
+	console.log(req.body);
 
 	const userChoicesQuery = `
         INSERT OR REPLACE INTO userChoices (

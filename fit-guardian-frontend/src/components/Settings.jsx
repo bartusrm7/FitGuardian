@@ -58,6 +58,14 @@ export default function Settings() {
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
+
+		setEditedUserData(prevState => ({
+			...prevState,
+			userCalories: totalCalories,
+			userProteins: totalMacros.proteins,
+			userCarbs: totalMacros.carbs,
+			userFats: totalMacros.fats,
+		}));
 	};
 	const setNewMacronutrientsFromTotalCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
@@ -101,20 +109,51 @@ export default function Settings() {
 				...prevState,
 				[name]: value,
 			};
-			setNewMacronutrientsFromTotalCalories(
-				updatedUserData.userAge,
-				updatedUserData.userHeight,
-				updatedUserData.userWeight,
-				updatedUserData.userGender,
-				updatedUserData.userGoal,
-				updatedUserData.userActivity
-			);
+			setTimeout(() => {
+				setNewMacronutrientsFromTotalCalories(
+					updatedUserData.userAge,
+					updatedUserData.userHeight,
+					updatedUserData.userWeight,
+					updatedUserData.userGender,
+					updatedUserData.userGoal,
+					updatedUserData.userActivity
+				);
+			}, 0);
 			return updatedUserData;
 		});
 	};
 
-	const handleSaveChanges = () => {
-		setUserAllData(editedUserData);
+	const handleSaveChanges = async () => {
+		if (!userCurrentEmail) return;
+		try {
+			const response = await fetch("http://localhost:5174/save-user-data", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+					userEmail: editedUserData.userEmail,
+					userAge: editedUserData.userAge,
+					userGender: editedUserData.userGender,
+					userHeight: editedUserData.userHeight,
+					userWeight: editedUserData.userWeight,
+					userGoal: editedUserData.userGoal,
+					userActivity: editedUserData.userActivity,
+					userCalories: editedUserData.userCalories,
+					userProteins: editedUserData.userProteins,
+					userCarbs: editedUserData.userCarbs,
+					userFats: editedUserData.userFats,
+				}),
+			});
+			if (!response.ok) {
+				throw Error("Save data is not working!");
+			}
+			setUserAllData(data);
+			setEditedUserData(data);
+			console.log(data);
+		} catch (error) {
+			console.error("Error fetching user data:", error.message);
+		}
 	};
 
 	useEffect(() => {
@@ -134,6 +173,14 @@ export default function Settings() {
 				const data = await response.json();
 				setEditedUserData(data);
 				setUserAllData(data);
+				setNewMacronutrientsFromTotalCalories(
+					data.userAge,
+					data.userHeight,
+					data.userWeight,
+					data.userGender,
+					data.userGoal,
+					data.userActivity
+				);
 			} catch (error) {
 				console.error("Error fetching user data:", error.message);
 			}
@@ -289,7 +336,7 @@ export default function Settings() {
 											<div className='settings__user-settings-name'>CALORIES:</div>
 											<div
 												className='settings__user-settings-data'
-												onChange={e => setUserTotalCalories(e.target.value)}>
+												onChange={e => setUserTotalCalories("userCalories", e.target.value)}>
 												{`${editedUserData.userCalories}cal`}
 											</div>
 										</div>
@@ -298,19 +345,19 @@ export default function Settings() {
 											<div className='settings__input-macro-container'>
 												<div
 													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													onChange={e => setMacronutrientsFromTotalCalories("userProteins", e.target.value)}>
 													<span>P:</span>
 													{`${editedUserData.userProteins}g`}
 												</div>
 												<div
 													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													onChange={e => setMacronutrientsFromTotalCalories("userCarbs", e.target.value)}>
 													<span>C:</span>
 													{`${editedUserData.userCarbs}g`}
 												</div>
 												<div
 													className='settings__user-settings-data'
-													onChange={e => setMacronutrientsFromTotalCalories(e.target.value)}>
+													onChange={e => setMacronutrientsFromTotalCalories("userFats", e.target.value)}>
 													<span>F:</span>
 													{`${editedUserData.userFats}g`}
 												</div>
