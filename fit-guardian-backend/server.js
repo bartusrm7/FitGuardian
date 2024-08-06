@@ -31,7 +31,7 @@ const verifyToken = (req, res, next) => {
 		req.user = user;
 		next();
 	});
-};
+};-
 
 app.post("/user-data", verifyToken, (req, res) => {
 	const userEmail = req.user.userEmail;
