@@ -121,7 +121,6 @@ app.post("/save-user-data", (req, res) => {
 		userCarbs,
 		userFats,
 	} = req.body;
-	console.log(req.body);
 
 	if (!userEmail || userCalories == null || userProteins == null || userCarbs == null || userFats == null) {
 		return res.status(400).json({ message: "All fields are required!" });

@@ -100,7 +100,6 @@ export default function Menu() {
 				throw Error("Wrong data!");
 			}
 			const data = await response.json();
-			console.log(data);
 			const caloriesWeight = parseFloat(inputFoodGrams);
 			const newFood = {
 				userEmail: userCurrentEmail,
@@ -112,7 +111,6 @@ export default function Menu() {
 				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
 				foodDate: currentDate,
 			};
-			console.log(newFood);
 			const responseBackend = await fetch("http://localhost:5174/add-meal", {
 				method: "POST",
 				headers: {
@@ -123,8 +121,6 @@ export default function Menu() {
 			if (!responseBackend.ok) {
 				throw Error("Failed to add meal to backend!");
 			}
-			const result = await responseBackend.json();
-
 			const updatedMeals = { ...userMeal };
 			if (!updatedMeals[userCurrentEmail]) {
 				updatedMeals[userCurrentEmail] = [];

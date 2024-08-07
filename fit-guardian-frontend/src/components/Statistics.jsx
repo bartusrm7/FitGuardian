@@ -18,6 +18,26 @@ export default function Statistics() {
 		carbs: 0,
 		fats: 0,
 	});
+
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
 	const filteredDaysInPeriodTimes = period => {
 		const newDate = new Date();
 		if (period === "week") {
@@ -28,6 +48,27 @@ export default function Statistics() {
 			return newDate.getFullYear() % 4 === 0 ? 366 : 365;
 		}
 	};
+
+	const getMealsFromBackend = async () => {
+		try {
+			const response = await fetch("http://localhost:5174/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
+
 	const filteredMealsLastPeriodTimes = period => {
 		const newDate = new Date();
 		const lastWeek = new Date(newDate);
@@ -43,7 +84,6 @@ export default function Statistics() {
 			totalCarbs: 0,
 			totalFats: 0,
 		};
-
 		const getUserMeals = localStorage.getItem("userMeals");
 		const getUpdatedUserMeals = getUserMeals ? JSON.parse(getUserMeals) : [];
 
@@ -95,30 +135,6 @@ export default function Statistics() {
 	};
 
 	useEffect(() => {
-		const updatedUserMealsString = localStorage.getItem("userMeals");
-		if (updatedUserMealsString) {
-			const userMeals = JSON.parse(updatedUserMealsString);
-			setUserMeal(userMeals);
-		}
-		const updatedUserAllMacrosString = localStorage.getItem("allMacros");
-		if (updatedUserAllMacrosString) {
-			const userAllMacros = JSON.parse(updatedUserAllMacrosString);
-			setAllMacros(userAllMacros);
-		}
-		const updatedAllMacrosStats = localStorage.getItem("macrosStats");
-		if (updatedAllMacrosStats) {
-			const allMacrosStats = JSON.parse(updatedAllMacrosStats);
-			setAllMacrosCompleted(allMacrosStats);
-		}
-		const updatedAvgMacrosStats = localStorage.getItem("macrosAvgStats");
-		if (updatedAvgMacrosStats) {
-			const avgMacrosStats = JSON.parse(updatedAvgMacrosStats);
-			setAllMacrosAverageCompleted(avgMacrosStats);
-		}
-		const updatedPeriodChoice = localStorage.getItem("periodChoice");
-		if (updatedPeriodChoice) {
-			setPeriodChoice(updatedPeriodChoice);
-		}
 		filteredMealsLastPeriodTimes(periodChoice);
 	}, [periodChoice]);
 	useEffect(() => {
