@@ -7,13 +7,9 @@ export default function FirstLogOnboarding() {
 		userCurrentEmail,
 		setUserCurrentEmail,
 		setUserTotalCalories,
-		userProteins,
 		setUserProteins,
-		userCarbs,
 		setUserCarbs,
-		userFats,
 		setUserFats,
-		userTotalMacros,
 		setUserTotalMacros,
 		userAge,
 		setUserAge,
@@ -41,6 +37,7 @@ export default function FirstLogOnboarding() {
 		activity: userActivity,
 		activityOptions: ["Sedentary", "Light", "Moderate", "Active", "Very Active"],
 	});
+
 	const handleSetUserAge = birthDate => {
 		const today = new Date();
 		const birthDateObject = new Date(birthDate);
@@ -62,7 +59,7 @@ export default function FirstLogOnboarding() {
 			...prevState,
 			[name]: value,
 		}));
-		const contextSetters = {
+		const context = {
 			age: setUserAge,
 			gender: setUserGender,
 			height: setUserHeight,
@@ -70,62 +67,40 @@ export default function FirstLogOnboarding() {
 			goal: setUserGoal,
 			activity: setUserActivity,
 		};
-		if (contextSetters[name]) {
-			contextSetters[name](value);
+		if (context[name]) {
+			context[name](value);
 		}
 	};
 	const calculateCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
-		if (age >= 40 && age <= 50) {
-			basedAge = 0.9;
-		} else if (age >= 51 && age <= 60) {
-			basedAge = 0.8;
-		} else if (age >= 61) {
-			basedAge = 0.7;
-		}
+		if (age >= 40 && age <= 50) basedAge = 0.9;
+		else if (age >= 51 && age <= 60) basedAge = 0.8;
+		else if (age >= 61) basedAge = 0.7;
 
 		let basedHeight = 0;
-		if (height >= 170 && height <= 190) {
-			basedHeight = 100;
-		} else if (height >= 191 && height <= 220) {
-			basedHeight = 200;
-		} else if (height >= 211) {
-			basedHeight = 300;
-		}
+		if (height >= 170 && height <= 190) basedHeight = 100;
+		else if (height >= 191 && height <= 220) basedHeight = 200;
+		else if (height >= 211) basedHeight = 300;
 
 		let basedWeight = 0;
-		if (weight >= 75 && weight <= 90) {
-			basedWeight = 200;
-		} else if (weight >= 91 && weight <= 110) {
-			basedWeight = 300;
-		} else if (weight >= 111) {
-			basedWeight = 400;
-		}
+		if (weight >= 75 && weight <= 90) basedWeight = 200;
+		else if (weight >= 91 && weight <= 110) basedWeight = 300;
+		else if (weight >= 111) basedWeight = 400;
 
 		let baseCalories = 0;
-		if (gender === "Male") {
-			baseCalories = 2200;
-		} else if (gender === "Female") {
-			baseCalories = 1800;
-		}
+		if (gender === "Male") baseCalories = 2200;
+		else if (gender === "Female") baseCalories = 1800;
 
 		let baseGoalAmount = 0;
-		if (goal === "Lose weight") {
-			baseGoalAmount = -300;
-		} else if (goal === "Gain weight") {
-			baseGoalAmount = 300;
-		}
+		if (goal === "Lose weight") baseGoalAmount = -300;
+		else if (goal === "Gain weight") baseGoalAmount = 300;
 
 		let baseActivityAmount = 1;
-		if (activity === "Light") {
-			baseActivityAmount = 1.25;
-		} else if (activity === "Moderate") {
-			baseActivityAmount = 1.35;
-		} else if (activity === "Active") {
-			baseActivityAmount = 1.5;
-		} else if (activity === "Very Active") {
-			baseActivityAmount = 1.65;
-		}
+		if (activity === "Light") baseActivityAmount = 1.25;
+		else if (activity === "Moderate") baseActivityAmount = 1.35;
+		else if (activity === "Active") baseActivityAmount = 1.5;
+		else if (activity === "Very Active") baseActivityAmount = 1.65;
+
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
 	const getUserEmail = async () => {
@@ -142,7 +117,6 @@ export default function FirstLogOnboarding() {
 			}
 			const data = await response.json();
 			localStorage.setItem("userEmail", data.userEmail);
-
 			setUserCurrentEmail(data.userEmail);
 		} catch (error) {
 			console.error("Error fetching user email:", error.message);
@@ -166,13 +140,11 @@ export default function FirstLogOnboarding() {
 		setUserProteins(proteins.toFixed(0));
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
-
 		return totalMacros;
 	};
 	const saveUserChoices = async () => {
 		const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 		const userMacros = setMacronutrientsFromTotalCalories(userCalories);
-
 		try {
 			const response = await fetch("http://localhost:5174/save-user-data", {
 				method: "POST",
@@ -196,15 +168,12 @@ export default function FirstLogOnboarding() {
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
-			const data = await response.json();
-
 			setUserTotalCalories(userCalories);
 			navigate("/menu");
 		} catch (error) {
 			console.error("Error saving user data:", error.message);
 		}
 	};
-
 	useEffect(() => {
 		getUserEmail();
 		setOpacityClass("display-opacity");

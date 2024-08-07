@@ -3,7 +3,7 @@ import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 
 export default function Reg() {
-	const { authToken, setAuthToken, userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } =
+	const { setAuthToken, userName, setUserName, userEmail, setUserEmail, userPassword, setUserPassword } =
 		useLogRegContext();
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [errorMessage, setErrorMessage] = useState("");
