@@ -70,11 +70,8 @@ export default function Statistics() {
 		const parsedMeals = getUserUpdatedMeals[userCurrentEmail];
 
 		parsedMeals.forEach(meals => {
-			console.log(meals);
 			meals.food.forEach(meal => {
-				console.log(meal);
-				const mealDate = new Date(meal.date);
-				console.log(mealDate);
+				const mealDate = new Date(meal.foodDate);
 				if (period === "week" && mealDate >= lastWeek) {
 					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
 					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
