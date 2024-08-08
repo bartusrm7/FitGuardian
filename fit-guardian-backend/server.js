@@ -131,6 +131,7 @@ app.post("/save-user-data", (req, res) => {
 	const userDataQuery = `INSERT OR REPLACE INTO users (userEmail, userName, userPassword) VALUES (?, ?, ?)`;
 	const userChoicesQuery = `INSERT OR REPLACE INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 	const userMacrosQuery = `INSERT OR REPLACE INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
+	
 	db.run(userDataQuery, [userEmail, userName, userPassword], function (err) {
 		if (err) {
 			console.error("Error saving user macros:", err.message);

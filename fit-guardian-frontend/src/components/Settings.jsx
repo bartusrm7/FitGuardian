@@ -5,7 +5,6 @@ import { useUserContext } from "./UserContext";
 export default function Settings() {
 	const {
 		userAllData,
-		setUserAllData,
 		userCurrentEmail,
 		setUserCurrentEmail,
 		userTotalCalories,
@@ -153,7 +152,6 @@ export default function Settings() {
 			}
 			const data = await response.json();
 			setEditedUserData(data);
-			console.log(data);
 			localStorage.setItem("userName", data.userName);
 		} catch (error) {
 			console.error("Error fetching user data:", error.message);
@@ -175,19 +173,12 @@ export default function Settings() {
 				}
 				const data = await response.json();
 				setEditedUserData(data);
-				console.log(data);
 			} catch (error) {
 				console.error("Error fetching user data:", error.message);
 			}
 		};
 		getUserDataAndMacrosFromBackend();
 	}, [userCurrentEmail]);
-
-	useEffect(() => {
-		if (userAllData) {
-			setEditedUserData(userAllData);
-		}
-	}, [userAllData]);
 
 	useEffect(() => {
 		const getUserEmail = async () => {

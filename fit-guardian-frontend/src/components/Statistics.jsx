@@ -66,30 +66,33 @@ export default function Statistics() {
 			totalFats: 0,
 		};
 		const getUserMeals = localStorage.getItem("userMeals");
-		const getUpdatedUserMeals = getUserMeals ? JSON.parse(getUserMeals) : [];
-		console.log(getUpdatedUserMeals);
+		const getUserUpdatedMeals = getUserMeals ? JSON.parse(getUserMeals) : {};
+		const parsedMeals = getUserUpdatedMeals[userCurrentEmail];
 
-		// getUpdatedUserMeals.forEach(meals => {
-		// 	Object.values(meals).forEach(meal => {
-		// 		const mealDate = new Date(meal.date);
-		// 		if (period === "week" && mealDate >= lastWeek) {
-		// 			newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-		// 			newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-		// 			newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-		// 			newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
-		// 		} else if (period === "month" && mealDate >= lastMonth) {
-		// 			newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-		// 			newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-		// 			newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-		// 			newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
-		// 		} else if (period === "year" && mealDate >= lastYear) {
-		// 			newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-		// 			newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-		// 			newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-		// 			newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
-		// 		}
-		// 	});
-		// });
+		parsedMeals.forEach(meals => {
+			console.log(meals);
+			meals.food.forEach(meal => {
+				console.log(meal);
+				const mealDate = new Date(meal.date);
+				console.log(mealDate);
+				if (period === "week" && mealDate >= lastWeek) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				} else if (period === "month" && mealDate >= lastMonth) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				} else if (period === "year" && mealDate >= lastYear) {
+					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+				}
+			});
+		});
 		const dayInPeriod = filteredDaysInPeriodTimes(period);
 
 		const allSaveMacrosCompleted = {
