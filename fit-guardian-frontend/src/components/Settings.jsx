@@ -8,6 +8,7 @@ export default function Settings() {
 		setUserAllData,
 		userCurrentEmail,
 		setUserCurrentEmail,
+		userTotalCalories,
 		setUserTotalCalories,
 		setUserTotalMacros,
 		setUserProteins,
@@ -133,6 +134,8 @@ export default function Settings() {
 				},
 				body: JSON.stringify({
 					userEmail: editedUserData.userEmail,
+					userName: editedUserData.userName,
+					userPassword: editedUserData.userPassword,
 					userAge: editedUserData.userAge,
 					userGender: editedUserData.userGender,
 					userHeight: editedUserData.userHeight,
@@ -150,60 +153,12 @@ export default function Settings() {
 			}
 			const data = await response.json();
 			setEditedUserData(data);
-			console.log(editedUserData);
 			console.log(data);
+			localStorage.setItem("userName", data.userName);
 		} catch (error) {
 			console.error("Error fetching user data:", error.message);
 		}
 	};
-	// JAK DODAJE TAK, TO WTEDY POBIERAJĄ SIĘ TE SAME DANE, ALE JUŻ NIE DOSTAJE BŁĘDÓW
-	// const handleSaveChanges = async () => {
-	// 	if (!userCurrentEmail) return;
-	// 	try {
-	// 		const response = await fetch("http://localhost:5174/save-user-data", {
-	// 			method: "POST",
-	// 			headers: {
-	// 				"Content-type": "application/json",
-	// 			},
-	// 			body: JSON.stringify({
-	// 				userEmail: editedUserData.userEmail,
-	// 				userAge: editedUserData.userAge,
-	// 				userGender: editedUserData.userGender,
-	// 				userHeight: editedUserData.userHeight,
-	// 				userWeight: editedUserData.userWeight,
-	// 				userGoal: editedUserData.userGoal,
-	// 				userActivity: editedUserData.userActivity,
-	// 				userCalories: editedUserData.userCalories,
-	// 				userProteins: editedUserData.userProteins,
-	// 				userCarbs: editedUserData.userCarbs,
-	// 				userFats: editedUserData.userFats,
-	// 			}),
-	// 		});
-	// 		if (!response.ok) {
-	// 			throw Error("Save data is not working!");
-	// 		}
-	// 		const data = await response.json();
-	// 		setEditedUserData(data);
-	// 		console.log(data);
-
-	// 		// Fetch updated data from backend after saving
-	// 		const fetchUpdatedDataResponse = await fetch("http://localhost:5174/pass-user-data", {
-	// 			method: "POST",
-	// 			headers: {
-	// 				"Content-type": "application/json",
-	// 			},
-	// 			body: JSON.stringify({ userEmail: userCurrentEmail }),
-	// 		});
-	// 		if (!fetchUpdatedDataResponse.ok) {
-	// 			throw Error("Failed to fetch updated user data!");
-	// 		}
-	// 		const updatedData = await fetchUpdatedDataResponse.json();
-	// 		setEditedUserData(updatedData);
-	// 		console.log(updatedData);
-	// 	} catch (error) {
-	// 		console.error("Error fetching user data:", error.message);
-	// 	}
-	// };
 	useEffect(() => {
 		const getUserDataAndMacrosFromBackend = async () => {
 			if (!userCurrentEmail) return;
@@ -220,7 +175,7 @@ export default function Settings() {
 				}
 				const data = await response.json();
 				setEditedUserData(data);
-				console.log(editedUserData);
+				console.log(data);
 			} catch (error) {
 				console.error("Error fetching user data:", error.message);
 			}
@@ -293,9 +248,9 @@ export default function Settings() {
 													onClick={handleToggleActiveBtn}>
 													SHOW
 												</button>
-												{/* {isPasswordVisible
+												{isPasswordVisible
 													? editedUserData.userPassword
-													: editedUserData.userPassword.replace(/./g, "*")} */}
+													: editedUserData.userPassword.replace(/./g, "*")}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>

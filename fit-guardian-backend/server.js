@@ -110,6 +110,8 @@ app.post("/login", (req, res) => {
 app.post("/save-user-data", (req, res) => {
 	const {
 		userEmail,
+		userName,
+		userPassword,
 		userAge,
 		userGender,
 		userHeight,
@@ -126,34 +128,47 @@ app.post("/save-user-data", (req, res) => {
 		return res.status(400).json({ message: "All fields are required!" });
 	}
 
-	const userChoicesQuery = `
-        INSERT OR REPLACE INTO userChoices (
-            userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-	db.run(
-		userChoicesQuery,
-		[userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity],
-		function (err) {
-			if (err) {
-				console.error("Error saving user choices:", err.message);
-				return res.status(500).json({ message: "Database error while saving user choices!", error: err.message });
-			}
-
-			const userMacrosQuery = `
-                INSERT OR REPLACE INTO userMacros (
-                    userEmail, userCalories, userProteins, userCarbs, userFats
-                ) VALUES (?, ?, ?, ?, ?)
-            `;
-			db.run(userMacrosQuery, [userEmail, userCalories, userProteins, userCarbs, userFats], function (err) {
-				if (err) {
-					console.error("Error saving user macros:", err.message);
-					return res.status(500).json({ message: "Database error while saving user macros!", error: err.message });
-				}
-				res.status(200).json({ message: "User data saved successfully!" });
-			});
+	const userDataQuery = `INSERT OR REPLACE INTO users (userEmail, userName, userPassword) VALUES (?, ?, ?)`;
+	const userChoicesQuery = `INSERT OR REPLACE INTO userChoices (userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+	const userMacrosQuery = `INSERT OR REPLACE INTO userMacros (userEmail, userCalories, userProteins, userCarbs, userFats) VALUES (?, ?, ?, ?, ?)`;
+	db.run(userDataQuery, [userEmail, userName, userPassword], function (err) {
+		if (err) {
+			console.error("Error saving user macros:", err.message);
+			return res.status(500).json({ message: "Database error while saving user macros!", error: err.message });
 		}
-	);
+		db.run(
+			userChoicesQuery,
+			[userEmail, userAge, userGender, userHeight, userWeight, userGoal, userActivity],
+			function (err) {
+				if (err) {
+					console.error("Error saving user choices:", err.message);
+					return res.status(500).json({ message: "Database error while saving user choices!", error: err.message });
+				}
+
+				db.run(userMacrosQuery, [userEmail, userCalories, userProteins, userCarbs, userFats], function (err) {
+					if (err) {
+						console.error("Error saving user macros:", err.message);
+						return res.status(500).json({ message: "Database error while saving user macros!", error: err.message });
+					}
+					res.status(200).json({
+						userEmail: userEmail,
+						userName: userName,
+						userPassword: userPassword,
+						userAge: userAge,
+						userGender: userGender,
+						userHeight: userHeight,
+						userWeight: userWeight,
+						userGoal: userGoal,
+						userActivity: userActivity,
+						userCalories: userCalories,
+						userProteins: userProteins,
+						userCarbs: userCarbs,
+						userFats: userFats,
+					});
+				});
+			}
+		);
+	});
 });
 
 app.post("/pass-user-data", (req, res) => {
