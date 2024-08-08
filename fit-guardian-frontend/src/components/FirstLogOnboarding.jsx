@@ -146,7 +146,7 @@ export default function FirstLogOnboarding() {
 		const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 		const userMacros = setMacronutrientsFromTotalCalories(userCalories);
 		try {
-			const response = await fetch("http://localhost:5174/save-user-data", {
+			const response = await fetch("http://localhost:5174/save-user-data-after-firstlog", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

@@ -5,8 +5,9 @@ import Dashboard from "./Dashboard";
 
 export default function Statistics() {
 	const { userCurrentEmail, setUserCurrentEmail } = useUserContext();
-	const { userMeal, setUserMeal, setAllMacros } = useFoodContext();
+	const { userMeal, setUserMeal } = useFoodContext();
 	const [periodChoice, setPeriodChoice] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [allMacrosCompleted, setAllMacrosCompleted] = useState({
 		calories: 0,
@@ -69,6 +70,11 @@ export default function Statistics() {
 		const getUserUpdatedMeals = getUserMeals ? JSON.parse(getUserMeals) : {};
 		const parsedMeals = getUserUpdatedMeals[userCurrentEmail];
 
+		if (!parsedMeals || parsedMeals.length === 0) {
+			setErrorMessage("No meals found for this user!");
+			return newAllMacrosCompleted;
+		}
+
 		parsedMeals.forEach(meals => {
 			meals.food.forEach(meal => {
 				const mealDate = new Date(meal.foodDate);
@@ -125,7 +131,6 @@ export default function Statistics() {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
 				const data = await response.json();
-
 				setUserMeal(data.meals);
 			} catch (error) {
 				console.error("Error fetching user email:", error.message);
@@ -155,6 +160,7 @@ export default function Statistics() {
 						<div className='statistics__container-name'>
 							<h3 className='statistics__label'>Statistics</h3>
 						</div>
+						<div className={`statistics__error-mess${errorMessage ? "show" : ""}`}>{errorMessage}</div>
 						<div className='statistics__calendar-container'>
 							<button
 								className={`statistics__date ${periodChoice === "week" ? "active" : ""}`}
