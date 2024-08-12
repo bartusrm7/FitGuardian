@@ -32,6 +32,7 @@ const verifyToken = (req, res, next) => {
 		next();
 	});
 };
+
 app.post("/user-data", verifyToken, (req, res) => {
 	const userEmail = req.user.userEmail;
 
@@ -273,11 +274,12 @@ app.post("/pass-user-data", (req, res) => {
 });
 
 app.post("/add-meal", (req, res) => {
-	const { userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate } = req.body;
+	const { userEmail, foodID, mealID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate } = req.body;
 
 	if (
 		!userEmail ||
 		!foodID ||
+		!mealID ||
 		!foodName ||
 		foodCalories == null ||
 		foodProteins == null ||
@@ -287,10 +289,10 @@ app.post("/add-meal", (req, res) => {
 	) {
 		return res.status(400).json({ message: "All fields are required." });
 	}
-	const query = `INSERT INTO userMeals (userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+	const query = `INSERT INTO userMeals (userEmail, foodID, mealID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 	db.run(
 		query,
-		[userEmail, foodID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate],
+		[userEmail, foodID, mealID, foodName, foodCalories, foodProteins, foodCarbs, foodFats, foodDate],
 		function (err) {
 			if (err) {
 				return res.status(500).json({ message: "Database error!", error: err.message });
@@ -301,23 +303,27 @@ app.post("/add-meal", (req, res) => {
 });
 
 app.post("/remove-meal", (req, res) => {
-	const { userEmail, foodID } = req.body;
+	const { userEmail, foodID, mealID } = req.body;
 
-	if (!userEmail || foodID === undefined) {
+	if (!userEmail || foodID === undefined || mealID === undefined) {
 		return res.status(400).json({ error: "Missing parameters" });
 	}
 
-	db.run(`DELETE FROM userMeals WHERE userEmail = ? AND foodID = ?`, [userEmail, foodID], function (err) {
-		if (err) {
-			return res.status(500).json({ error: err.message });
-		}
+	db.run(
+		`DELETE FROM userMeals WHERE userEmail = ? AND foodID = ? AND mealID = ?`,
+		[userEmail, foodID, mealID],
+		function (err) {
+			if (err) {
+				return res.status(500).json({ error: err.message });
+			}
 
-		if (this.changes === 0) {
-			return res.status(404).json({ error: "Food item not found" });
-		}
+			if (this.changes === 0) {
+				return res.status(404).json({ error: "Food item not found" });
+			}
 
-		res.status(200).json({ message: "Food item removed successfully" });
-	});
+			res.status(200).json({ message: "Food item removed successfully" });
+		}
+	);
 });
 
 app.post("/food-info", (req, res) => {

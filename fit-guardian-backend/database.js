@@ -33,7 +33,8 @@ db.serialize(() => {
 	db.run(`CREATE TABLE IF NOT EXISTS userMeals (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	userEmail TEXT NOT NULL,
-	foodID INTEGER NOT NULL,
+	mealID INTEGER NOT NULL,
+	foodID TEXT NOT NULL,
 	foodName TEXT NOT NULL,
 	foodCalories INTEGER NOT NULL,
 	foodProteins INTEGER NOT NULL,
