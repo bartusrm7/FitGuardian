@@ -64,7 +64,6 @@ export default function Macronutrients() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
-
 	const handleAddMacrosToContainers = async () => {
 		try {
 			const response = await fetch("http://localhost:5174/user-macros", {
@@ -84,7 +83,6 @@ export default function Macronutrients() {
 				throw new Error(`HTTP error! Error:${response.status}`);
 			}
 			const data = await response.json();
-
 			setUserTotalCalories(data.macros.userCalories);
 			setUserTotalMacros({
 				proteins: data.macros.userProteins,
@@ -121,8 +119,6 @@ export default function Macronutrients() {
 		});
 		setAllMacros(newAllMacros);
 	};
-
-	// ZROBIĆ WYWOŁANIE getMealsFromBackend; DODAĆ WSZYSTKIE POSIŁKI DO filteredMeals, A NASTĘPNIE DO handleAddMacrosToContainers
 
 	useEffect(() => {
 		getUserEmail();
