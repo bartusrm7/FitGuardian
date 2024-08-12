@@ -149,7 +149,7 @@ export default function Settings() {
 				throw Error("Save data is not working!");
 			}
 			const data = await response.json();
-			console.log(data);
+
 			setEditedUserData(data);
 			localStorage.setItem("userName", data.userName);
 		} catch (error) {
