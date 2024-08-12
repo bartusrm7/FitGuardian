@@ -4,10 +4,8 @@ import { useUserContext } from "./UserContext";
 
 export default function Settings() {
 	const {
-		userAllData,
 		userCurrentEmail,
 		setUserCurrentEmail,
-		userTotalCalories,
 		setUserTotalCalories,
 		setUserTotalMacros,
 		setUserProteins,

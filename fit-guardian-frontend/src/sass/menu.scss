@@ -227,7 +227,18 @@ body {
 		visibility: hidden;
 	}
 }
-
+.menu__error-mess {
+	position: relative;
+	opacity: 0;
+}
+.menu__error-messshow {
+	position: absolute;
+	top: -150%;
+	right: 50%;
+	transform: translateX(50%);
+	opacity: 1;
+	color: red;
+}
 @media (max-width: 368px) {
 	.menu {
 		&__input-container {
