@@ -12,11 +12,11 @@ export default function Settings() {
 		setUserCarbs,
 		setUserFats,
 	} = useUserContext();
-	const [userOptions, setUserOptions] = useState({
+	const userOptions = {
 		genderOptions: ["Male", "Female"],
 		goalOptions: ["Lose weight", "Maintain weight", "Gain weight"],
 		activityOptions: ["Sedentary", "Light", "Moderate", "Active", "Very Active"],
-	});
+	};
 	const [editedUserData, setEditedUserData] = useState({
 		userName: "",
 		userEmail: "",
@@ -149,6 +149,7 @@ export default function Settings() {
 				throw Error("Save data is not working!");
 			}
 			const data = await response.json();
+			console.log(data);
 
 			setEditedUserData(data);
 			localStorage.setItem("userName", data.userName);
@@ -156,6 +157,7 @@ export default function Settings() {
 			console.error("Error fetching user data:", error.message);
 		}
 	};
+	// ZROBIĆ README KTÓRE JUŻ MOMY ZAPISANE W CHACIE GPT!!!
 	useEffect(() => {
 		const getUserDataAndMacrosFromBackend = async () => {
 			if (!userCurrentEmail) return;
