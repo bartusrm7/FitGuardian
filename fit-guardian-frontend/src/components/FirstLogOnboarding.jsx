@@ -49,6 +49,7 @@ export default function FirstLogOnboarding() {
 		}
 		return age;
 	};
+	
 	const handleUserChoices = (name, value) => {
 		let updatedValue = value;
 		if (name === "age") {
@@ -71,6 +72,7 @@ export default function FirstLogOnboarding() {
 			context[name](value);
 		}
 	};
+
 	const calculateCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
 		if (age >= 40 && age <= 50) basedAge = 0.9;
@@ -103,6 +105,7 @@ export default function FirstLogOnboarding() {
 
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
+
 	const getUserEmail = async () => {
 		try {
 			const response = await fetch("http://localhost:5174/user-data", {
@@ -122,6 +125,7 @@ export default function FirstLogOnboarding() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
+
 	const setMacronutrientsFromTotalCalories = calories => {
 		const proteinPercentage = 0.2;
 		const carbPercentage = 0.5;
