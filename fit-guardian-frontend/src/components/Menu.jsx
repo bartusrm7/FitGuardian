@@ -59,7 +59,7 @@ export default function Menu() {
 				.filter(meal => meal.food.length > 0);
 		}
 		try {
-			const response = await fetch("http://localhost:5174/remove-meal", {
+			const response = await fetch("http://localhost:5175/remove-meal", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -78,7 +78,7 @@ export default function Menu() {
 
 	const getUserEmail = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/user-data", {
+			const response = await fetch("http://localhost:5175/user-data", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -121,7 +121,7 @@ export default function Menu() {
 				foodDate: currentDate,
 			};
 
-			const responseBackend = await fetch("http://localhost:5174/add-meal", {
+			const responseBackend = await fetch("http://localhost:5175/add-meal", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

@@ -5,7 +5,7 @@ const db = require("./database");
 const jwt = require("jsonwebtoken");
 
 const app = express();
-const port = 5174;
+const port = 5175;
 
 app.use(express.json());
 app.use(cors());
@@ -177,6 +177,8 @@ app.post("/save-user-data", (req, res) => {
 		userCarbs,
 		userFats,
 	} = req.body;
+
+	console.log(req.body);
 
 	if (!userEmail || userCalories == null || userProteins == null || userCarbs == null || userFats == null) {
 		return res.status(400).json({ message: "All fields are required!" });

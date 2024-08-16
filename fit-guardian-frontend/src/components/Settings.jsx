@@ -100,13 +100,13 @@ export default function Settings() {
 		setUserTotalCalories(totalUserChoices);
 		setMacronutrientsFromTotalCalories(totalUserChoices);
 	};
-
 	const handleInputChange = (name, value) => {
 		setEditedUserData(prevState => {
 			const updatedUserData = {
 				...prevState,
 				[name]: value,
 			};
+			console.log(updatedUserData.userWeight);
 			setTimeout(() => {
 				setNewMacronutrientsFromTotalCalories(
 					updatedUserData.userAge,
@@ -120,11 +120,10 @@ export default function Settings() {
 			return updatedUserData;
 		});
 	};
-
 	const handleSaveChanges = async () => {
 		if (!userCurrentEmail) return;
 		try {
-			const response = await fetch("http://localhost:5174/save-user-data", {
+			const response = await fetch("http://localhost:5175/save-user-data", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
@@ -149,20 +148,46 @@ export default function Settings() {
 				throw Error("Save data is not working!");
 			}
 			const data = await response.json();
-			console.log(data);
-
 			setEditedUserData(data);
 			localStorage.setItem("userName", data.userName);
+
+			const response1 = await fetch("http://localhost:5175/pass-user-data", {
+				method: "POST",
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify({
+					userEmail: editedUserData.userEmail,
+					userName: editedUserData.userName,
+					userPassword: editedUserData.userPassword,
+					userAge: editedUserData.userAge,
+					userGender: editedUserData.userGender,
+					userHeight: editedUserData.userHeight,
+					userWeight: editedUserData.userWeight,
+					userGoal: editedUserData.userGoal,
+					userActivity: editedUserData.userActivity,
+					userCalories: editedUserData.userCalories,
+					userProteins: editedUserData.userProteins,
+					userCarbs: editedUserData.userCarbs,
+					userFats: editedUserData.userFats,
+				}),
+			});
+			if (!response1.ok) {
+				throw Error("Login failed!");
+			}
+			const data1 = await response1.json();
+			setEditedUserData(data1);
 		} catch (error) {
 			console.error("Error fetching user data:", error.message);
 		}
 	};
-	// ZROBIĆ README KTÓRE JUŻ MOMY ZAPISANE W CHACIE GPT!!!
+	//ZAPISUJE SIĘ ALE NIE TO CO JEST W FUNKCJACH setNewMacronutrientsFromTotalCalories I setMacronutrientsFromTotalCalories, COŚ SIĘ SPIERDOLIŁO I TE DWIE FUNKCJE NIE AKTUALIZUJĄ DANYCH, A RESZTA JAK DAŁEM INPUT NA PASSWORD(KTÓRY NIE JEST JAKOŚ MODYFIKOWANY W KODZIE - TAK SAMO JAK USERNAME) TO ZAPISUJE SIĘ TO PÓŹNIEJ TO CO NIE JEST AKTUALIZOWANE ZAMIAST KODU
+	//MOŻLIWE, ŻE POMOŻE DODANIE updatedUserData DO TEGO CO JEST W setNewMacronutrientsFromTotalCalories
 	useEffect(() => {
 		const getUserDataAndMacrosFromBackend = async () => {
 			if (!userCurrentEmail) return;
 			try {
-				const response = await fetch("http://localhost:5174/pass-user-data", {
+				const response = await fetch("http://localhost:5175/pass-user-data", {
 					method: "POST",
 					headers: {
 						"Content-type": "application/json",
@@ -184,7 +209,7 @@ export default function Settings() {
 	useEffect(() => {
 		const getUserEmail = async () => {
 			try {
-				const response = await fetch("http://localhost:5174/user-data", {
+				const response = await fetch("http://localhost:5175/user-data", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

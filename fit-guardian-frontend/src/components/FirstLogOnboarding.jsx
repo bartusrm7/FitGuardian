@@ -108,7 +108,7 @@ export default function FirstLogOnboarding() {
 
 	const getUserEmail = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/user-data", {
+			const response = await fetch("http://localhost:5175/user-data", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -150,7 +150,7 @@ export default function FirstLogOnboarding() {
 		const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
 		const userMacros = setMacronutrientsFromTotalCalories(userCalories);
 		try {
-			const response = await fetch("http://localhost:5174/save-user-data-after-firstlog", {
+			const response = await fetch("http://localhost:5175/save-user-data-after-firstlog", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

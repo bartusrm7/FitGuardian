@@ -23,7 +23,7 @@ export default function Statistics() {
 	});
 	const getUserEmail = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/user-data", {
+			const response = await fetch("http://localhost:5175/user-data", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -120,7 +120,7 @@ export default function Statistics() {
 	useEffect(() => {
 		const getMealsFromBackend = async () => {
 			try {
-				const response = await fetch("http://localhost:5174/food-info", {
+				const response = await fetch("http://localhost:5175/food-info", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",

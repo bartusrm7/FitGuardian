@@ -31,7 +31,7 @@ export default function Reg() {
 			return;
 		}
 		try {
-			const response = await fetch("http://localhost:5174/register", {
+			const response = await fetch("http://localhost:5175/register", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

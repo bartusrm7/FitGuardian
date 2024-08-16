@@ -28,7 +28,7 @@ export default function Macronutrients() {
 
 	const getUserEmail = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/user-data", {
+			const response = await fetch("http://localhost:5175/user-data", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -48,7 +48,7 @@ export default function Macronutrients() {
 
 	const getMealsFromBackend = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/food-info", {
+			const response = await fetch("http://localhost:5175/food-info", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -66,7 +66,7 @@ export default function Macronutrients() {
 	};
 	const handleAddMacrosToContainers = async () => {
 		try {
-			const response = await fetch("http://localhost:5174/user-macros", {
+			const response = await fetch("http://localhost:5175/user-macros", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

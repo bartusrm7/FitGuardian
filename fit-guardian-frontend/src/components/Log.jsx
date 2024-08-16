@@ -32,7 +32,7 @@ export default function Log() {
 			return;
 		}
 		try {
-			const response = await fetch("http://localhost:5174/login", {
+			const response = await fetch("http://localhost:5175/login", {
 				method: "POST",
 				headers: {
 					"Content-type": "application/json",
