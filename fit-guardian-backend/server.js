@@ -4,6 +4,8 @@ const cors = require("cors");
 const db = require("./database");
 const jwt = require("jsonwebtoken");
 
+console.log(db);
+
 const app = express();
 const port = 5175;
 

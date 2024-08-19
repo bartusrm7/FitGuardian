@@ -106,7 +106,6 @@ export default function Settings() {
 				...prevState,
 				[name]: value,
 			};
-			console.log(updatedUserData.userWeight);
 			setTimeout(() => {
 				setNewMacronutrientsFromTotalCalories(
 					updatedUserData.userAge,
@@ -181,8 +180,6 @@ export default function Settings() {
 			console.error("Error fetching user data:", error.message);
 		}
 	};
-	//ZAPISUJE SIĘ ALE NIE TO CO JEST W FUNKCJACH setNewMacronutrientsFromTotalCalories I setMacronutrientsFromTotalCalories, COŚ SIĘ SPIERDOLIŁO I TE DWIE FUNKCJE NIE AKTUALIZUJĄ DANYCH, A RESZTA JAK DAŁEM INPUT NA PASSWORD(KTÓRY NIE JEST JAKOŚ MODYFIKOWANY W KODZIE - TAK SAMO JAK USERNAME) TO ZAPISUJE SIĘ TO PÓŹNIEJ TO CO NIE JEST AKTUALIZOWANE ZAMIAST KODU
-	//MOŻLIWE, ŻE POMOŻE DODANIE updatedUserData DO TEGO CO JEST W setNewMacronutrientsFromTotalCalories
 	useEffect(() => {
 		const getUserDataAndMacrosFromBackend = async () => {
 			if (!userCurrentEmail) return;
