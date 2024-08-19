@@ -21,7 +21,7 @@ db.serialize(() => {
 
 	db.run(`CREATE TABLE IF NOT EXISTS userChoices (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	userEmail TEXT NOT NULL,
+	userEmail TEXT NOT NULL UNIQUE,
 	userAge INTEGER NOT NULL,
 	userGender TEXT NOT NULL,
 	userHeight INTEGER NOT NULL,
@@ -32,7 +32,7 @@ db.serialize(() => {
 
 	db.run(`CREATE TABLE IF NOT EXISTS userMeals (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	userEmail TEXT NOT NULL,
+	userEmail TEXT NOT NULL UNIQUE,
 	mealID INTEGER NOT NULL,
 	foodID TEXT NOT NULL,
 	foodName TEXT NOT NULL,
@@ -45,7 +45,7 @@ db.serialize(() => {
 
 	db.run(`CREATE TABLE IF NOT EXISTS userMacros (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	userEmail TEXT NOT NULL,
+	userEmail TEXT NOT NULL UNIQUE,
 	userCalories INTEGER NOT NULL,
 	userProteins INTEGER NOT NULL,
 	userCarbs INTEGER NOT NULL,
