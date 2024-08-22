@@ -9,3 +9,8 @@ Currently, two official plugins are available:
 
 
 TECHNOLOGIES
+React + Vite
+SCSS
+Node.JS
+Express
+SQLite
