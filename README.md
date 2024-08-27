@@ -4,7 +4,7 @@ FitGuardian is a project thanks to what counting calories to change our body and
 
 How to install?
 
-##TECHNOLOGIES##
+## TECHNOLOGIES ##
 - React + Vite
 - SCSS
 - Node.JS
