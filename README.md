@@ -12,8 +12,9 @@ To went to our main menu, firstly we have to registered an account, after this t
 Then the application sets calories and macronutrients what the user will can intake.
 
 
-Finally we can move to our dashboard and there we have much abilities, like:
-- add/remove foods,
+Finally we can move to our dashboard and there we have much components to chose like:
+##### Menu #####
+We have four meals and we can add/remove foods to them.
 
 
 ## How to install? ##
