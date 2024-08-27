@@ -13,7 +13,7 @@ Then the application sets calories and macronutrients what the user will can int
 
 
 Finally we can move to our dashboard and there we have much components to chose like:
-##### Menu #####
+### Menu ###
 We have four meals and we can add/remove foods to them.
 
 
