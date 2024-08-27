@@ -19,6 +19,12 @@ body {
 }
 .log,
 .reg {
+	.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+		color: #000046;
+	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root::after {
+		border-bottom: 2px solid #000046;
+	}
 	height: 100vh;
 	display: flex;
 	justify-content: center;
@@ -26,7 +32,7 @@ body {
 	transition: opacity 0.3s ease-out;
 	&__main-container {
 		width: 250px;
-		height: 300px;
+		height: 350px;
 		background-color: #caf0f8;
 		color: #000046;
 		overflow: hidden;
@@ -49,37 +55,34 @@ body {
 		position: absolute;
 		right: 10px;
 		top: 10px;
-		background-color: white;
 		color: #000046;
 		font-size: 0rem;
 		border-radius: 5px;
 		cursor: pointer;
 	}
 	&__input-item-container {
+		position: relative;
+		margin-bottom: 0.25em;
 		display: flex;
 		align-items: center;
-		span {
-			margin-right: 0.25em;
-			font-size: 1.4rem;
-		}
-		input {
-			font-size: 0.8rem;
-		}
+	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+		width: 160px;
+	}
+	&__error-message {
+		width: 80%;
+		text-align: center;
+		color: red;
 	}
 	&__input-container {
 		display: flex;
 		flex-direction: column;
-		input {
-			padding: 0.35em;
-			margin: 0.25em 0;
-			border-radius: 5px;
-		}
+		align-items: center;
 	}
 	&__log-reg-accept-btn,
 	&__log-reg-switch-btn {
-		padding: 0.5em 0.75em;
-		background-color: white;
 		color: #000046;
+		font-size: 0.8rem;
 		font-weight: bold;
 		border-radius: 5px;
 		cursor: pointer;
@@ -90,22 +93,36 @@ body {
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
+		p {
+			margin-bottom: 2px;
+		}
 	}
 	&__log-reg-switch-btn {
 		margin: 0.75em 0;
 	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root,
+	.css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root {
+		font-size: 0.8rem;
+	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+		margin-top: 10px;
+	}
+	#log1,
+	#log2,
+	#reg1,
+	#reg2 {
+		padding: 0.25em 1.5em;
+		font-size: 0.8rem;
+	}
 }
 @media (min-width: 368px) {
-	.log,
-	.reg {
-	}
 }
 @media (min-width: 576px) {
 	.log,
 	.reg {
 		&__main-container {
-			width: 320px;
-			height: 370px;
+			width: 280px;
+			height: 380px;
 		}
 		&__container {
 			font-size: 1rem;
@@ -118,17 +135,22 @@ body {
 			right: 12px;
 		}
 		&__input-container {
-			span {
-				font-size: 1.6rem;
-			}
 			input {
-				padding: 0.5em;
+				padding: 0.5em 0;
 				font-size: 0.9rem;
 			}
 		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+			width: 180px;
+		}
 		&__log-reg-accept-btn,
-		&__log-reg-switch-btn {
+		&__log-reg-switch-btn,
+		&__error-message {
 			padding: 0.5em 1.25em;
+			font-size: 0.9rem;
+		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root,
+		.css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root {
 			font-size: 0.9rem;
 		}
 		&__cancel-btn,
@@ -139,13 +161,20 @@ body {
 				background-color: #60dfff;
 			}
 		}
+		#log1,
+		#log2,
+		#reg1,
+		#reg2 {
+			padding: 0.25em 2em;
+			font-size: 0.9rem;
+		}
 	}
 }
 @media (min-width: 768px) {
 	.log,
 	.reg {
 		&__main-container {
-			width: 350px;
+			width: 320px;
 			height: 400px;
 		}
 		&__container {
@@ -156,28 +185,38 @@ body {
 			right: 15px;
 		}
 	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+		width: 200px;
+	}
 }
 @media (min-width: 992px) {
 	.log,
 	.reg {
 		&__main-container {
-			width: 370px;
-			height: 420px;
+			width: 340px;
+			height: 450px;
 		}
 		&__container {
 			font-size: 1.2rem;
 		}
-		&__input-container {
-			span {
-				font-size: 1.7rem;
-			}
-			input {
-				padding: 0.75em;
-			}
-		}
+		font-size: 1rem;
 		&__log-reg-accept-btn,
 		&__log-reg-switch-btn {
 			padding: 0.5em 1.5em;
+			font-size: 1rem;
+		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+			width: 220px;
+		}
+		&__error-message,
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root,
+		.css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root {
+			font-size: 1rem;
+		}
+		#log1,
+		#log2,
+		#reg1,
+		#reg2 {
 			font-size: 1rem;
 		}
 	}

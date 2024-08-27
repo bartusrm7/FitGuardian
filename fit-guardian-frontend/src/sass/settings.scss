@@ -56,7 +56,7 @@ body {
 		justify-content: space-between;
 	}
 	.toggle-password-btn {
-		padding: 0.25em;
+		padding: 0 0.25em;
 		margin-right: 0.25em;
 		font-size: 0.8rem;
 		font-weight: bold;
@@ -126,6 +126,20 @@ body {
 	}
 	.active {
 		background-color: #60dfff;
+	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root::before {
+		border-bottom: 2px solid #caf0f8;
+	}
+	.css-1eed5fa-MuiInputBase-root-MuiInput-root::after {
+		border-bottom: 3px solid #60dfff;
+	}
+	.css-1e8p9h-MuiButtonBase-root-MuiButton-root {
+		border: 1px solid #000046;
+	}
+	#save-btn {
+		&:hover {
+			background-color: #caf0f8;
+		}
 	}
 }
 @media (max-width: 368px) {
@@ -219,6 +233,9 @@ body {
 				padding: 0 0.5em;
 			}
 		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root {
+			color: #caf0f8;
+		}
 	}
 }
 @media (min-width: 768px) {
@@ -242,7 +259,7 @@ body {
 			height: 100%;
 		}
 		.toggle-password-btn {
-			padding: 0.25em 0.5em;
+			padding: 0.15em 0.5em;
 			font-size: 0.9rem;
 		}
 		&__user-settings-item {
@@ -288,6 +305,12 @@ body {
 			&:hover {
 				background-color: #60dfff;
 			}
+		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root::before {
+			border-bottom: 2px solid #60dfff;
+		}
+		.css-1eed5fa-MuiInputBase-root-MuiInput-root::after {
+			border-bottom: 3px solid #000046;
 		}
 	}
 }

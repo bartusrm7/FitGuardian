@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useFoodContext } from "./FoodContext";
 import { useUserContext } from "./UserContext";
 import { v4 as uuidv4 } from "uuid";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 
 export default function Menu() {
 	const {
@@ -16,9 +18,11 @@ export default function Menu() {
 		setInputFoodGrams,
 	} = useFoodContext();
 	const { userCurrentEmail, setUserCurrentEmail } = useUserContext();
+
 	const [inputIsOpen, setInputIsOpen] = useState(false);
 	const [activeMealId, setActiveMealId] = useState(null);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [error, setError] = useState(false);
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
 	const handleCurrentDate = () => {
@@ -75,26 +79,13 @@ export default function Menu() {
 			console.error("Error removing food item:", error.message);
 		}
 	};
-
-	const getUserEmail = async () => {
-		try {
-			const response = await fetch("http://localhost:5175/user-data", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-				},
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-			const data = await response.json();
-			setUserCurrentEmail(data.userEmail);
-		} catch (error) {
-			console.error("Error fetching user email:", error.message);
-		}
-	};
 	const handleAddFoodItem = async () => {
+		setError(true);
+
+		if (inputFood === "" || !inputFood || inputFoodGrams === "") {
+			setErrorMessage("Empty field, complete data!");
+			return;
+		}
 		try {
 			const response = await fetch(`https://api.calorieninjas.com/v1/nutrition?query=${inputFood}`, {
 				method: "GET",
@@ -115,9 +106,9 @@ export default function Menu() {
 				foodID: newFoodID,
 				foodName: inputFood,
 				foodCalories: `${((data.items[0].calories / 100) * caloriesWeight).toFixed(0)}cal`,
-				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}g`,
-				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}g`,
-				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}g`,
+				foodProteins: `${((data.items[0].protein_g / 100) * caloriesWeight).toFixed(0)}gP`,
+				foodCarbs: `${((data.items[0].carbohydrates_total_g / 100) * caloriesWeight).toFixed(0)}gC`,
+				foodFats: `${((data.items[0].fat_total_g / 100) * caloriesWeight).toFixed(0)}gF`,
 				foodDate: currentDate,
 			};
 
@@ -150,16 +141,6 @@ export default function Menu() {
 			}
 			localStorage.setItem("userMeals", JSON.stringify(updatedMeals));
 
-			if (inputFood === "") {
-				setErrorMessage("Empty field, complete data!");
-				return;
-			} else if (!inputFood) {
-				setErrorMessage("Wrong data, complete field!");
-				return;
-			} else if (inputFoodGrams === "") {
-				setErrorMessage("Empty field, complete data!");
-				return;
-			}
 			setUserMeal(updatedMeals);
 			setInputFood("");
 			setInputFoodGrams("");
@@ -173,12 +154,32 @@ export default function Menu() {
 		const existingMeal = (userMeal[userCurrentEmail] || []).find(meal => meal.id === id && meal.date === currentDate);
 		return existingMeal || { id, date: currentDate, name: `Meal ${id}`, food: [] };
 	});
-
+	const handleInputFocus = () => {
+		setError(false);
+		setErrorMessage("");
+	};
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5175/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
+	};
 	useEffect(() => {
 		const updatedUserMeals = localStorage.getItem("userMeals");
-		if (updatedUserMeals) {
-			setUserMeal(JSON.parse(updatedUserMeals));
-		}
+		setUserMeal(JSON.parse(updatedUserMeals));
+
 		const savedDate = localStorage.getItem("currentDate");
 		if (savedDate) {
 			setCurrentDate(savedDate);
@@ -187,7 +188,6 @@ export default function Menu() {
 		}
 		getUserEmail();
 	}, []);
-
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
@@ -212,6 +212,7 @@ export default function Menu() {
 								keyboard_double_arrow_right
 							</span>
 						</div>
+
 						<div className='menu__add-food-container'>
 							{mealsForCurrentDate.map(meal => (
 								<div key={meal.id} className='menu__meal-item-container'>
@@ -246,29 +247,45 @@ export default function Menu() {
 								</div>
 							))}
 						</div>
+
 						<div className={`menu__background-shadow ${inputIsOpen ? "open" : "close"}`}>
 							<div className='menu__cancel-btn' onClick={handleCloseInputFoodContainer}>
 								<span className='material-symbols-outlined'>close</span>
 							</div>
-							<div className={`menu__error-mess${errorMessage ? "show" : ""}`}>{errorMessage}</div>
+							<div className={`menu__error-mess${errorMessage ? "" : "show"}`}>{errorMessage}</div>
 							<div className='menu__input-container'>
-								<input
+								<TextField
+									error={error && !!errorMessage}
 									className='menu__input-food'
-									type='text'
-									placeholder='Enter your food...'
+									label='Enter your food...'
+									variant='standard'
 									value={inputFood}
+									onFocus={handleInputFocus}
 									onChange={e => setInputFood(e.target.value)}
 								/>
-								<input
+								<TextField
+									error={error && !!errorMessage}
 									className='menu__input-food grams'
-									type='number'
-									placeholder='Grams'
+									label='Grams'
+									variant='standard'
+									type="number"
 									value={inputFoodGrams}
+									onFocus={handleInputFocus}
 									onChange={e => setInputFoodGrams(e.target.value)}
+									sx={{ width: "60px" }}
 								/>
-								<button className='menu__add-food-btn' onClick={handleAddFoodItem}>
+								<Button
+									variant='outlined'
+									className='menu__add-food-btn'
+									onClick={handleAddFoodItem}
+									sx={{
+										backgroundColor: "white",
+										height: "40px",
+										padding: "0 0.5em",
+										"&hover": { backgroundColor: "white" },
+									}}>
 									ADD FOOD
-								</button>
+								</Button>
 							</div>
 						</div>
 					</div>

@@ -1,6 +1,11 @@
 import Dashboard from "./Dashboard";
 import { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Slider from "@mui/material/Slider";
+import Button from "@mui/material/Button";
 
 export default function Settings() {
 	const {
@@ -202,7 +207,6 @@ export default function Settings() {
 		};
 		getUserDataAndMacrosFromBackend();
 	}, [userCurrentEmail]);
-
 	useEffect(() => {
 		const getUserEmail = async () => {
 			try {
@@ -224,7 +228,6 @@ export default function Settings() {
 		};
 		getUserEmail();
 	}, []);
-
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
@@ -243,11 +246,12 @@ export default function Settings() {
 									<>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>NAME:</div>
-											<input
-												type='text'
+											<TextField
+												variant='standard'
 												className='settings__user-settings-data'
 												value={editedUserData.userName}
 												onChange={e => handleInputChange("userName", e.target.value)}
+												sx={{ margin: "0 5px" }}
 											/>
 										</div>
 										<div className='settings__user-settings-item'>
@@ -257,11 +261,20 @@ export default function Settings() {
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>PASSWORD:</div>
 											<div className='settings__user-settings-data'>
-												<button
+												<Button
 													className={`toggle-password-btn ${isPasswordVisible ? "active" : ""}`}
-													onClick={handleToggleActiveBtn}>
+													onClick={handleToggleActiveBtn}
+													variant='outlined'
+													sx={{
+														backgroundColor: "#caf0f8",
+														color: "#000046",
+														"&:hover": { backgroundColor: "#000046", color: "#caf0f8" },
+														"@media (min-width: 768px)": {
+															"&:hover": { color: "#000046" },
+														},
+													}}>
 													SHOW
-												</button>
+												</Button>
 												{isPasswordVisible
 													? editedUserData.userPassword
 													: editedUserData.userPassword.replace(/./g, "*")}
@@ -287,66 +300,82 @@ export default function Settings() {
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>HEIGHT:</div>
-											<div className='choices'>
-												<span>{`${editedUserData.userHeight}cm`}</span>
-												<input
-													type='range'
-													min={140}
-													max={250}
-													className='settings__user-settings-data'
-													value={editedUserData.userHeight}
-													onChange={e => handleInputChange("userHeight", e.target.value)}
-												/>
-											</div>
+											<Slider
+												step={1}
+												marks
+												min={140}
+												max={250}
+												valueLabelDisplay='auto'
+												value={editedUserData.userHeight}
+												onChange={e => handleInputChange("userHeight", e.target.value)}
+												sx={{
+													height: "10px",
+													width: "40%",
+													"@media (max-width: 768px)": { color: "#caf0f8" },
+													"@media (max-width: 576px)": { width: "50%" },
+												}}
+											/>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>WEIGHT:</div>
-											<div className='choices'>
-												<span>{`${editedUserData.userWeight}kg`}</span>
-												<input
-													type='range'
-													min={40}
-													max={150}
-													className='settings__user-settings-data'
-													value={editedUserData.userWeight}
-													onChange={e => handleInputChange("userWeight", e.target.value)}
-												/>
-											</div>
+											<Slider
+												step={1}
+												marks
+												min={40}
+												max={150}
+												valueLabelDisplay='auto'
+												value={editedUserData.userWeight}
+												onChange={e => handleInputChange("userWeight", e.target.value)}
+												sx={{
+													height: "10px",
+													width: "40%",
+													"@media (max-width: 768px)": { color: "#caf0f8" },
+													"@media (max-width: 576px)": { width: "50%" },
+												}}
+											/>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>GOAL:</div>
-											<select
-												className='settings__user-settings-data'
+											<Select
+												labelId='demo-simple-select-label'
+												id='activity-select'
 												value={editedUserData.userGoal}
-												onChange={e => handleInputChange("userGoal", e.target.value)}>
-												<option value=''></option>
+												onChange={e => handleInputChange("userGoal", e.target.value)}
+												sx={{
+													height: "35px",
+													"@media(max-width:768px)": { backgroundColor: "#60dfff", height: "25px" },
+												}}>
 												{userOptions.goalOptions.map((option, index) => (
-													<option key={index} value={option}>
+													<MenuItem key={index} value={option}>
 														{option}
-													</option>
+													</MenuItem>
 												))}
-											</select>
+											</Select>
 										</div>
 										<div className='settings__user-settings-item'>
 											<div className='settings__user-settings-name'>ACTIVITY:</div>
-											<select
-												className='settings__user-settings-data'
+											<Select
+												labelId='demo-simple-select-label'
+												id='activity-select'
 												value={editedUserData.userActivity}
-												onChange={e => handleInputChange("userActivity", e.target.value)}>
-												<option value=''></option>
+												onChange={e => handleInputChange("userActivity", e.target.value)}
+												sx={{
+													height: "35px",
+													"@media(max-width:768px)": { backgroundColor: "#60dfff", height: "25px" },
+												}}>
 												{userOptions.activityOptions.map((option, index) => (
-													<option key={index} value={option}>
+													<MenuItem key={index} value={option}>
 														{option}
-													</option>
+													</MenuItem>
 												))}
-											</select>
+											</Select>
 										</div>
 										<div className='settings__user-settings-item calories'>
 											<div className='settings__user-settings-name'>CALORIES:</div>
 											<div
 												className='settings__user-settings-data'
 												onChange={e => setUserTotalCalories("userCalories", e.target.value)}>
-												{`${editedUserData.userCalories}cal`}
+												{`${editedUserData.userCalories.toFixed(0)}cal`}
 											</div>
 										</div>
 										<div className='settings__user-settings-item'>
@@ -373,9 +402,19 @@ export default function Settings() {
 											</div>
 										</div>
 										<div className='settings__edited-data-btn-container'>
-											<button className='settings__edited-data-btn' onClick={handleSaveChanges}>
+											<Button
+												id='save-btn'
+												variant='outlined'
+												onClick={handleSaveChanges}
+												sx={{
+													backgroundColor: "#60dfff",
+													color: "#000046",
+													"@media(max-width:576px)": {
+														padding: "2px 12px",
+													},
+												}}>
 												SAVE CHANGES
-											</button>
+											</Button>
 										</div>
 									</>
 								)}

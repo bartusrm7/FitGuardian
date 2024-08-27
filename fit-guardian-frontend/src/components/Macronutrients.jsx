@@ -23,8 +23,9 @@ export default function Macronutrients() {
 		carbs: 0,
 		fats: 0,
 	});
-	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+
 	const [userMeals, setUserMeals] = useState([]);
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
 	const getUserEmail = async () => {
 		try {

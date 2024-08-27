@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
+import Slider from "@mui/material/Slider";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function FirstLogOnboarding() {
 	const {
@@ -24,8 +27,6 @@ export default function FirstLogOnboarding() {
 		userActivity,
 		setUserActivity,
 	} = useUserContext();
-	const [opacityClass, setOpacityClass] = useState("hide-opacity");
-	const navigate = useNavigate();
 	const [userChoices, setUserChoices] = useState({
 		age: userAge,
 		gender: userGender,
@@ -37,6 +38,8 @@ export default function FirstLogOnboarding() {
 		activity: userActivity,
 		activityOptions: ["Sedentary", "Light", "Moderate", "Active", "Very Active"],
 	});
+	const navigate = useNavigate();
+	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 
 	const handleSetUserAge = birthDate => {
 		const today = new Date();
@@ -49,7 +52,6 @@ export default function FirstLogOnboarding() {
 		}
 		return age;
 	};
-	
 	const handleUserChoices = (name, value) => {
 		let updatedValue = value;
 		if (name === "age") {
@@ -72,7 +74,6 @@ export default function FirstLogOnboarding() {
 			context[name](value);
 		}
 	};
-
 	const calculateCalories = (age, height, weight, gender, goal, activity) => {
 		let basedAge = 1;
 		if (age >= 40 && age <= 50) basedAge = 0.9;
@@ -105,27 +106,6 @@ export default function FirstLogOnboarding() {
 
 		return (baseCalories + basedHeight + basedWeight + baseGoalAmount) * baseActivityAmount * basedAge;
 	};
-
-	const getUserEmail = async () => {
-		try {
-			const response = await fetch("http://localhost:5175/user-data", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-				},
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-			const data = await response.json();
-			localStorage.setItem("userEmail", data.userEmail);
-			setUserCurrentEmail(data.userEmail);
-		} catch (error) {
-			console.error("Error fetching user email:", error.message);
-		}
-	};
-
 	const setMacronutrientsFromTotalCalories = calories => {
 		const proteinPercentage = 0.2;
 		const carbPercentage = 0.5;
@@ -145,6 +125,25 @@ export default function FirstLogOnboarding() {
 		setUserCarbs(carbs.toFixed(0));
 		setUserFats(fats.toFixed(0));
 		return totalMacros;
+	};
+	const getUserEmail = async () => {
+		try {
+			const response = await fetch("http://localhost:5175/user-data", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+			const data = await response.json();
+			localStorage.setItem("userEmail", data.userEmail);
+			setUserCurrentEmail(data.userEmail);
+		} catch (error) {
+			console.error("Error fetching user email:", error.message);
+		}
 	};
 	const saveUserChoices = async () => {
 		const userCalories = calculateCalories(userAge, userHeight, userWeight, userGender, userGoal, userActivity);
@@ -203,65 +202,101 @@ export default function FirstLogOnboarding() {
 							<div className='firstlog-onboarding__selected-container'>
 								<input
 									type='date'
+									id='age-select'
 									className='firstlog-onboarding__items'
 									value={userChoices.age}
 									onChange={e => handleUserChoices("age", e.target.value)}
+									style={{ backgroundColor: "#caf0f8" }}
 								/>
-								<select
-									className='firstlog-onboarding__items'
+								<Select
+									labelId='gender-select-label'
+									id='gender-select'
 									value={userChoices.gender}
-									onChange={e => handleUserChoices("gender", e.target.value)}>
-									<option value=''></option>
+									onChange={e => handleUserChoices("gender", e.target.value)}
+									displayEmpty
+									renderValue={userChoices.gender !== "" ? undefined : () => <em>Select Gender</em>}
+									sx={{
+										height: "25px",
+										backgroundColor: "#caf0f8",
+										"@media (min-width: 768px)": { height: "35px" },
+									}}>
+									<MenuItem value=''>
+										<em>None</em>
+									</MenuItem>
 									{userChoices.genderOptions.map((option, index) => (
-										<option key={index} value={option}>
+										<MenuItem key={index} value={option}>
 											{option}
-										</option>
+										</MenuItem>
 									))}
-								</select>
-								<div className='choices'>
-									<span>{userChoices.height}cm</span>
-									<input
-										type='range'
-										className='firstlog-onboarding__items'
-										min={140}
-										max={250}
-										value={userChoices.height}
-										onChange={e => handleUserChoices("height", e.target.value)}
-									/>
-								</div>
-								<div className='choices'>
-									<span>{userChoices.weight}kg</span>
-									<input
-										type='range'
-										className='firstlog-onboarding__items'
-										min={40}
-										max={150}
-										value={userChoices.weight}
-										onChange={e => handleUserChoices("weight", e.target.value)}
-									/>
-								</div>
-								<select
-									className='firstlog-onboarding__items'
+								</Select>
+								<Slider
+									step={1}
+									marks
+									min={140}
+									max={250}
+									id='height-select'
+									valueLabelDisplay='auto'
+									value={userChoices.height}
+									onChange={e => handleUserChoices("height", e.target.value)}
+									sx={{
+										height: "10px",
+									}}
+								/>
+								<Slider
+									step={1}
+									marks
+									min={40}
+									max={150}
+									id='weight-select'
+									valueLabelDisplay='auto'
+									value={userChoices.weight}
+									onChange={e => handleUserChoices("weight", e.target.value)}
+									sx={{
+										height: "10px",
+									}}
+								/>
+								<Select
+									labelId='goal-select-label'
+									id='goal-select'
 									value={userChoices.goal}
-									onChange={e => handleUserChoices("goal", e.target.value)}>
-									<option value=''> </option>
+									onChange={e => handleUserChoices("goal", e.target.value)}
+									displayEmpty
+									renderValue={userChoices.goal !== "" ? undefined : () => <em>Select Goal</em>}
+									sx={{
+										height: "25px",
+										backgroundColor: "#caf0f8",
+										"@media (min-width: 768px)": { height: "35px" },
+									}}>
+									<MenuItem value=''>
+										<em>None</em>
+									</MenuItem>
 									{userChoices.goalOptions.map((option, index) => (
-										<option key={index} value={option}>
+										<MenuItem key={index} value={option}>
 											{option}
-										</option>
+										</MenuItem>
 									))}
-								</select>
-								<select
-									className='firstlog-onboarding__items'
+								</Select>
+								<Select
+									labelId='activity-select-label'
+									id='activity-select'
 									value={userChoices.activity}
-									onChange={e => handleUserChoices("activity", e.target.value)}>
-									<option value=''></option>
+									onChange={e => handleUserChoices("activity", e.target.value)}
+									displayEmpty
+									renderValue={userChoices.activity !== "" ? undefined : () => <em>Select Activity</em>}
+									sx={{
+										height: "25px",
+										backgroundColor: "#caf0f8",
+										"@media (min-width: 768px)": { height: "35px" },
+									}}>
+									<MenuItem value=''>
+										<em>None</em>
+									</MenuItem>
 									{userChoices.activityOptions.map((option, index) => (
-										<option key={index} value={option}>
+										<MenuItem key={index} value={option}>
 											{option}
-										</option>
+										</MenuItem>
 									))}
-								</select>
+								</Select>
 							</div>
 						</div>
 					</div>

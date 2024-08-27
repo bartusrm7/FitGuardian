@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "./UserContext";
 import { useFoodContext } from "./FoodContext";
 import Dashboard from "./Dashboard";
+import Button from "@mui/material/Button";
 
 export default function Statistics() {
 	const { userCurrentEmail, setUserCurrentEmail } = useUserContext();
 	const { userMeal, setUserMeal } = useFoodContext();
 	const [periodChoice, setPeriodChoice] = useState("");
-	const [errorMessage, setErrorMessage] = useState("");
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
 	const [allMacrosCompleted, setAllMacrosCompleted] = useState({
 		calories: 0,
@@ -41,6 +41,7 @@ export default function Statistics() {
 			console.error("Error fetching user email:", error.message);
 		}
 	};
+	// USTAWIĆ TO ABY BYŁO TYLKO Z DNIAMI DO TYŁU, A NIE DO PRZODU
 	const filteredDaysInPeriodTimes = period => {
 		const newDate = new Date();
 		if (period === "week") {
@@ -71,28 +72,29 @@ export default function Statistics() {
 		const parsedMeals = getUserUpdatedMeals[userCurrentEmail];
 
 		if (!parsedMeals || parsedMeals.length === 0) {
-			setErrorMessage("No meals found for this user!");
 			return newAllMacrosCompleted;
 		}
-
 		parsedMeals.forEach(meals => {
 			meals.food.forEach(meal => {
 				const mealDate = new Date(meal.foodDate);
-				if (period === "week" && mealDate >= lastWeek) {
-					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
-				} else if (period === "month" && mealDate >= lastMonth) {
-					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
-				} else if (period === "year" && mealDate >= lastYear) {
-					newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
-					newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
-					newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
-					newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+
+				if (mealDate <= lastWeek || lastMonth || lastYear) {
+					if (period === "week" && mealDate >= lastWeek) {
+						newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+						newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+						newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+						newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+					} else if (period === "month" && mealDate >= lastMonth) {
+						newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+						newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+						newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+						newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+					} else if (period === "year" && mealDate >= lastYear) {
+						newAllMacrosCompleted.totalCalories += parseFloat(meal.foodCalories);
+						newAllMacrosCompleted.totalProteins += parseFloat(meal.foodProteins);
+						newAllMacrosCompleted.totalCarbs += parseFloat(meal.foodCarbs);
+						newAllMacrosCompleted.totalFats += parseFloat(meal.foodFats);
+					}
 				}
 			});
 		});
@@ -140,13 +142,11 @@ export default function Statistics() {
 			getMealsFromBackend();
 		}
 	}, [userCurrentEmail]);
-
 	useEffect(() => {
 		if (periodChoice) {
 			filteredMealsLastPeriodTimes(periodChoice);
 		}
 	}, [periodChoice, userMeal]);
-
 	useEffect(() => {
 		getUserEmail();
 		setOpacityClass("display-opacity");
@@ -160,23 +160,49 @@ export default function Statistics() {
 						<div className='statistics__container-name'>
 							<h3 className='statistics__label'>Statistics</h3>
 						</div>
-						<div className={`statistics__error-mess${errorMessage ? "show" : ""}`}>{errorMessage}</div>
 						<div className='statistics__calendar-container'>
-							<button
+							<Button
 								className={`statistics__date ${periodChoice === "week" ? "active" : ""}`}
-								onClick={() => handleToggleActiveBtn("week")}>
+								onClick={() => handleToggleActiveBtn("week")}
+								sx={{
+									margin: "0 0.25em",
+									backgroundColor: "#caf0f8",
+									color: "#000046",
+									border: "1px solid #000046",
+									"@media(max-width:576px)": {
+										padding: "2px 7px",
+									},
+								}}>
 								Last Week
-							</button>
-							<button
+							</Button>
+							<Button
 								className={`statistics__date ${periodChoice === "month" ? "active" : ""}`}
-								onClick={() => handleToggleActiveBtn("month")}>
+								onClick={() => handleToggleActiveBtn("month")}
+								sx={{
+									margin: "0 0.25em",
+									backgroundColor: "#caf0f8",
+									color: "#000046",
+									border: "1px solid #000046",
+									"@media(max-width:576px)": {
+										padding: "2px 7px",
+									},
+								}}>
 								Last Month
-							</button>
-							<button
+							</Button>
+							<Button
 								className={`statistics__date ${periodChoice === "year" ? "active" : ""}`}
-								onClick={() => handleToggleActiveBtn("year")}>
+								onClick={() => handleToggleActiveBtn("year")}
+								sx={{
+									margin: "0 0.25em",
+									backgroundColor: "#caf0f8",
+									color: "#000046",
+									border: "1px solid #000046",
+									"@media(max-width:576px)": {
+										padding: "2px 7px",
+									},
+								}}>
 								Last Year
-							</button>
+							</Button>
 						</div>
 						<div className='statistics__calories-container'>
 							<div className='statistics__main-view-container'>

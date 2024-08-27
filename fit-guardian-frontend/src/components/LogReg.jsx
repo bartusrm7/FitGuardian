@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function LogReg() {
 	const [opacityClass, setOpacityClass] = useState("hide-opacity");
+	
 	useEffect(() => {
 		setOpacityClass("display-opacity");
 	}, []);
