@@ -16,6 +16,14 @@ Finally we can move to our dashboard and there we have much components to chose 
 ### Menu ###
 We have four meals and we can add/remove foods to them.
 
+### Macronutriens ###
+Here we can check how much calories or macronutrients we ate in the particular day what we chosen.
+
+### Statistics ###
+In this component we can check our statistics from last week, last month or even last year. We can see there calories and macronutriens per chosen period time and average amount.
+
+### Settings ###
+Here we have abilities to update our user choices which we setted right away after registered. In this reason our user will can change his calories and macronutrients.
 
 ## How to install? ##
 
