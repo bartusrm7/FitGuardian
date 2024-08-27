@@ -1,10 +1,12 @@
-# FitGuardian
+# FitGuardian #
+FitGuardian is a project that help with counting calories to change our body and generally care of our health.
 
-FitGuardian is a project thanks to what counting calories to change our body and generally care about our health.
+## About project ##
 
-How to install?
 
-## TECHNOLOGIES ##
+## How to install? ##
+
+## Technologies ##
 - React + Vite
 - SCSS
 - Node.JS
