@@ -14,8 +14,7 @@ After this the user can select his choices like:
 - goals,
 - activity.
 
-<img src="/src/assets/Zrzut ekranu 2024-08-28 114542.png" width="150" height="250" />
-<img src="/src/assets/Zrzut ekranu 2024-08-28 114609.png" width="150" height="250" />
+<img src="/src/assets/Zrzut ekranu 2024-08-28 114542.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114609.png" width="150" height="250" />
 
 Then the application sets calories and macronutrients what the user will can intake.
 
