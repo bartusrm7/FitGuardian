@@ -95,6 +95,5 @@ npm run dev
 
 - React + Vite
 - SCSS
-- Node.JS
-- Express
+- Node.JS + Express
 - SQLite
