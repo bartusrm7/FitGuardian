@@ -2,7 +2,11 @@
 FitGuardian is a project that help with counting calories to change our body and generally care of our health.
 
 ## About project ##
-To went to our main menu, firstly we have to registered an account, after this the user can select his choices like:
+To went to our main menu, firstly we have to registered an account.
+
+<img src="/src/assets/Zrzut ekranu 2024-08-28 111746.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111759.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111903.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 112703.png" width="150" height="250" />
+
+After this the user can select his choices like:
 - birth date,
 - gender,
 - height,
@@ -10,11 +14,12 @@ To went to our main menu, firstly we have to registered an account, after this t
 - goals,
 - activity.
 
-<img src="/src/assets/Zrzut ekranu 2024-08-28 111746.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111759.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111903.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 112703.png" width="150" height="250" />
+<img src="/src/assets/Zrzut ekranu 2024-08-28 114542.png" width="150" height="250" />
+<img src="/src/assets/Zrzut ekranu 2024-08-28 114609.png" width="150" height="250" />
 
 Then the application sets calories and macronutrients what the user will can intake.
-<br><br>
 
+<br><br>
 Finally we can move to our dashboard and there we have much components to chose like:
 ## Menu ##
 We have four meals and we can add/remove foods to them.
