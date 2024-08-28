@@ -41,7 +41,16 @@ https://sqlitebrowser.org/dl/
 ```bash
 git clone https://github.com/bartusrm7/FitGuardian.git
 ```
-3. 
+3. Went to backend and start it.
+```bash
+cd fit-guardian-backend
+node server.js
+```
+4. Went to frotend and start it.
+```bash
+cd fit-guardian-frontend
+npm run dev
+```
 
 ## Technologies ##
 - React + Vite
