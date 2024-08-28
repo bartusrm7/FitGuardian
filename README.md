@@ -12,13 +12,13 @@ To went to our main menu, firstly we have to registered an account, after this t
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 111746.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111759.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111903.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 112703.png" width="150" height="250" />
 
-
 Then the application sets calories and macronutrients what the user will can intake.
-
+<br><br>
 
 Finally we can move to our dashboard and there we have much components to chose like:
 ## Menu ##
 We have four meals and we can add/remove foods to them.
+
 
 ## Macronutriens ##
 Here we can check how much calories or macronutrients we ate in the particular day what we chosen.
@@ -61,7 +61,7 @@ cd fit-guardian-frontend
 ```bash
 npm run dev
 ```
-
+<br><br>
 ## Technologies ##
 - React + Vite
 - SCSS
