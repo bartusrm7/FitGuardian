@@ -9,7 +9,7 @@ To went to our main menu, firstly we have to registered an account, after this t
 - weight,
 - goals,
 - activity.
-
+<img src="/src/assets/Zrzut ekranu 2024-08-28 111746.png" width="250" height="300" />
 Then the application sets calories and macronutrients what the user will can intake.
 
 
