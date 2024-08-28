@@ -26,6 +26,9 @@ In this component we can check our statistics from last week, last month or even
 Here we have abilities to update our user choices which we setted right away after registered. In this reason our user will can change his calories and macronutrients.
 
 ## How to install? ##
+```bash
+git clone https://github.com/bartusrm7/FitGuardian.git
+
 
 ## Technologies ##
 - React + Vite
