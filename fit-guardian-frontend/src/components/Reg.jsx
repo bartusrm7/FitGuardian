@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { json, Link, useNavigate } from "react-router-dom";
 import { useLogRegContext } from "./LogRegContext";
 import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
@@ -43,7 +43,12 @@ export default function Reg() {
 				body: JSON.stringify({ userName, userEmail, userPassword }),
 			});
 			if (!response.ok) {
-				throw Error("Wrong data!");
+				const errorData = await response.json();
+				if (errorData.error) {
+					setErrorMessage({ userEmail: "Email is already registered!" });
+				} else {
+					setErrorMessage({ userName: "Name is already registered!" });
+				}
 			}
 			const data = await response.json();
 			localStorage.setItem("accessToken", data.accessToken);
