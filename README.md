@@ -28,7 +28,7 @@ Here we have abilities to update our user choices which we setted right away aft
 ## How to install? ##
 ```bash
 git clone https://github.com/bartusrm7/FitGuardian.git
-
+```
 
 ## Technologies ##
 - React + Vite
