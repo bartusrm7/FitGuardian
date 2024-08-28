@@ -66,7 +66,7 @@ https://sqlitebrowser.org/dl/
 2. Clone the repo.
 
 ```bash
-git clone https://github.com/bartusrm7/FitGuardian.git
+git clone git@github.com:bartusrm7/FitGuardian.git
 ```
 
 3. Went to backend and start it.
