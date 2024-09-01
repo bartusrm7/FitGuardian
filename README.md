@@ -1,14 +1,14 @@
 # FitGuardian
 
-FitGuardian is a project that help with counting calories to change our body and generally care of our health.
+FitGuardian is a project designed to help users track calories, promote a healthy lifestyle and generally care of our health.
 
-## About project
+## Project description
 
-To went to our main menu, firstly we have to registered an account.
+To access the main menu, users must first register an account.
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 111746.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111759.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 111903.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 112703.png" width="150" height="250" />
 
-After this the user can select his choices like:
+After registration, users can set preferences such as:
 - birth date,
 - gender,
 - height,
@@ -18,38 +18,38 @@ After this the user can select his choices like:
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 114542.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114609.png" width="450" height="250" />
 
-Then the application sets calories and macronutrients what the user will can intake.
+Then the app calculates the daily calories and macronutrients limits what the user should intake.
 
 <br><br>
-Finally we can move to our dashboard and there we have much components to chose like:
+Finally we can move to our dashboard and there we have much components to choose like:
 
 ## Menu
 
-We have four meals and we can add/remove foods to them.
+Here, users have four meals where can add/remove foods to various meals.
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 114805.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114820.png" width="450" height="250" />
 
 ## Macronutriens
 
-Here we can check how much calories or macronutrients we ate in the particular day what we chosen.
+Users can track the calories and macronutrients consumed on a selected day.
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 114942.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114834.png" width="450" height="250" />
 
 ## Statistics
 
-In this component we can check our statistics from last week, last month or even last year. We can see there calories and macronutriens per chosen period time and average amount.
+In this component users can check statistics from last week, last month or even last year. They can see there calories and macronutriens per chosen period time and averages amount.
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 114934.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114847.png" width="450" height="250" />
 
 ## Settings
 
-Here we have abilities to update our user choices which we setted right away after registered. In this reason our user will can change his calories and macronutrients.
+Users can update their preferences, which were initially set during registration. Thanks to this, users will can change his calories and macronutrients.
 
 <img src="/src/assets/Zrzut ekranu 2024-08-28 114925.png" width="150" height="250" /> <img src="/src/assets/Zrzut ekranu 2024-08-28 114908.png" width="450" height="250" />
 
 ## How to install?
 
-1. Firstly you have to download programs like:
+1. First, download the programs like:
 
 ```bash
 https://code.visualstudio.com/
@@ -63,13 +63,13 @@ https://nodejs.org/en/download/package-manager
 https://sqlitebrowser.org/dl/
 ```
 
-2. Clone the repo.
+2. Clone the repository.
 
 ```bash
 git clone git@github.com:bartusrm7/FitGuardian.git
 ```
 
-3. Went to backend and start it.
+3.Start the backend.
 
 ```bash
 cd fit-guardian-backend
@@ -79,7 +79,7 @@ cd fit-guardian-backend
 node server.js
 ```
 
-4. Went to frotend and start it.
+4. Start the frontend.
 
 ```bash
 cd fit-guardian-frontend
